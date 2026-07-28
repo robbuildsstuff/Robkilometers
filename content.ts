@@ -1,9 +1,9 @@
 export const nav = [
-  { href: '#work', label: 'Work' },
-  { href: '#eat', label: 'Eat' },
-  { href: '#build', label: 'Build' },
-  { href: '#life', label: 'Life' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/work', label: 'Work' },
+  { href: '/eat', label: 'Eat' },
+  { href: '/build', label: 'Build' },
+  { href: '/life', label: 'Life' },
+  { href: '/#contact', label: 'Contact' },
 ];
 
 export const hero = {
@@ -68,5 +68,4 @@ export const contact = {
 
 export const footer = {
   copyright: '© 2026 Robkilometers',
-  location: 'Toronto, ON',
 };

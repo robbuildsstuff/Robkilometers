@@ -4,3 +4,11 @@
   padding: 18px 28px 30px 28px;
   color: var(--sage);
 }
+
+.footerBar a {
+  text-decoration: none;
+}
+
+.footerBar a:hover {
+  color: var(--rust);
+}
