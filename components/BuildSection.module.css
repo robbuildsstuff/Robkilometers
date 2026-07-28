@@ -1,0 +1,36 @@
+.circuit {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.circuitCard {
+  background: var(--white);
+  padding: 22px;
+  text-align: left;
+}
+
+.circuitTitle {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.circuitCard p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--olive-deep);
+}
+
+@media (max-width: 760px) {
+  .circuit {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 460px) {
+  .circuit {
+    grid-template-columns: 1fr;
+  }
+}

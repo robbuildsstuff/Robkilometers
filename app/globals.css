@@ -1,0 +1,124 @@
+:root {
+  --parchment: #ece8dd;
+  --parchment-deep: #dfd9c8;
+  --ink: #26251f;
+  --olive: #8a7b4e;
+  --olive-deep: #5f5535;
+  --rust: #e9631a;
+  --sage: #a6ae9d;
+  --line: #c9c2ae;
+  --white: #faf9f4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+}
+
+.display {
+  font-family: 'Archivo Expanded', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.eyebrow {
+  color: var(--rust);
+  margin-bottom: 18px;
+  display: block;
+}
+
+.placeholder {
+  color: #95742b;
+  background: #fbf3de;
+  border: 1px dashed #d2ae5c;
+  padding: 1px 5px;
+  font-style: italic;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+}
+
+/* Stitched hang-tag component — shared across sections */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  padding: 5px 12px 5px 8px;
+  position: relative;
+}
+
+.tag::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--parchment);
+  flex-shrink: 0;
+}
+
+.tagStitch {
+  border-top: 1px dashed var(--olive);
+  border-bottom: 1px dashed var(--olive);
+  padding: 2px 0;
+}
+
+/* Section scaffold shared by every content block */
+.block {
+  padding: 60px 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.blockHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 34px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.blockHead .num {
+  color: var(--sage);
+}
+
+.blockHead h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  margin: 6px 0 0 0;
+}
+
+.blockHead .status {
+  color: var(--olive-deep);
+}

@@ -1,0 +1,27 @@
+.contact {
+  padding: 70px 28px;
+  text-align: center;
+}
+
+.contact h2 {
+  font-size: clamp(30px, 5vw, 52px);
+  margin: 0 0 22px 0;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  border: 1px solid var(--ink);
+  padding: 12px 22px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.cta:hover {
+  background: var(--ink);
+  color: var(--white);
+}

@@ -1,0 +1,6 @@
+.footerBar {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 28px 30px 28px;
+  color: var(--sage);
+}

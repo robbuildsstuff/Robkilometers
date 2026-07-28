@@ -1,0 +1,35 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.mark {
+  font-family: 'Archivo Expanded', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+.nav {
+  display: flex;
+  gap: 26px;
+}
+
+.navLink {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  color: var(--olive-deep);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+}
+
+.navLink:hover {
+  border-bottom: 1px solid var(--rust);
+  color: var(--ink);
+}
