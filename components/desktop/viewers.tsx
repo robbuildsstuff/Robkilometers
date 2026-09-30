@@ -1,4 +1,4 @@
-import type { ContentItem, IconName, ItemType, VideoItem } from '@/content';
+import type { ContentItem, IconName, ItemType, NoteLine, VideoItem } from '@/content';
 import { PauseGlyph, PlayGlyph, StopGlyph } from './icons';
 import MapView from './MapView';
 
@@ -48,7 +48,7 @@ export function MenuBar({ items }: { items: string[] }) {
   );
 }
 
-export function Notepad({ body, date }: { body: string; date?: string }) {
+export function Notepad({ body, date, lines }: { body?: string; date?: string; lines?: NoteLine[] }) {
   return (
     <>
       <MenuBar items={['File', 'Edit', 'Search', 'Help']} />
@@ -61,6 +61,19 @@ export function Notepad({ body, date }: { body: string; date?: string }) {
             </>
           )}
           {body}
+          {lines && (
+            <ul className="lines">
+              {lines.map((l, i) => {
+                const line = typeof l === 'string' ? { text: l } : l;
+                return (
+                  <li key={i}>
+                    <span className={line.crossed ? 'struck' : undefined}>{line.text}</span>
+                    {line.scribble && <span className="scribble">{line.scribble}</span>}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </div>
     </>
@@ -138,7 +151,7 @@ function VideoPlayer({ it }: { it: VideoItem }) {
 export function ItemView({ it }: { it: ContentItem }) {
   switch (it.type) {
     case 'note':
-      return <Notepad body={it.body} date={it.date} />;
+      return <Notepad body={it.body} date={it.date} lines={it.lines} />;
 
     case 'recipe':
       return (

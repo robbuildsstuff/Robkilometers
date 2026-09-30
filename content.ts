@@ -6,7 +6,9 @@ import type { CityIconName } from './components/desktop/cityIcons';
  * copy an item inside a folder's `items` list and change the words.
  *
  * Item types:
- *   note    { type, id, title, date?, body }                           -> opens in Notepad
+ *   note    { type, id, title, date?, body?, lines? }                  -> opens in Notepad. `lines` is a list, one thing per line;
+ *                                                                        { text: 'Milk', crossed: true, scribble: 'why??' } crosses a
+ *                                                                        line out and scribbles a handwritten note beside it
  *   recipe  { type, id, title, date?, serves?, time?, ingredients, steps, note?, source? }
  *   link    { type, id, title, date?, url, note? }                     -> little browser window with a "Visit" button
  *   video   { type, id, title, date?, url, note? }                     -> media player. YouTube video links
@@ -24,7 +26,7 @@ import type { CityIconName } from './components/desktop/cityIcons';
  *
  * Any item can also have `icon: 'paris'` etc. to swap its icon (see IconName below).
  *
- * `id` makes a deep link: robkilometers.ca/#food.lemon-pasta opens that item directly,
+ * `id` makes a deep link: robkilometers.ca/#food.bagels opens that item directly,
  * robkilometers.ca/#food.city-guides.paris works the same way inside a folder in a folder,
  * robkilometers.ca/#food opens the folder, robkilometers.ca/#about opens the profile.
  * Items marked "(sample ...)" are placeholders to show the layout. Replace them with your own.
@@ -53,7 +55,9 @@ export type IconName =
 // `icon` is optional on every item and replaces the default icon for its type.
 type ItemBase = { id: string; title: string; date?: string; icon?: IconName };
 
-export type NoteItem = ItemBase & { type: 'note'; body: string };
+// A line in a note's `lines` list: plain text, or crossed out with an optional handwritten scribble beside it.
+export type NoteLine = string | { text: string; crossed?: boolean; scribble?: string };
+export type NoteItem = ItemBase & { type: 'note'; body?: string; lines?: NoteLine[] };
 export type RecipeItem = ItemBase & {
   type: 'recipe';
   serves?: string;
@@ -921,7 +925,6 @@ Last updated: Sept 2026
           type: 'recipe',
           id: 'bagels',
           title: 'Bagels',
-          icon: 'bagel',
           serves: '~14 small bagels',
           time: '2 days (mostly waiting)',
           source: 'https://docs.google.com/document/d/1LTdMHqFdjTvnNiZU3QcrJegVDtM5eDW9W8UjopKyiaY/edit?usp=sharing',
@@ -951,7 +954,6 @@ Last updated: Sept 2026
           type: 'recipe',
           id: 'pickled-onions',
           title: "Hank's Pickled Onions",
-          icon: 'pickled-onions',
           time: '10 min, plus cooling',
           source: 'https://docs.google.com/document/d/1s3CkMTPfqKeWS4tgrHV-V7sEXLU0-_IVJBDraFGnV4Q/edit?usp=sharing',
           ingredients: [
@@ -981,63 +983,24 @@ Last updated: Sept 2026
           caption: 'Bistrot des Tournelles, Paris',
         },
         {
-          type: 'recipe',
-          id: 'lemon-pasta',
-          title: 'Weeknight Lemon Pasta',
-          serves: '2',
-          time: '20 min',
-          ingredients: [
-            '200 g spaghetti',
-            '1 lemon, zest and juice',
-            '40 g butter',
-            '50 g parmesan, finely grated',
-            'Black pepper, lots',
-            'Handful of basil or parsley',
-          ],
-          steps: [
-            'Cook the pasta in well-salted water until just shy of al dente. Save a mug of the water.',
-            'Melt the butter in a wide pan over low heat and add the lemon zest.',
-            'Move the pasta into the pan with a splash of pasta water and toss hard.',
-            'Off the heat, add the parmesan and lemon juice, tossing until glossy. Loosen with more water if needed.',
-            'Finish with pepper and torn herbs. Eat right away.',
-          ],
-          note: 'Sample recipe. The trick is taking it off the heat before the cheese goes in.',
-        },
-        {
-          type: 'recipe',
-          id: 'smash-burger',
-          title: 'Smash Burgers',
-          serves: '4',
-          time: '25 min',
-          ingredients: [
-            '500 g ground beef (80/20)',
-            '4 potato buns',
-            '4 slices American cheese',
-            '1 onion, sliced paper thin',
-            'Pickles, mustard, salt',
-          ],
-          steps: [
-            'Roll the beef into 8 loose balls. Keep them cold.',
-            'Get a cast iron pan ripping hot. Toast the buns and set aside.',
-            'Put a ball down, top with onion, and smash it flat with a spatula. Salt it.',
-            'After about 90 seconds, scrape it up in one go, flip, add cheese, stack a second patty on top.',
-            'Build with pickles and mustard.',
-          ],
-          note: 'Sample recipe.',
-        },
-        {
-          type: 'link',
-          id: 'serious-eats',
-          title: 'Serious Eats',
-          url: 'https://www.seriouseats.com/',
-          note: 'Sample link. Where I go when I want to know why a recipe works.',
-        },
-        {
           type: 'note',
-          id: 'food-list',
-          title: 'Places to try in Toronto',
-          date: '2026-09-12',
-          body: '- that ramen spot on Queen West\n- the Portuguese bakery near Dundas\n- somewhere for proper Sichuan\n\n(sample list)',
+          id: 'grocery-list',
+          title: 'Grocery List',
+          lines: [
+            'Topo Chico',
+            'Kale',
+            'Broccoli',
+            'Sourdough',
+            'Eggs',
+            { text: 'Milk', crossed: true, scribble: "you don't even like milk" },
+            'Bjorn Korn (the spicy one)',
+            'Frozen dumplings',
+            'Jamaican beef patties',
+            'Kimchi',
+            'Coke Zero',
+            'Sardines',
+            'Coffee',
+          ],
         },
       ],
     },

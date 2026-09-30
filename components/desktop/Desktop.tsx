@@ -41,7 +41,10 @@ function resolve(path: string[]) {
 }
 
 // Old links that moved.
-const aliases: Record<string, string> = { 'food.toronto-eats': 'food.city-guides.toronto' };
+const aliases: Record<string, string> = {
+  'food.toronto-eats': 'food.city-guides.toronto',
+  'food.food-list': 'food.grocery-list',
+};
 
 // The window contents for a folder path, or null if the path isn't a folder.
 function folderTarget(path: string[]) {
