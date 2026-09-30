@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { site, type Folder } from '@/content';
+import { site, visibleFolders, type Folder } from '@/content';
 import { Icon } from './icons';
 import type { WinFrame } from './Window';
 
@@ -144,7 +144,7 @@ export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, on
             <li>
               <hr />
             </li>
-            {site.folders.map((f) => (
+            {visibleFolders.map((f) => (
               <li key={f.id}>
                 <button type="button" onClick={run(() => onFolder(f))}>
                   <Icon name={f.icon ?? 'folder'} />

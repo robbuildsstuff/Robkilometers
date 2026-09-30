@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { site, type ContentItem, type Item } from '@/content';
+import { site, visibleFolders, type ContentItem, type Item } from '@/content';
 import { Icon } from './icons';
 
 const avatarRows = [
@@ -48,7 +48,7 @@ function Avatar() {
   return <canvas ref={ref} className="avatar" width={16} height={16} aria-label="Pixel portrait" role="img" />;
 }
 
-const shownFolders = site.folders.filter((f) => f.id !== 'recycle');
+const shownFolders = visibleFolders.filter((f) => f.id !== 'recycle');
 
 // Every dated item, however deep in folders, with its path for the deep link.
 function flatten(items: Item[], path: string[]): { path: string[]; it: ContentItem }[] {

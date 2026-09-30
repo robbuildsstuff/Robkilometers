@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { site, type Banner, type ContentItem, type Folder, type IconName, type Item } from '@/content';
+import { site, visibleFolders, type Banner, type ContentItem, type Folder, type IconName, type Item } from '@/content';
 import FolderView from './FolderView';
 import IconButton from './IconButton';
 import Profile from './Profile';
@@ -28,7 +28,7 @@ const topFolderNode = (f: Folder): FolderNode => ({ name: f.name, icon: f.icon ?
 // Walks a path of ids (['food', 'city-guides', 'paris']) down from the desktop.
 // Returns the chain of folders passed through and, if the path ends on one, the item.
 function resolve(path: string[]) {
-  const top = site.folders.find((f) => f.id === path[0]);
+  const top = visibleFolders.find((f) => f.id === path[0]);
   if (!top) return null;
   const folders = [topFolderNode(top)];
   for (let i = 1; i < path.length; i++) {
@@ -192,7 +192,10 @@ export default function Desktop() {
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
     const boot = setTimeout(() => {
-      if (!openFromHash() && !isNarrow()) openReadme();
+      if (!openFromHash()) {
+        if (location.hash) setHash(''); // a link to something that's gone: just show the desktop
+        if (!isNarrow()) openReadme();
+      }
     }, 0);
     const onHash = () => openFromHash();
     window.addEventListener('hashchange', onHash);
@@ -269,7 +272,7 @@ export default function Desktop() {
   const desktopIcons: { id: string; icon: IconName; label: string; open: () => void }[] = [
     { id: 'about', icon: 'computer', label: "Rob's Computer", open: openAbout },
     { id: 'readme', icon: 'notepad', label: site.readme.title, open: openReadme },
-    ...site.folders.map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
+    ...visibleFolders.map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
   ];
 
   return (

@@ -95,6 +95,7 @@ export type Folder = {
   icon?: IconName;
   blurb?: string;
   banner?: Banner;
+  hidden?: boolean; // true keeps the folder here but off the desktop, Start menu and profile
   items: Item[];
 };
 
@@ -1097,6 +1098,7 @@ Last updated: Sept 2026
     {
       id: 'sport',
       name: 'Sport',
+      hidden: true, // off the desktop for now; delete this line to bring it back
       blurb: 'Teams, games and the occasional run.',
       items: [
         { type: 'link', id: 'raptors', title: 'Toronto Raptors', url: 'https://www.nba.com/raptors', note: 'Sample link.' },
@@ -1116,6 +1118,7 @@ Last updated: Sept 2026
     {
       id: 'projects',
       name: 'Projects',
+      hidden: true, // off the desktop for now; delete this line to bring it back
       icon: 'tools',
       blurb: "Things I've built, mostly from zero.",
       items: [
@@ -1222,3 +1225,6 @@ export const contact = {
 export const footer = {
   copyright: '© 2026 Robkilometers',
 };
+
+/** The folders that show up: everything not marked `hidden`. */
+export const visibleFolders = site.folders.filter((f) => !f.hidden);
