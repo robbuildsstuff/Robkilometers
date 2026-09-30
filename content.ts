@@ -24,7 +24,8 @@ import type { CityIconName } from './components/desktop/cityIcons';
  *                                                                        `area` is what the map shows before a place is picked
  *   folder  { type, id, title, blurb?, items: [...] }                 -> a folder inside a folder, with its own items
  *
- * Any item can also have `icon: 'paris'` etc. to swap its icon (see IconName below).
+ * Any item can also have `icon: 'paris'` etc. to swap its icon (see IconName below),
+ * and `newRow: true` to start a new row of icons in its folder window.
  *
  * `id` makes a deep link: robkilometers.ca/#food.bagels opens that item directly,
  * robkilometers.ca/#food.city-guides.paris works the same way inside a folder in a folder,
@@ -53,7 +54,7 @@ export type IconName =
   | CityIconName;
 
 // `icon` is optional on every item and replaces the default icon for its type.
-type ItemBase = { id: string; title: string; date?: string; icon?: IconName };
+type ItemBase = { id: string; title: string; date?: string; icon?: IconName; newRow?: boolean };
 
 // A line in a note's `lines` list: plain text, or crossed out with an optional handwritten scribble beside it.
 export type NoteLine = string | { text: string; crossed?: boolean; scribble?: string };
@@ -975,14 +976,6 @@ Last updated: Sept 2026
           note: 'They turn bright pink in the fridge and last a month or two. If it smells wrong, it probably is. Good on just about anything.',
         },
         {
-          type: 'image',
-          id: 'bistrot-des-tournelles',
-          title: '📍 Bistrot des Tournelles',
-          src: '/photos/bistrot-des-tournelles.jpg',
-          thumb: '/photos/bistrot-des-tournelles-thumb.jpg',
-          caption: 'Bistrot des Tournelles, Paris',
-        },
-        {
           type: 'note',
           id: 'grocery-list',
           title: 'Grocery List',
@@ -1001,6 +994,23 @@ Last updated: Sept 2026
             'Sardines',
             'Coffee',
           ],
+        },
+        {
+          type: 'image',
+          newRow: true,
+          id: 'bistrot-des-tournelles',
+          title: '📍 Bistrot des Tournelles',
+          src: '/photos/bistrot-des-tournelles.jpg',
+          thumb: '/photos/bistrot-des-tournelles-thumb.jpg',
+          caption: 'Bistrot des Tournelles, Paris',
+        },
+        {
+          type: 'image',
+          id: 'ceres',
+          title: '📍 Ceres',
+          src: '/photos/ceres.jpg',
+          thumb: '/photos/ceres-thumb.jpg',
+          caption: 'Ceres, New York City',
         },
       ],
     },

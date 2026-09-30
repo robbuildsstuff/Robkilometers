@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import type { Item } from '@/content';
 import IconButton from './IconButton';
 import { MenuBar, typeIcon } from './viewers';
@@ -33,8 +33,9 @@ export default function FolderView({ trail, link, blurb, items, onOpenItem, onBa
         {blurb && <div className="blurb">{blurb}</div>}
         <div className="fgrid">
           {items.map((it) => (
-            <IconButton
-              key={it.id}
+            <Fragment key={it.id}>
+              {it.newRow && <div className="rowbreak" />}
+              <IconButton
               className="ficon"
               icon={it.icon ?? typeIcon[it.type]}
               label={it.title}
@@ -42,7 +43,8 @@ export default function FolderView({ trail, link, blurb, items, onOpenItem, onBa
               onSelect={() => setSelected(it.id)}
               onOpen={() => onOpenItem(it)}
               thumb={it.type === 'image' ? (it.thumb ?? it.src) : undefined}
-            />
+              />
+            </Fragment>
           ))}
         </div>
       </div>
