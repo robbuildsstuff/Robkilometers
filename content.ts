@@ -316,7 +316,7 @@ Last updated: Sept 2026
       id: 'recycle',
       name: 'Recycle Bin',
       icon: 'trash',
-      blurb: 'Takes I no longer stand behind.',
+      blurb: 'Hey, get outta here!',
       items: [
         {
           type: 'note',
