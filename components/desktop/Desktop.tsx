@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { site, type ContentItem, type Folder, type IconName, type Item } from '@/content';
+import { site, type Banner, type ContentItem, type Folder, type IconName, type Item } from '@/content';
 import FolderView from './FolderView';
 import IconButton from './IconButton';
 import Profile from './Profile';
@@ -10,7 +10,7 @@ import { ItemView, Notepad, itemSize, itemWindowTitle, typeIcon } from './viewer
 import Window, { type WinFrame } from './Window';
 
 // A folder window's contents: a top-level desktop folder or a folder item nested inside one.
-type FolderNode = { name: string; icon: IconName; blurb?: string; items: Item[] };
+type FolderNode = { name: string; icon: IconName; blurb?: string; banner?: Banner; items: Item[] };
 
 // What a window shows. The window key doubles as its deep link: #food, #food.city-guides.paris, #about.
 type Target =
@@ -23,7 +23,7 @@ type Win = WinFrame & { target: Target };
 
 type OpenSpec = { title: string; icon: IconName; w: number; h?: number; target: Target };
 
-const topFolderNode = (f: Folder): FolderNode => ({ name: f.name, icon: f.icon ?? 'folder', blurb: f.blurb, items: f.items });
+const topFolderNode = (f: Folder): FolderNode => ({ name: f.name, icon: f.icon ?? 'folder', blurb: f.blurb, banner: f.banner, items: f.items });
 
 // Walks a path of ids (['food', 'city-guides', 'paris']) down from the desktop.
 // Returns the chain of folders passed through and, if the path ends on one, the item.
@@ -102,7 +102,13 @@ export default function Desktop() {
   const openFolderAt = useCallback(
     (path: string[], trail: string[], node: FolderNode) => {
       const key = path.join('.');
-      open(key, { title: node.name, icon: node.icon, w: 500, h: 360, target: { kind: 'folder', path, trail, node } });
+      open(key, {
+        title: node.name,
+        icon: node.icon,
+        w: 500,
+        h: node.banner && !node.items.length ? undefined : 360, // a banner-only folder fits its banner
+        target: { kind: 'folder', path, trail, node },
+      });
       setHash(key);
     },
     [open],
@@ -148,7 +154,12 @@ export default function Desktop() {
   // Opens a path from a link: the innermost folder, plus the item if the path ends on one.
   const openPath = useCallback(
     (path: string[]) => {
-      const r = resolve(path);
+      let r = resolve(path);
+      // A link to something that's gone falls back to the nearest folder that still exists.
+      while (!r && path.length > 1) {
+        path = path.slice(0, -1);
+        r = resolve(path);
+      }
       if (!r) return false;
       const depth = r.folders.length;
       const node = r.folders[depth - 1];
@@ -236,6 +247,7 @@ export default function Desktop() {
             trail={t.trail}
             link={t.path.join('.')}
             blurb={t.node.blurb}
+            banner={t.node.banner}
             items={t.node.items}
             onOpenItem={(it) => {
               const path = [...t.path, it.id];

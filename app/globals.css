@@ -1045,3 +1045,47 @@ img {
     max-height: 100%;
   }
 }
+
+/* running banner: pixel runner on a hilly road */
+.runbanner {
+  border-bottom: 1px solid var(--chrome-lo);
+}
+.runbanner h2 {
+  margin: 0;
+  padding: 8px 12px 6px;
+  font: 600 22px/1 var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.runscene {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+}
+.runscene canvas {
+  display: block;
+  image-rendering: pixelated;
+}
+.runscene .bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 2px 7px;
+  background: #fff;
+  border: 1px solid var(--ink);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+  font: 18px/1 var(--font-term);
+  white-space: nowrap;
+}
+.runscene .bubble::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  bottom: -6px;
+  width: 8px;
+  height: 6px;
+  background: #fff;
+  border-left: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}

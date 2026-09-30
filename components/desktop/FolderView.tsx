@@ -1,7 +1,8 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import type { Item } from '@/content';
+import type { Banner, Item } from '@/content';
+import RunnerBanner from './RunnerBanner';
 import IconButton from './IconButton';
 import { MenuBar, typeIcon } from './viewers';
 
@@ -9,12 +10,13 @@ type Props = {
   trail: string[]; // folder names from the desktop down, e.g. ['Food', 'City Guides']
   link: string; // deep link, e.g. 'food.city-guides'
   blurb?: string;
+  banner?: Banner;
   items: Item[];
   onOpenItem: (it: Item) => void;
   onBack?: () => void; // go up to the parent folder; missing at the top level
 };
 
-export default function FolderView({ trail, link, blurb, items, onOpenItem, onBack }: Props) {
+export default function FolderView({ trail, link, blurb, banner, items, onOpenItem, onBack }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   return (
     <>
@@ -30,8 +32,9 @@ export default function FolderView({ trail, link, blurb, items, onOpenItem, onBa
         <div className="sunken">C:\Rob\{trail.join('\\')}</div>
       </div>
       <div className="sunken scroll">
+        {banner && <RunnerBanner title={banner.title} lines={banner.lines} />}
         {blurb && <div className="blurb">{blurb}</div>}
-        <div className="fgrid">
+        <div className="fgrid" hidden={!items.length}>
           {items.map((it) => (
             <Fragment key={it.id}>
               {it.newRow && <div className="rowbreak" />}

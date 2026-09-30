@@ -86,11 +86,15 @@ export type ContentItem = NoteItem | RecipeItem | LinkItem | VideoItem | ListIte
 export type Item = ContentItem | FolderItem;
 export type ItemType = Item['type'];
 
+// An animated scene at the top of a folder window: a runner on a hilly road saying `lines` in turn.
+export type Banner = { title: string; lines: string[] };
+
 export type Folder = {
   id: string;
   name: string;
   icon?: IconName;
   blurb?: string;
+  banner?: Banner;
   items: Item[];
 };
 
@@ -1103,22 +1107,11 @@ Last updated: Sept 2026
       id: 'running',
       name: 'Running',
       icon: 'runner',
-      blurb: 'Kilometers, obviously.',
-      items: [
-        {
-          type: 'note',
-          id: 'marathon-block',
-          title: 'Marathon block',
-          date: '2026-09-28',
-          body: 'Marathon — sub-3:30 — Oct 19\n\n[ training log, sub-3:30 push, Oct 19 ]\n\nMon  5.2 km  easy\nWed  8.0 km  waterfront\nSat 12.4 km  long and slow\n\n(sample log)',
-        },
-        {
-          type: 'note',
-          id: 'tourmalet',
-          title: 'Col du Tourmalet',
-          body: '[ the climb story ]',
-        },
-      ],
+      banner: {
+        title: 'Training for something',
+        lines: ['ouch', 'i hate this', 'i love running', 'this rocks'],
+      },
+      items: [],
     },
     {
       id: 'projects',
