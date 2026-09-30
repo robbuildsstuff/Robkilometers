@@ -1,5 +1,6 @@
 import type { IconName, Item, ItemType, VideoItem } from '@/content';
 import { PauseGlyph, PlayGlyph, StopGlyph } from './icons';
+import MapView from './MapView';
 
 export const typeIcon: Record<ItemType, IconName> = {
   note: 'notepad',
@@ -8,6 +9,7 @@ export const typeIcon: Record<ItemType, IconName> = {
   video: 'film',
   list: 'book',
   image: 'image',
+  map: 'map',
 };
 
 const appName: Record<ItemType, string> = {
@@ -17,6 +19,7 @@ const appName: Record<ItemType, string> = {
   video: 'Media Player',
   list: 'Contents',
   image: 'Photo Viewer',
+  map: 'Maps',
 };
 
 export const itemSize: Record<ItemType, [number, number | undefined]> = {
@@ -26,6 +29,7 @@ export const itemSize: Record<ItemType, [number, number | undefined]> = {
   video: [560, undefined],
   list: [460, 300],
   image: [560, 440],
+  map: [660, 520],
 };
 
 export function itemWindowTitle(it: Item) {
@@ -243,5 +247,8 @@ export function ItemView({ it }: { it: Item }) {
           {it.caption && <p className="caption">{it.caption}</p>}
         </>
       );
+
+    case 'map':
+      return <MapView it={it} />;
   }
 }

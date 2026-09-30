@@ -11,6 +11,11 @@
  *                                                                        play right in the window; anything else links out
  *   list    { type, id, title, date?, rows: [{ name, detail, url? }] } -> a table (books, playlists, etc.)
  *   image   { type, id, title, date?, src, caption? }                  -> photo viewer (src = a file in /public, e.g. "/photos/tourmalet.jpg")
+ *   map     { type, id, title, date?, url?, note?, places?: [{ name, note?, query? }] }
+ *                                                                     -> Google Map in a window. `url` is any Google Maps link,
+ *                                                                        e.g. your saved list's Share link. `places` shows a
+ *                                                                        clickable list; clicking one moves the map to it
+ *                                                                        (`query` if the name alone finds the wrong spot)
  *
  * `id` makes a deep link: robkilometers.ca/#food.lemon-pasta opens that item directly,
  * robkilometers.ca/#food opens the folder, robkilometers.ca/#about opens the profile.
@@ -33,7 +38,8 @@ export type IconName =
   | 'km'
   | 'shutdown'
   | 'runner'
-  | 'tools';
+  | 'tools'
+  | 'map';
 
 type ItemBase = { id: string; title: string; date?: string };
 
@@ -51,8 +57,14 @@ export type LinkItem = ItemBase & { type: 'link'; url: string; note?: string };
 export type VideoItem = ItemBase & { type: 'video'; url: string; note?: string };
 export type ListItem = ItemBase & { type: 'list'; rows: { name: string; detail: string; url?: string }[] };
 export type ImageItem = ItemBase & { type: 'image'; src: string; caption?: string };
+export type MapItem = ItemBase & {
+  type: 'map';
+  url?: string;
+  note?: string;
+  places?: { name: string; note?: string; query?: string }[];
+};
 
-export type Item = NoteItem | RecipeItem | LinkItem | VideoItem | ListItem | ImageItem;
+export type Item = NoteItem | RecipeItem | LinkItem | VideoItem | ListItem | ImageItem | MapItem;
 export type ItemType = Item['type'];
 
 export type Folder = {
@@ -184,6 +196,17 @@ Last updated: Sept 2026
           title: 'Serious Eats',
           url: 'https://www.seriouseats.com/',
           note: 'Sample link. Where I go when I want to know why a recipe works.',
+        },
+        {
+          type: 'map',
+          id: 'toronto-eats',
+          title: 'Toronto eats map',
+          note: 'Sample map. Click a place to move the pin. Swap `url` for your own saved list\'s Share link.',
+          places: [
+            { name: 'St. Lawrence Market', note: 'Peameal bacon sandwich', query: 'St. Lawrence Market, Toronto' },
+            { name: 'Kensington Market', note: 'Wander and snack', query: 'Kensington Market, Toronto' },
+            { name: 'Pai', note: 'Northern Thai', query: 'Pai Northern Thai Kitchen, Toronto' },
+          ],
         },
         {
           type: 'note',
