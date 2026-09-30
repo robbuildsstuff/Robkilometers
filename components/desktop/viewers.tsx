@@ -29,7 +29,7 @@ export const itemSize: Record<ContentItem['type'], [number, number | undefined]>
   link: [520, 330],
   video: [560, undefined],
   list: [460, 300],
-  image: [560, 440],
+  image: [620, undefined],
   map: [660, 520],
 };
 

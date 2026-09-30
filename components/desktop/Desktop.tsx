@@ -116,6 +116,15 @@ export default function Desktop() {
       const key = path.join('.');
       open(key, { title: itemWindowTitle(item), icon: item.icon ?? typeIcon[item.type], w, h, target: { kind: 'item', item } });
       setHash(key);
+      if (item.type === 'image') {
+        // Once the photo loads, narrow the window to the photo's shape so there are no black bars.
+        const img = new Image();
+        img.onload = () => {
+          const imgW = Math.min(w - 10, window.innerHeight * 0.7 * (img.naturalWidth / img.naturalHeight));
+          setWins((ws) => ws.map((x) => (x.key === key ? { ...x, w: Math.round(imgW + 10) } : x)));
+        };
+        img.src = item.src;
+      }
     },
     [open],
   );
