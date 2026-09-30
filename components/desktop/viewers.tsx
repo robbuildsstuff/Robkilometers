@@ -1,4 +1,4 @@
-import type { IconName, Item, ItemType, VideoItem } from '@/content';
+import type { ContentItem, IconName, ItemType, VideoItem } from '@/content';
 import { PauseGlyph, PlayGlyph, StopGlyph } from './icons';
 import MapView from './MapView';
 
@@ -10,9 +10,10 @@ export const typeIcon: Record<ItemType, IconName> = {
   list: 'book',
   image: 'image',
   map: 'map',
+  folder: 'folder',
 };
 
-const appName: Record<ItemType, string> = {
+const appName: Record<ContentItem['type'], string> = {
   note: 'Notepad',
   recipe: 'Recipe Card',
   link: 'Internet Explorer',
@@ -22,7 +23,7 @@ const appName: Record<ItemType, string> = {
   map: 'Maps',
 };
 
-export const itemSize: Record<ItemType, [number, number | undefined]> = {
+export const itemSize: Record<ContentItem['type'], [number, number | undefined]> = {
   recipe: [620, 520],
   note: [440, 320],
   link: [520, 330],
@@ -32,7 +33,7 @@ export const itemSize: Record<ItemType, [number, number | undefined]> = {
   map: [660, 520],
 };
 
-export function itemWindowTitle(it: Item) {
+export function itemWindowTitle(it: ContentItem) {
   const name = it.type === 'note' && !/\.txt$/i.test(it.title) ? `${it.title}.txt` : it.title;
   return `${name} - ${appName[it.type]}`;
 }
@@ -134,7 +135,7 @@ function VideoPlayer({ it }: { it: VideoItem }) {
   );
 }
 
-export function ItemView({ it }: { it: Item }) {
+export function ItemView({ it }: { it: ContentItem }) {
   switch (it.type) {
     case 'note':
       return <Notepad body={it.body} date={it.date} />;

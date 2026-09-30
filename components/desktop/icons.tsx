@@ -1,7 +1,8 @@
 import type { IconName } from '@/content';
+import { cityArt, palette, type CityIconName } from './cityIcons';
 
 // Pixel icons on a 32x32 grid. Markup is static and authored here, never from content.
-const art: Record<IconName, string> = {
+const baseArt: Record<Exclude<IconName, CityIconName>, string> = {
   folder:
     '<rect x="3" y="6" width="11" height="4" fill="#7a5c00"/><rect x="4" y="7" width="9" height="3" fill="#e0b940"/><rect x="2" y="9" width="28" height="19" fill="#7a5c00"/><rect x="3" y="10" width="26" height="17" fill="#f2cf5b"/><rect x="3" y="10" width="26" height="2" fill="#fff0a8"/><rect x="3" y="25" width="26" height="2" fill="#c9a227"/>',
   trash:
@@ -34,6 +35,30 @@ const art: Record<IconName, string> = {
   tools:
     '<rect x="7" y="4" width="18" height="7" fill="#222"/><rect x="8" y="5" width="16" height="5" fill="#8a8a8a"/><rect x="8" y="5" width="16" height="1" fill="#d8d8d8"/><rect x="13" y="11" width="6" height="18" fill="#222"/><rect x="14" y="11" width="4" height="17" fill="#a0642a"/><rect x="14" y="11" width="1" height="17" fill="#c88a4a"/>',
   map: '<rect x="3" y="7" width="26" height="20" fill="#222"/><rect x="4" y="8" width="8" height="18" fill="#e8e2c4"/><rect x="12" y="8" width="8" height="18" fill="#d4cda8"/><rect x="20" y="8" width="8" height="18" fill="#e8e2c4"/><rect x="4" y="16" width="24" height="2" fill="#f2cf5b"/><rect x="15" y="8" width="2" height="18" fill="#9fd4ff"/><rect x="18" y="2" width="8" height="8" fill="#8a1410"/><rect x="19" y="3" width="6" height="6" fill="#e0301e"/><rect x="21" y="5" width="2" height="2" fill="#fff"/><rect x="20" y="10" width="4" height="2" fill="#8a1410"/><rect x="21" y="12" width="2" height="3" fill="#8a1410"/>',
+};
+
+// Turns a 16x16 letter grid into rects, merging runs of the same colour on a row.
+function gridToRects(grid: string) {
+  return grid
+    .trim()
+    .split('\n')
+    .flatMap((row, y) => {
+      const rects: string[] = [];
+      for (let x = 0; x < row.length; ) {
+        const ch = row[x];
+        let end = x + 1;
+        while (end < row.length && row[end] === ch) end++;
+        if (palette[ch]) rects.push(`<rect x="${x * 2}" y="${y * 2}" width="${(end - x) * 2}" height="2" fill="${palette[ch]}"/>`);
+        x = end;
+      }
+      return rects;
+    })
+    .join('');
+}
+
+const art: Record<IconName, string> = {
+  ...baseArt,
+  ...(Object.fromEntries(Object.entries(cityArt).map(([k, grid]) => [k, gridToRects(grid)])) as Record<CityIconName, string>),
 };
 
 export function Icon({ name, className }: { name: IconName; className?: string }) {

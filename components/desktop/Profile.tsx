@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { site, type Folder, type Item } from '@/content';
+import { site, type ContentItem, type Item } from '@/content';
 import { Icon } from './icons';
 
 const avatarRows = [
@@ -50,17 +50,22 @@ function Avatar() {
 
 const shownFolders = site.folders.filter((f) => f.id !== 'recycle');
 
+// Every dated item, however deep in folders, with its path for the deep link.
+function flatten(items: Item[], path: string[]): { path: string[]; it: ContentItem }[] {
+  return items.flatMap((it) => (it.type === 'folder' ? flatten(it.items, [...path, it.id]) : [{ path: [...path, it.id], it }]));
+}
+
 const latest = shownFolders
-  .flatMap((f) => f.items.map((it) => ({ f, it })))
+  .flatMap((f) => flatten(f.items, [f.id]))
   .filter((x) => x.it.date)
   .sort((a, b) => (b.it.date ?? '').localeCompare(a.it.date ?? ''))
   .slice(0, 5);
 
 export default function Profile({
-  onOpenItem,
+  onOpenPath,
   onCopy,
 }: {
-  onOpenItem: (f: Folder, it: Item) => void;
+  onOpenPath: (path: string[]) => void;
   onCopy: (text: string) => void;
 }) {
   return (
@@ -112,10 +117,10 @@ export default function Profile({
           <div className="ext">Rob is in your extended network</div>
           <h3 style={{ marginTop: 18 }}>Rob&apos;s Latest Entries</h3>
           <ul className="entries">
-            {latest.map(({ f, it }) => (
-              <li key={`${f.id}.${it.id}`}>
+            {latest.map(({ path, it }) => (
+              <li key={path.join('.')}>
                 {it.title} (
-                <button type="button" onClick={() => onOpenItem(f, it)}>
+                <button type="button" onClick={() => onOpenPath(path)}>
                   check it out
                 </button>
                 )

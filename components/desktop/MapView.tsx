@@ -32,7 +32,7 @@ export default function MapView({ it }: { it: MapItem }) {
   const fromUrl = it.url ? embedFromUrl(it.url) : null;
   const src = place
     ? embedFor(place.query ?? place.name)
-    : (fromUrl ?? (places[0] ? embedFor(places[0].query ?? places[0].name) : null));
+    : (fromUrl ?? (it.area ? embedFor(it.area) : null) ?? (places[0] ? embedFor(places[0].query ?? places[0].name) : null));
   const openHref = place ? search(place.query ?? place.name) : (it.url ?? (places[0] ? search(places[0].query ?? places[0].name) : '#'));
 
   return (

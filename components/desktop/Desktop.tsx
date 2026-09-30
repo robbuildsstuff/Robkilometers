@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { site, type Folder, type IconName, type Item } from '@/content';
+import { site, type ContentItem, type Folder, type IconName, type Item } from '@/content';
 import FolderView from './FolderView';
 import IconButton from './IconButton';
 import Profile from './Profile';
@@ -9,10 +9,13 @@ import Taskbar from './Taskbar';
 import { ItemView, Notepad, itemSize, itemWindowTitle, typeIcon } from './viewers';
 import Window, { type WinFrame } from './Window';
 
-// What a window shows. The window key doubles as its deep link: #food, #food.lemon-pasta, #about.
+// A folder window's contents: a top-level desktop folder or a folder item nested inside one.
+type FolderNode = { name: string; icon: IconName; blurb?: string; items: Item[] };
+
+// What a window shows. The window key doubles as its deep link: #food, #food.city-guides.paris, #about.
 type Target =
-  | { kind: 'folder'; folder: Folder }
-  | { kind: 'item'; folder: Folder; item: Item }
+  | { kind: 'folder'; path: string[]; trail: string[]; node: FolderNode }
+  | { kind: 'item'; item: ContentItem }
   | { kind: 'about' }
   | { kind: 'readme' };
 
@@ -20,7 +23,22 @@ type Win = WinFrame & { target: Target };
 
 type OpenSpec = { title: string; icon: IconName; w: number; h?: number; target: Target };
 
-const folderById = (id: string) => site.folders.find((f) => f.id === id);
+const topFolderNode = (f: Folder): FolderNode => ({ name: f.name, icon: f.icon ?? 'folder', blurb: f.blurb, items: f.items });
+
+// Walks a path of ids (['food', 'city-guides', 'paris']) down from the desktop.
+// Returns the chain of folders passed through and, if the path ends on one, the item.
+function resolve(path: string[]) {
+  const top = site.folders.find((f) => f.id === path[0]);
+  if (!top) return null;
+  const folders = [topFolderNode(top)];
+  for (let i = 1; i < path.length; i++) {
+    const it = folders[folders.length - 1].items.find((x) => x.id === path[i]);
+    if (!it) return null;
+    if (it.type !== 'folder') return i === path.length - 1 ? { folders, item: it } : null;
+    folders.push({ name: it.title, icon: it.icon ?? 'folder', blurb: it.blurb, items: it.items });
+  }
+  return { folders, item: undefined };
+}
 const topZ = (ws: Win[]) => ws.reduce((z, w) => Math.max(z, w.z), 10);
 const isNarrow = () => window.matchMedia('(max-width: 640px)').matches;
 
@@ -67,22 +85,39 @@ export default function Desktop() {
     [focus],
   );
 
-  const openFolder = useCallback(
-    (folder: Folder) => {
-      open(folder.id, { title: folder.name, icon: folder.icon ?? 'folder', w: 500, h: 360, target: { kind: 'folder', folder } });
-      setHash(folder.id);
+  const openFolderAt = useCallback(
+    (path: string[], trail: string[], node: FolderNode) => {
+      const key = path.join('.');
+      open(key, { title: node.name, icon: node.icon, w: 500, h: 360, target: { kind: 'folder', path, trail, node } });
+      setHash(key);
     },
     [open],
   );
 
-  const openItem = useCallback(
-    (folder: Folder, item: Item) => {
+  const openFolder = useCallback((f: Folder) => openFolderAt([f.id], [f.name], topFolderNode(f)), [openFolderAt]);
+
+  const openItemAt = useCallback(
+    (path: string[], item: ContentItem) => {
       const [w, h] = itemSize[item.type];
-      const key = `${folder.id}.${item.id}`;
-      open(key, { title: itemWindowTitle(item), icon: typeIcon[item.type], w, h, target: { kind: 'item', folder, item } });
+      const key = path.join('.');
+      open(key, { title: itemWindowTitle(item), icon: item.icon ?? typeIcon[item.type], w, h, target: { kind: 'item', item } });
       setHash(key);
     },
     [open],
+  );
+
+  // Opens a path from a link: the innermost folder, plus the item if the path ends on one.
+  const openPath = useCallback(
+    (path: string[]) => {
+      const r = resolve(path);
+      if (!r) return false;
+      const depth = r.folders.length;
+      const node = r.folders[depth - 1];
+      openFolderAt(path.slice(0, depth), r.folders.map((f) => f.name), node);
+      if (r.item) openItemAt(path, r.item);
+      return true;
+    },
+    [openFolderAt, openItemAt],
   );
 
   const openAbout = useCallback(() => {
@@ -101,14 +136,8 @@ export default function Desktop() {
       openAbout();
       return true;
     }
-    const dot = h.indexOf('.');
-    const folder = folderById(dot === -1 ? h : h.slice(0, dot));
-    if (!folder) return false;
-    openFolder(folder);
-    const item = dot === -1 ? undefined : folder.items.find((it) => it.id === h.slice(dot + 1));
-    if (item) openItem(folder, item);
-    return true;
-  }, [openAbout, openFolder, openItem]);
+    return h ? openPath(h.split('.')) : false;
+  }, [openAbout, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -163,11 +192,24 @@ export default function Desktop() {
   function body(t: Target) {
     switch (t.kind) {
       case 'folder':
-        return <FolderView folder={t.folder} onOpenItem={(it) => openItem(t.folder, it)} />;
+        return (
+          <FolderView
+            trail={t.trail}
+            link={t.path.join('.')}
+            blurb={t.node.blurb}
+            items={t.node.items}
+            onOpenItem={(it) => {
+              const path = [...t.path, it.id];
+              if (it.type === 'folder') {
+                openFolderAt(path, [...t.trail, it.title], { name: it.title, icon: it.icon ?? 'folder', blurb: it.blurb, items: it.items });
+              } else openItemAt(path, it);
+            }}
+          />
+        );
       case 'item':
         return <ItemView it={t.item} />;
       case 'about':
-        return <Profile onOpenItem={openItem} onCopy={copy} />;
+        return <Profile onOpenPath={openPath} onCopy={copy} />;
       case 'readme':
         return <Notepad body={site.readme.body} />;
     }
