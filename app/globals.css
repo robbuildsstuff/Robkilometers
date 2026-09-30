@@ -942,3 +942,39 @@ img {
     border-top: 1px solid var(--chrome-lo);
   }
 }
+
+/* folder back button + photo thumbnails */
+.backbtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px 1px 6px;
+  font-size: 12px;
+  flex: none;
+}
+.backbtn svg {
+  width: 10px;
+  height: 10px;
+}
+.backbtn:disabled {
+  color: var(--chrome-lo);
+  text-shadow: 1px 1px 0 var(--chrome-hi);
+}
+.backbtn:disabled:active {
+  border-color: var(--chrome-hi) var(--chrome-dk) var(--chrome-dk) var(--chrome-hi);
+  box-shadow:
+    inset -1px -1px 0 var(--chrome-lo),
+    inset 1px 1px 0 #dfdfdf;
+}
+.ficon .thumb {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  border: 1px solid var(--chrome-dk);
+  outline: 2px solid var(--paper);
+  outline-offset: -3px;
+  background: #000;
+}
+.ficon.sel .thumb {
+  filter: sepia(1) hue-rotate(190deg) saturate(3) brightness(0.7);
+}

@@ -11,14 +11,21 @@ type Props = {
   blurb?: string;
   items: Item[];
   onOpenItem: (it: Item) => void;
+  onBack?: () => void; // go up to the parent folder; missing at the top level
 };
 
-export default function FolderView({ trail, link, blurb, items, onOpenItem }: Props) {
+export default function FolderView({ trail, link, blurb, items, onOpenItem, onBack }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   return (
     <>
       <MenuBar items={['File', 'Edit', 'View', 'Help']} />
       <div className="addr">
+        <button type="button" className="bevel backbtn" onClick={onBack} disabled={!onBack} aria-label="Back to the folder above" title="Back">
+          <svg viewBox="0 0 10 10" shapeRendering="crispEdges" aria-hidden="true">
+            <path d="M4 1h1v2h5v4H5v2H4V8H3V7H2V6H1V4h1V3h1V2h1z" fill="currentColor" />
+          </svg>
+          Back
+        </button>
         <span>Address</span>
         <div className="sunken">C:\Rob\{trail.join('\\')}</div>
       </div>
@@ -34,6 +41,7 @@ export default function FolderView({ trail, link, blurb, items, onOpenItem }: Pr
               selected={selected === it.id}
               onSelect={() => setSelected(it.id)}
               onOpen={() => onOpenItem(it)}
+              thumb={it.type === 'image' ? (it.thumb ?? it.src) : undefined}
             />
           ))}
         </div>

@@ -10,11 +10,12 @@ type Props = {
   selected: boolean;
   onSelect: () => void;
   onOpen: () => void;
+  thumb?: string; // a photo to show instead of the pixel icon
 };
 
 // Desktop behaviour: click selects, double-click opens.
 // Phones (no hover) open on tap; keyboard Enter/Space opens too (click with detail 0).
-export default function IconButton({ className, icon, label, selected, onSelect, onOpen }: Props) {
+export default function IconButton({ className, icon, label, selected, onSelect, onOpen, thumb }: Props) {
   return (
     <button
       type="button"
@@ -25,7 +26,12 @@ export default function IconButton({ className, icon, label, selected, onSelect,
       }}
       onDoubleClick={onOpen}
     >
-      <Icon name={icon} />
+      {thumb ? (
+        // eslint-disable-next-line @next/next/no-img-element -- tiny local thumbnail
+        <img className="thumb" src={thumb} alt="" />
+      ) : (
+        <Icon name={icon} />
+      )}
       <span>{label}</span>
     </button>
   );

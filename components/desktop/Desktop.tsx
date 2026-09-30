@@ -39,6 +39,17 @@ function resolve(path: string[]) {
   }
   return { folders, item: undefined };
 }
+
+// Old links that moved.
+const aliases: Record<string, string> = { 'food.toronto-eats': 'food.city-guides.toronto' };
+
+// The window contents for a folder path, or null if the path isn't a folder.
+function folderTarget(path: string[]) {
+  const r = resolve(path);
+  if (!r || r.item) return null;
+  const node = r.folders[r.folders.length - 1];
+  return { kind: 'folder' as const, path, trail: r.folders.map((f) => f.name), node };
+}
 const topZ = (ws: Win[]) => ws.reduce((z, w) => Math.max(z, w.z), 10);
 const isNarrow = () => window.matchMedia('(max-width: 640px)').matches;
 
@@ -106,6 +117,22 @@ export default function Desktop() {
     [open],
   );
 
+  // Shows another folder in an existing folder window, like Explorer does.
+  // If that folder already has its own window, that one comes forward instead.
+  const navigate = useCallback((fromKey: string, path: string[]) => {
+    const target = folderTarget(path);
+    if (!target) return;
+    const key = path.join('.');
+    setWins((ws) => {
+      const z = topZ(ws) + 1;
+      if (ws.some((w) => w.key === key)) {
+        return ws.filter((w) => w.key !== fromKey).map((w) => (w.key === key ? { ...w, min: false, z } : w));
+      }
+      return ws.map((w) => (w.key === fromKey ? { ...w, key, title: target.node.name, icon: target.node.icon, target, z } : w));
+    });
+    setHash(key);
+  }, []);
+
   // Opens a path from a link: the innermost folder, plus the item if the path ends on one.
   const openPath = useCallback(
     (path: string[]) => {
@@ -136,7 +163,7 @@ export default function Desktop() {
       openAbout();
       return true;
     }
-    return h ? openPath(h.split('.')) : false;
+    return h ? openPath((aliases[h] ?? h).split('.')) : false;
   }, [openAbout, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
@@ -200,10 +227,10 @@ export default function Desktop() {
             items={t.node.items}
             onOpenItem={(it) => {
               const path = [...t.path, it.id];
-              if (it.type === 'folder') {
-                openFolderAt(path, [...t.trail, it.title], { name: it.title, icon: it.icon ?? 'folder', blurb: it.blurb, items: it.items });
-              } else openItemAt(path, it);
+              if (it.type === 'folder') navigate(t.path.join('.'), path);
+              else openItemAt(path, it);
             }}
+            onBack={t.path.length > 1 ? () => navigate(t.path.join('.'), t.path.slice(0, -1)) : undefined}
           />
         );
       case 'item':

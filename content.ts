@@ -12,7 +12,8 @@ import type { CityIconName } from './components/desktop/cityIcons';
  *   video   { type, id, title, date?, url, note? }                     -> media player. YouTube video links
  *                                                                        play right in the window; anything else links out
  *   list    { type, id, title, date?, rows: [{ name, detail, url? }] } -> a table (books, playlists, etc.)
- *   image   { type, id, title, date?, src, caption? }                  -> photo viewer (src = a file in /public, e.g. "/photos/tourmalet.jpg")
+ *   image   { type, id, title, date?, src, thumb?, caption? }          -> photo viewer (src = a file in /public, e.g. "/photos/tourmalet.jpg").
+ *                                                                        Shows as a little thumbnail in its folder (`thumb` = a smaller copy)
  *   map     { type, id, title, date?, url?, area?, note?, places?: [{ name, note?, query? }] }
  *                                                                     -> Google Map in a window. `url` is any Google Maps link,
  *                                                                        e.g. your saved list's Share link. `places` shows a
@@ -65,7 +66,7 @@ export type RecipeItem = ItemBase & {
 export type LinkItem = ItemBase & { type: 'link'; url: string; note?: string };
 export type VideoItem = ItemBase & { type: 'video'; url: string; note?: string };
 export type ListItem = ItemBase & { type: 'list'; rows: { name: string; detail: string; url?: string }[] };
-export type ImageItem = ItemBase & { type: 'image'; src: string; caption?: string };
+export type ImageItem = ItemBase & { type: 'image'; src: string; thumb?: string; caption?: string };
 export type MapItem = ItemBase & {
   type: 'map';
   url?: string;
@@ -150,6 +151,19 @@ Last updated: Sept 2026
           title: 'City Guides',
           blurb: 'Where I eat and drink when I travel. Straight from my Google Maps lists.',
           items: [
+            {
+              type: 'map',
+              id: 'toronto',
+              title: 'Toronto',
+              icon: 'toronto',
+              area: 'Toronto, Canada',
+              note: 'Sample map. Click a place to move the pin. Swap `url` for your own saved list\'s Share link.',
+              places: [
+                { name: 'St. Lawrence Market', note: 'Peameal bacon sandwich', query: 'St. Lawrence Market, Toronto' },
+                { name: 'Kensington Market', note: 'Wander and snack', query: 'Kensington Market, Toronto' },
+                { name: 'Pai', note: 'Northern Thai', query: 'Pai Northern Thai Kitchen, Toronto' },
+              ],
+            },
             {
               type: 'map',
               id: 'paris',
@@ -905,6 +919,69 @@ Last updated: Sept 2026
         },
         {
           type: 'recipe',
+          id: 'bagels',
+          title: 'Bagels',
+          icon: 'bagel',
+          serves: '~14 small bagels',
+          time: '2 days (mostly waiting)',
+          source: 'https://docs.google.com/document/d/1LTdMHqFdjTvnNiZU3QcrJegVDtM5eDW9W8UjopKyiaY/edit?usp=sharing',
+          ingredients: [
+            '350 g water, at 95°F',
+            '650 g hard bread flour (250 g for the sponge, 400 g later)',
+            '3 g active dry yeast',
+            '25 g white sugar',
+            '25 g diastatic malt powder (yes, buy this FFS)',
+            '10 g Diamond Crystal kosher salt',
+            'Boiling: water plus about 1 tbsp each honey and molasses',
+            'Toppings: seeds, cheese, jalapeño. Everything mix = 1 tbsp poppy, 1 tbsp sesame, ¼ tsp caraway, flaky salt',
+          ],
+          steps: [
+            'Day 1, 10:00 am. Sponge: mix all the water, all the yeast and 250 g flour. Cover and leave somewhere warm (oven off, light on) for 3 to 6 hours.',
+            'Day 1, 4:00 pm. Whisk the salt, sugar and malt powder into the remaining 400 g flour, then slowly add it to the sponge. Knead by hand for 15+ minutes until smooth and springy and it passes the windowpane test. Put on golf cart classics and take shifts if you can. Rest somewhere warm 1 to 3 hours.',
+            'Day 1, 6:15 pm. Once doubled, portion with a scale and scissors: 65 g small, 85 g medium, 105 g large. Shape into tight balls, space out on a parchment-lined sheet, cover, and rise 1 to 2 hours. Never leave dough uncovered.',
+            'Day 1, 7:45 pm. Pinch a hole through the centre of each ball and spin it on your fingers. Make the hole bigger than you think. Cover and put in the fridge overnight. Crack a pint, you earned it.',
+            'Day 2, 9:00 am. Oven to 450°F, racks in the lower half, with a pizza stone or an upside-down baking sheet heating inside.',
+            'Day 2, 9:15 am. Bring a big pot of water to a heavy simmer and add about 1 tbsp each honey and molasses. No malt powder? Add a pinch of baking soda. Prep toppings while it heats.',
+            'Day 2, 9:45 am. Boil bagels 1 minute per side, then onto a rack and top them. Slide onto parchment on the hot stone or sheet and bake 20 to 25 minutes, until deep caramelized brown and blistered.',
+            "Cool on a rack. Best warm and toasted. Freeze whatever you don't eat day one (good luck).",
+          ],
+          note: 'Cheddar jalapeño is the fan favourite. Questions on shaping? Just call me.',
+        },
+        {
+          type: 'recipe',
+          id: 'pickled-onions',
+          title: "Hank's Pickled Onions",
+          icon: 'pickled-onions',
+          time: '10 min, plus cooling',
+          source: 'https://docs.google.com/document/d/1s3CkMTPfqKeWS4tgrHV-V7sEXLU0-_IVJBDraFGnV4Q/edit?usp=sharing',
+          ingredients: [
+            '1 red onion',
+            '1 red chili',
+            '1 tbsp kosher salt',
+            '1 tbsp white sugar',
+            '¾ cup white distilled vinegar',
+            '½ cup water',
+            'Optional: mustard seed, pink peppercorns, cilantro, more chilies',
+          ],
+          steps: [
+            'Cut the top and root off the onion, halve it, and slice thin from pole to pole. Thinner is better. Slice the chili too.',
+            'Pack the onions and chili into a glass jar (or a bowl first, whatever works).',
+            'Put the salt, sugar, water and vinegar in a saucepan with any spices you like. Heat on medium-high, stirring, just until the sugar and salt dissolve, 1 to 2 minutes.',
+            'Pour the hot brine over the onions and put the lid on.',
+            'Cool on the counter about 30 minutes, then into the fridge.',
+          ],
+          note: 'They turn bright pink in the fridge and last a month or two. If it smells wrong, it probably is. Good on just about anything.',
+        },
+        {
+          type: 'image',
+          id: 'bistrot-des-tournelles',
+          title: '📍 Bistrot des Tournelles',
+          src: '/photos/bistrot-des-tournelles.jpg',
+          thumb: '/photos/bistrot-des-tournelles-thumb.jpg',
+          caption: 'Bistrot des Tournelles, Paris',
+        },
+        {
+          type: 'recipe',
           id: 'lemon-pasta',
           title: 'Weeknight Lemon Pasta',
           serves: '2',
@@ -949,36 +1026,11 @@ Last updated: Sept 2026
           note: 'Sample recipe.',
         },
         {
-          type: 'video',
-          id: 'mushroom-pasta',
-          title: 'Easy Weeknight Pasta with Mushrooms',
-          url: 'https://www.youtube.com/watch?v=dqpOz9pJnho',
-          note: 'Sample video: Kenji, point-of-view cooking, no fuss. Plays right here in the window.',
-        },
-        {
-          type: 'link',
-          id: 'kenji',
-          title: "Kenji's YouTube channel",
-          url: 'https://www.youtube.com/@JKenjiLopezAlt',
-          note: 'Sample link. Good for learning technique.',
-        },
-        {
           type: 'link',
           id: 'serious-eats',
           title: 'Serious Eats',
           url: 'https://www.seriouseats.com/',
           note: 'Sample link. Where I go when I want to know why a recipe works.',
-        },
-        {
-          type: 'map',
-          id: 'toronto-eats',
-          title: 'Toronto eats map',
-          note: 'Sample map. Click a place to move the pin. Swap `url` for your own saved list\'s Share link.',
-          places: [
-            { name: 'St. Lawrence Market', note: 'Peameal bacon sandwich', query: 'St. Lawrence Market, Toronto' },
-            { name: 'Kensington Market', note: 'Wander and snack', query: 'Kensington Market, Toronto' },
-            { name: 'Pai', note: 'Northern Thai', query: 'Pai Northern Thai Kitchen, Toronto' },
-          ],
         },
         {
           type: 'note',
