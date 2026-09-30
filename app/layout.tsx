@@ -1,11 +1,16 @@
-import type { Metadata } from 'next';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'robkilometers',
-  description: 'Rob — Founding AE, builder, endurance athlete. Toronto.',
+  title: 'robOS 98 · robkilometers',
+  description: "Rob's corner of the internet: food, clothes, books, sport and whatever else he's into this week.",
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#2a7a78',
 };
 
 export default function RootLayout({
@@ -14,20 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&family=VT323&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body>
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
