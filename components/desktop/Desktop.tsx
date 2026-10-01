@@ -44,6 +44,13 @@ function resolve(path: string[]) {
 const aliases: Record<string, string> = {
   'food.toronto-eats': 'food.city-guides.toronto',
   'food.food-list': 'food.grocery-list',
+  'running.cycling': 'cycling',
+};
+
+// Applies an alias to a link or anything under it: running.cycling.wout-wout -> cycling.wout-wout
+const unalias = (h: string) => {
+  const from = Object.keys(aliases).find((a) => h === a || h.startsWith(a + '.'));
+  return from ? aliases[from] + h.slice(from.length) : h;
 };
 
 // The window contents for a folder path, or null if the path isn't a folder.
@@ -186,7 +193,7 @@ export default function Desktop() {
       openAbout();
       return true;
     }
-    return h ? openPath((aliases[h] ?? h).split('.')) : false;
+    return h ? openPath(unalias(h).split('.')) : false;
   }, [openAbout, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
