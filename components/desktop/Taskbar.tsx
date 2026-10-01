@@ -119,7 +119,6 @@ export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, on
           ))}
         </div>
         <div id="tray">
-          <span className="km">{site.coords.split(' ')[0]}</span>
           <WeatherTray onOpen={onWeather} />
           <Clock />
         </div>
