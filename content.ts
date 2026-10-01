@@ -104,11 +104,11 @@ export type QuickLink =
   | { label: string; icon: IconName; email: string }
   | { label: string; icon: IconName; url: string };
 
-// The fridge in the middle of the desktop. Doodles are photos in /public/photos/doodles,
-// pinned on with magnets. Clicking one opens it big. `submitUrl` (unused while empty) is for a
-// future "submit a doodle" link.
-export type Doodle = { id: string; title: string; src: string };
-export type Fridge = { doodles: Doodle[]; note?: string; submitUrl?: string };
+// Stickers scattered over the desktop wallpaper, like a laptop lid: doodles, stickers, logos.
+// Files go in /public/stickers (PNG or WebP with a see-through background works best).
+// x and y are % across and down the desktop, size is the width in px, rotate is in degrees.
+// Leave x, y or rotate out and the sticker gets a spot of its own that stays the same every visit.
+export type Sticker = { id: string; src: string; alt?: string; x?: number; y?: number; size?: number; rotate?: number };
 
 export type Site = {
   owner: string;
@@ -119,7 +119,7 @@ export type Site = {
   tagline: string;
   taskbar: QuickLink[];
   readme: { title: string; body: string };
-  fridge: Fridge;
+  stickers: Sticker[];
   folders: Folder[];
 };
 
@@ -157,12 +157,8 @@ Last updated: Sept 2026
 (sample text, edit me in content.ts)`,
   },
 
-  fridge: {
-    // Add doodles like: { id: 'cat', title: 'Cat', src: '/photos/doodles/cat.jpg' },
-    doodles: [],
-    note: 'doodles coming soon',
-    submitUrl: '',
-  },
+  // e.g. { id: 'bagel', src: '/stickers/bagel.png', size: 120, rotate: -8 },
+  stickers: [],
 
   folders: [
     {

@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { site, visibleFolders, type Banner, type ContentItem, type Doodle, type Folder, type IconName, type Item } from '@/content';
+import { site, visibleFolders, type Banner, type ContentItem, type Folder, type IconName, type Item } from '@/content';
 import FolderView from './FolderView';
-import Fridge from './Fridge';
+import Stickers from './Stickers';
 import IconButton from './IconButton';
 import Profile from './Profile';
 import Solitaire from './Solitaire';
@@ -201,12 +201,6 @@ export default function Desktop() {
     setHash('solitaire');
   }, [open]);
 
-  // A doodle from the fridge opens like any photo. Its link is #fridge.<id>.
-  const openDoodle = useCallback(
-    (d: Doodle) => openItemAt(['fridge', d.id], { type: 'image', id: d.id, title: d.title, src: d.src }),
-    [openItemAt],
-  );
-
   // Opens whatever the URL hash points at. Returns false if it points at nothing.
   const openFromHash = useCallback(() => {
     const h = decodeURIComponent(location.hash.slice(1));
@@ -222,13 +216,8 @@ export default function Desktop() {
       openSolitaire();
       return true;
     }
-    const doodle = h.startsWith('fridge.') && site.fridge.doodles.find((d) => d.id === h.slice(7));
-    if (doodle) {
-      openDoodle(doodle);
-      return true;
-    }
     return h ? openPath(unalias(h).split('.')) : false;
-  }, [openAbout, openWeather, openSolitaire, openDoodle, openPath]);
+  }, [openAbout, openWeather, openSolitaire, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -328,10 +317,10 @@ export default function Desktop() {
         ref={deskRef}
         onPointerDown={(e) => {
           const t = e.target as HTMLElement;
-          if (t === e.currentTarget || t.id === 'icons' || t.closest('.fridge-art')) setSelectedIcon(null);
+          if (t === e.currentTarget || t.id === 'icons') setSelectedIcon(null);
         }}
       >
-        <Fridge data={site.fridge} onOpen={openDoodle} />
+        <Stickers stickers={site.stickers} />
         <div id="icons" role="list">
           {desktopIcons.map((d) => (
             <div key={d.id} role="listitem">

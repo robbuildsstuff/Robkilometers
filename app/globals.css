@@ -1297,90 +1297,27 @@ img {
   border-color: var(--chrome-hi) var(--chrome-dk) var(--chrome-dk) var(--chrome-hi) !important;
 }
 
-/* ---------- fridge on the wallpaper ---------- */
+/* ---------- sticker collage on the wallpaper ---------- */
 #icons {
   z-index: 1;
 }
-.fridge {
+.stickers {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 192px;
-  height: 320px;
-  transform: translate(-50%, -52%);
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
-.fridge-art {
-  width: 100%;
-  height: 100%;
-  display: block;
-  filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.25));
-}
-.doodle {
+.sticker {
   position: absolute;
-  width: 34%;
-  padding: 3px;
-  border: 0;
-  background: #fff;
-  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-}
-.doodle img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-.magnet {
-  position: absolute;
-  left: 50%;
-  top: -5px;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  border-radius: 50%;
-  box-shadow:
-    inset -2px -2px 0 rgba(0, 0, 0, 0.25),
-    1px 1px 0 rgba(0, 0, 0, 0.3);
-}
-.sticky {
-  position: absolute;
-  left: 20%;
-  top: 46%;
-  width: 52%;
-  padding: 12px 8px 10px;
-  background: #fff59a;
-  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.2);
-  transform: rotate(-5deg);
-  font: 600 22px/1 'Caveat', 'Comic Sans MS', cursive;
-  color: #1a33a8;
-  text-align: center;
-}
-.submit-doodle {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -26px;
-  text-align: center;
-  color: #fff;
-  font-size: 12px;
-  text-shadow: 1px 1px 0 #000;
+  height: auto;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  /* die-cut white edge, then a soft shadow */
+  filter: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+    drop-shadow(2px 3px 2px rgba(0, 0, 0, 0.35));
 }
 @media (max-width: 640px) {
-  .fridge {
-    top: auto;
-    bottom: 12px;
-    width: 132px;
-    height: 220px;
-    transform: translateX(-50%);
-  }
-  .sticky {
-    font-size: 16px;
-    padding: 9px 6px 7px;
-  }
-}
-@media (max-width: 640px) and (max-height: 700px) {
-  .fridge {
-    display: none;
+  .sticker {
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(0.6);
   }
 }
 
