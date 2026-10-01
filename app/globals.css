@@ -1089,3 +1089,297 @@ img {
   border-bottom: 1px solid var(--ink);
   clip-path: polygon(0 0, 100% 0, 0 100%);
 }
+
+/* ---------- weather ---------- */
+.wx-tray {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 12px;
+  cursor: pointer;
+}
+.wx-tray svg {
+  width: 18px;
+  height: 18px;
+}
+.wx-msg {
+  padding: 16px;
+}
+.wx {
+  background: var(--paper);
+}
+.wx-now {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--chrome);
+}
+.wx-big {
+  width: 64px;
+  height: 64px;
+}
+.wx-temp {
+  font: 600 36px/1 var(--font-display);
+}
+.wx-label {
+  font-size: 13px;
+  color: #444;
+}
+.wx-facts {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 10px;
+  margin: 0 0 0 auto;
+  font-size: 12px;
+}
+.wx-facts dt {
+  color: #555;
+}
+.wx-facts dd {
+  margin: 0;
+  font-weight: 700;
+}
+.wx-days {
+  list-style: none;
+  margin: 0;
+  padding: 10px 8px 14px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  text-align: center;
+  font-size: 12px;
+}
+.wx-days li {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+.wx-days svg {
+  width: 32px;
+  height: 32px;
+}
+.wx-days small {
+  color: #666;
+}
+
+/* ---------- solitaire ---------- */
+.sol-bar {
+  align-items: center;
+  gap: 10px;
+  padding: 2px 4px 4px;
+}
+.sol-bar button {
+  font-size: 12px;
+  padding: 1px 8px;
+}
+.sol-bar select {
+  font: inherit;
+  font-size: 12px;
+}
+.felt {
+  position: relative;
+  background: #0a7a3a;
+  padding: 8px 6px 16px;
+  container-type: inline-size;
+}
+.felt > * {
+  --cw: clamp(34px, calc((100cqw - 36px) / 7), 72px);
+  --ch: calc(var(--cw) * 1.4);
+}
+.sol-row,
+.sol-tab {
+  display: grid;
+  grid-template-columns: repeat(7, var(--cw));
+  gap: 6px;
+  justify-content: center;
+}
+.sol-tab {
+  margin-top: 14px;
+  align-items: start;
+}
+.felt button {
+  border: 0;
+  padding: 0;
+  background: none;
+  display: block;
+  cursor: pointer;
+  font: inherit;
+}
+.slot {
+  width: var(--cw);
+  height: var(--ch);
+  border: 1px solid #064d24;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.12);
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.35);
+  font: 700 calc(var(--cw) * 0.4) / 1 var(--font-display);
+}
+.slot > button {
+  position: absolute;
+  inset: -1px;
+}
+.col {
+  position: relative;
+}
+.col > button {
+  position: absolute;
+  left: 0;
+}
+.card {
+  width: var(--cw);
+  height: var(--ch);
+  border: 1px solid #111;
+  border-radius: 4px;
+  background: #fff;
+  color: #111;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+.card.red {
+  color: #c8201a;
+}
+.card .cr {
+  position: absolute;
+  left: 3px;
+  top: 1px;
+  font: 700 calc(var(--cw) * 0.26) / 1.05 Tahoma, sans-serif;
+  letter-spacing: -0.04em;
+}
+.card .cm {
+  position: absolute;
+  inset: 30% 0 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--cw) * 0.5);
+}
+.card .cm.face {
+  font: 600 calc(var(--cw) * 0.55) / 1 var(--font-display);
+}
+.card.back {
+  background: repeating-linear-gradient(45deg, #1a3a9a 0 3px, #2a4ab0 3px 6px);
+  display: grid;
+  place-items: center;
+}
+.card.back svg {
+  width: 72%;
+  height: auto;
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 3px;
+}
+.felt .picked .card {
+  outline: 3px solid #f2cf5b;
+  outline-offset: -1px;
+}
+.sol-win {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sol-again {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  padding: 4px 14px !important;
+  font-weight: 700 !important;
+  background: var(--chrome) !important;
+  border: 1px solid !important;
+  border-color: var(--chrome-hi) var(--chrome-dk) var(--chrome-dk) var(--chrome-hi) !important;
+}
+
+/* ---------- fridge on the wallpaper ---------- */
+#icons {
+  z-index: 1;
+}
+.fridge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 192px;
+  height: 320px;
+  transform: translate(-50%, -52%);
+}
+.fridge-art {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.25));
+}
+.doodle {
+  position: absolute;
+  width: 34%;
+  padding: 3px;
+  border: 0;
+  background: #fff;
+  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+.doodle img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.magnet {
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  box-shadow:
+    inset -2px -2px 0 rgba(0, 0, 0, 0.25),
+    1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+.sticky {
+  position: absolute;
+  left: 20%;
+  top: 46%;
+  width: 52%;
+  padding: 12px 8px 10px;
+  background: #fff59a;
+  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.2);
+  transform: rotate(-5deg);
+  font: 600 22px/1 'Caveat', 'Comic Sans MS', cursive;
+  color: #1a33a8;
+  text-align: center;
+}
+.submit-doodle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -26px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  text-shadow: 1px 1px 0 #000;
+}
+@media (max-width: 640px) {
+  .fridge {
+    top: auto;
+    bottom: 12px;
+    width: 132px;
+    height: 220px;
+    transform: translateX(-50%);
+  }
+  .sticky {
+    font-size: 16px;
+    padding: 9px 6px 7px;
+  }
+}
+@media (max-width: 640px) and (max-height: 700px) {
+  .fridge {
+    display: none;
+  }
+}

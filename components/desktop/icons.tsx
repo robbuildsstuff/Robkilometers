@@ -38,7 +38,7 @@ const baseArt: Record<Exclude<IconName, CityIconName>, string> = {
 };
 
 // Turns a 16x16 letter grid into rects, merging runs of the same colour on a row.
-function gridToRects(grid: string) {
+export function gridToRects(grid: string) {
   return grid
     .trim()
     .split('\n')
@@ -124,5 +124,18 @@ export function StopGlyph() {
     <svg viewBox="0 0 10 10" shapeRendering="crispEdges" aria-hidden="true">
       <rect x="1" y="1" width="8" height="8" fill="#000" />
     </svg>
+  );
+}
+
+// Draws a 16x16 letter grid (see cityIcons.ts) as a crisp little picture.
+export function GridIcon({ grid, className }: { grid: string; className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      shapeRendering="crispEdges"
+      aria-hidden="true"
+      className={className}
+      dangerouslySetInnerHTML={{ __html: gridToRects(grid) }}
+    />
   );
 }

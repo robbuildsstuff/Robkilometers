@@ -104,6 +104,12 @@ export type QuickLink =
   | { label: string; icon: IconName; email: string }
   | { label: string; icon: IconName; url: string };
 
+// The fridge in the middle of the desktop. Doodles are photos in /public/photos/doodles,
+// pinned on with magnets. Clicking one opens it big. `submitUrl` (unused while empty) is for a
+// future "submit a doodle" link.
+export type Doodle = { id: string; title: string; src: string };
+export type Fridge = { doodles: Doodle[]; note?: string; submitUrl?: string };
+
 export type Site = {
   owner: string;
   handle: string;
@@ -113,6 +119,7 @@ export type Site = {
   tagline: string;
   taskbar: QuickLink[];
   readme: { title: string; body: string };
+  fridge: Fridge;
   folders: Folder[];
 };
 
@@ -148,6 +155,13 @@ Start menu, bottom left, has everything in one list.
 
 Last updated: Sept 2026
 (sample text, edit me in content.ts)`,
+  },
+
+  fridge: {
+    // Add doodles like: { id: 'cat', title: 'Cat', src: '/photos/doodles/cat.jpg' },
+    doodles: [],
+    note: 'doodles coming soon',
+    submitUrl: '',
   },
 
   folders: [

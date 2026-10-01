@@ -1,12 +1,15 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { site, visibleFolders, type Banner, type ContentItem, type Folder, type IconName, type Item } from '@/content';
+import { site, visibleFolders, type Banner, type ContentItem, type Doodle, type Folder, type IconName, type Item } from '@/content';
 import FolderView from './FolderView';
+import Fridge from './Fridge';
 import IconButton from './IconButton';
 import Profile from './Profile';
+import Solitaire from './Solitaire';
 import Taskbar from './Taskbar';
 import { ItemView, Notepad, itemSize, itemWindowTitle, typeIcon } from './viewers';
+import WeatherView from './WeatherView';
 import Window, { type WinFrame } from './Window';
 
 // A folder window's contents: a top-level desktop folder or a folder item nested inside one.
@@ -17,7 +20,9 @@ type Target =
   | { kind: 'folder'; path: string[]; trail: string[]; node: FolderNode }
   | { kind: 'item'; item: ContentItem }
   | { kind: 'about' }
-  | { kind: 'readme' };
+  | { kind: 'readme' }
+  | { kind: 'weather' }
+  | { kind: 'solitaire' };
 
 type Win = WinFrame & { target: Target };
 
@@ -186,6 +191,22 @@ export default function Desktop() {
     open('readme', { title: `${site.readme.title} - Notepad`, icon: 'notepad', w: 440, h: 360, target: { kind: 'readme' } });
   }, [open]);
 
+  const openWeather = useCallback(() => {
+    open('weather', { title: 'Weather - Toronto', icon: 'weather', w: 460, target: { kind: 'weather' } });
+    setHash('weather');
+  }, [open]);
+
+  const openSolitaire = useCallback(() => {
+    open('solitaire', { title: 'Solitaire', icon: 'cards', w: 620, h: 500, target: { kind: 'solitaire' } });
+    setHash('solitaire');
+  }, [open]);
+
+  // A doodle from the fridge opens like any photo. Its link is #fridge.<id>.
+  const openDoodle = useCallback(
+    (d: Doodle) => openItemAt(['fridge', d.id], { type: 'image', id: d.id, title: d.title, src: d.src }),
+    [openItemAt],
+  );
+
   // Opens whatever the URL hash points at. Returns false if it points at nothing.
   const openFromHash = useCallback(() => {
     const h = decodeURIComponent(location.hash.slice(1));
@@ -193,8 +214,21 @@ export default function Desktop() {
       openAbout();
       return true;
     }
+    if (h === 'weather') {
+      openWeather();
+      return true;
+    }
+    if (h === 'solitaire') {
+      openSolitaire();
+      return true;
+    }
+    const doodle = h.startsWith('fridge.') && site.fridge.doodles.find((d) => d.id === h.slice(7));
+    if (doodle) {
+      openDoodle(doodle);
+      return true;
+    }
     return h ? openPath(unalias(h).split('.')) : false;
-  }, [openAbout, openPath]);
+  }, [openAbout, openWeather, openSolitaire, openDoodle, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -273,12 +307,17 @@ export default function Desktop() {
         return <Profile onOpenPath={openPath} onCopy={copy} />;
       case 'readme':
         return <Notepad body={site.readme.body} />;
+      case 'weather':
+        return <WeatherView />;
+      case 'solitaire':
+        return <Solitaire />;
     }
   }
 
   const desktopIcons: { id: string; icon: IconName; label: string; open: () => void }[] = [
     { id: 'about', icon: 'computer', label: "Rob's Computer", open: openAbout },
     { id: 'readme', icon: 'notepad', label: site.readme.title, open: openReadme },
+    { id: 'solitaire', icon: 'cards', label: 'Solitaire', open: openSolitaire },
     ...visibleFolders.map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
   ];
 
@@ -289,9 +328,10 @@ export default function Desktop() {
         ref={deskRef}
         onPointerDown={(e) => {
           const t = e.target as HTMLElement;
-          if (t === e.currentTarget || t.id === 'icons') setSelectedIcon(null);
+          if (t === e.currentTarget || t.id === 'icons' || t.closest('.fridge-art')) setSelectedIcon(null);
         }}
       >
+        <Fridge data={site.fridge} onOpen={openDoodle} />
         <div id="icons" role="list">
           {desktopIcons.map((d) => (
             <div key={d.id} role="listitem">
@@ -333,6 +373,8 @@ export default function Desktop() {
         }}
         onAbout={openAbout}
         onReadme={openReadme}
+        onWeather={openWeather}
+        onSolitaire={openSolitaire}
         onFolder={openFolder}
         onCopy={copy}
         onShutDown={() => setOff(true)}

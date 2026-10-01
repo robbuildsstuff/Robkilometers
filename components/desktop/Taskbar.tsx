@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { site, visibleFolders, type Folder } from '@/content';
 import { Icon } from './icons';
+import { WeatherTray } from './WeatherView';
 import type { WinFrame } from './Window';
 
 type Props = {
@@ -11,6 +12,8 @@ type Props = {
   onTask: (key: string) => void;
   onAbout: () => void;
   onReadme: () => void;
+  onWeather: () => void;
+  onSolitaire: () => void;
   onFolder: (f: Folder) => void;
   onCopy: (text: string) => void;
   onShutDown: () => void;
@@ -37,7 +40,7 @@ function Clock() {
   );
 }
 
-export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, onFolder, onCopy, onShutDown }: Props) {
+export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, onWeather, onSolitaire, onFolder, onCopy, onShutDown }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const startRef = useRef<HTMLButtonElement>(null);
@@ -117,6 +120,7 @@ export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, on
         </div>
         <div id="tray">
           <span className="km">{site.coords.split(' ')[0]}</span>
+          <WeatherTray onOpen={onWeather} />
           <Clock />
         </div>
       </nav>
@@ -139,6 +143,18 @@ export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, on
               <button type="button" onClick={run(onReadme)}>
                 <Icon name="notepad" />
                 <span>Read me</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" onClick={run(onWeather)}>
+                <Icon name="weather" />
+                <span>Weather</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" onClick={run(onSolitaire)}>
+                <Icon name="cards" />
+                <span>Solitaire</span>
               </button>
             </li>
             <li>
