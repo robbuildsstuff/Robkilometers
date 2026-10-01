@@ -106,7 +106,7 @@ export default function Desktop() {
         title: node.name,
         icon: node.icon,
         w: 500,
-        h: node.banner && !node.items.length ? undefined : 360, // a banner-only folder fits its banner
+        h: node.banner ? undefined : 360, // a folder with a banner sizes itself around it
         target: { kind: 'folder', path, trail, node },
       });
       setHash(key);

@@ -87,7 +87,8 @@ export type Item = ContentItem | FolderItem;
 export type ItemType = Item['type'];
 
 // An animated scene at the top of a folder window: a runner on a hilly road saying `lines` in turn.
-export type Banner = { title: string; lines: string[] };
+// While the window is open, the status bar counts how far the visitor has "run" at `metresPerSecond`.
+export type Banner = { title: string; lines: string[]; metresPerSecond?: number };
 
 export type Folder = {
   id: string;
@@ -1112,8 +1113,41 @@ Last updated: Sept 2026
       banner: {
         title: 'Training for something',
         lines: ['ouch', 'i hate this', 'i love running', 'this rocks'],
+        metresPerSecond: 3, // an easy ~5:30/km
       },
-      items: [],
+      items: [
+        {
+          type: 'folder',
+          id: 'cycling',
+          title: 'Cycling',
+          icon: 'cycling',
+          items: [
+            {
+              type: 'video',
+              id: 'wout-wout',
+              title: 'Wout Wout',
+              url: 'https://www.youtube.com/watch?v=zDsBRSa4fXw',
+            },
+            {
+              type: 'image',
+              id: 'col-du-tourmalet',
+              title: '📍 Col du Tourmalet',
+              newRow: true,
+              src: '/photos/col-du-tourmalet.jpg',
+              thumb: '/photos/col-du-tourmalet-thumb.jpg',
+              caption: 'Col du Tourmalet',
+            },
+            {
+              type: 'image',
+              id: 'col-daspin',
+              title: "📍 Col d'Aspin",
+              src: '/photos/col-daspin.jpg',
+              thumb: '/photos/col-daspin-thumb.jpg',
+              caption: "Col d'Aspin",
+            },
+          ],
+        },
+      ],
     },
     {
       id: 'projects',

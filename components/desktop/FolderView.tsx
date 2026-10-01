@@ -2,6 +2,7 @@
 
 import { Fragment, useState } from 'react';
 import type { Banner, Item } from '@/content';
+import DistanceCounter from './DistanceCounter';
 import RunnerBanner from './RunnerBanner';
 import IconButton from './IconButton';
 import { MenuBar, typeIcon } from './viewers';
@@ -39,20 +40,20 @@ export default function FolderView({ trail, link, blurb, banner, items, onOpenIt
             <Fragment key={it.id}>
               {it.newRow && <div className="rowbreak" />}
               <IconButton
-              className="ficon"
-              icon={it.icon ?? typeIcon[it.type]}
-              label={it.title}
-              selected={selected === it.id}
-              onSelect={() => setSelected(it.id)}
-              onOpen={() => onOpenItem(it)}
-              thumb={it.type === 'image' ? (it.thumb ?? it.src) : undefined}
+                className="ficon"
+                icon={it.icon ?? typeIcon[it.type]}
+                label={it.title}
+                selected={selected === it.id}
+                onSelect={() => setSelected(it.id)}
+                onOpen={() => onOpenItem(it)}
+                thumb={it.type === 'image' ? (it.thumb ?? it.src) : undefined}
               />
             </Fragment>
           ))}
         </div>
       </div>
       <div className="status">
-        <span>{items.length} object(s)</span>
+        {banner ? <DistanceCounter metresPerSecond={banner.metresPerSecond ?? 3} /> : <span>{items.length} object(s)</span>}
         <span>robkilometers.ca/#{link}</span>
       </div>
     </>
