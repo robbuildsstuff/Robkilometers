@@ -154,13 +154,13 @@ Last updated: Sept 2026
     {
       id: 'food',
       name: 'Food',
-      blurb: 'Recipes I actually make, and places and people I learn from.',
+      blurb: 'Food I make and eat',
       items: [
         {
           type: 'folder',
           id: 'city-guides',
           title: 'City Guides',
-          blurb: 'Where I eat and drink when I travel. Straight from my Google Maps lists.',
+          blurb: 'Where I eat and drink when I travel.',
           items: [
             {
               type: 'map',
