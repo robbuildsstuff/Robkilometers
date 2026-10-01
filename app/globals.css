@@ -1383,3 +1383,30 @@ img {
     display: none;
   }
 }
+
+/* solitaire drag and drop */
+.felt button {
+  touch-action: none;
+}
+.felt .ghosted {
+  opacity: 0;
+}
+.felt.dragging {
+  cursor: grabbing;
+}
+.drag-stack {
+  position: absolute;
+  width: var(--cw);
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.3));
+}
+.drag-stack > div {
+  position: absolute;
+  left: 0;
+}
+.felt .over {
+  outline: 3px solid #f2cf5b;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
