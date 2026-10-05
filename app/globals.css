@@ -1676,3 +1676,12 @@ img {
     transform: none;
   }
 }
+
+/* Trash sits alone in the top-right corner, like a real desktop */
+@media (min-width: 641px) {
+  #icons .trash-slot {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+  }
+}

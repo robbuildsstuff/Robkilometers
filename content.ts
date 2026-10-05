@@ -1022,7 +1022,7 @@ Last updated: Sept 2026
         {
           type: 'recipe',
           id: 'breakfast-tacos',
-          title: "Hank's Breakfast Tacos",
+          title: 'Breakfast Tacos',
           serves: '4 (about 8 tacos)',
           time: '1.5 hours',
           source: 'https://docs.google.com/document/d/1tfn_IncSiDoB3TL8Dz6GsrakdGCDfEE8_NLaTQ-9w7o/edit?usp=sharing',
@@ -1399,7 +1399,7 @@ Last updated: Sept 2026
     },
     {
       id: 'recycle',
-      name: 'Recycle Bin',
+      name: 'Trash',
       icon: 'trash',
       blurb: 'Hey, get outta here!',
       items: [

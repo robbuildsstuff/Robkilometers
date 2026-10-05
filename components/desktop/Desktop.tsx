@@ -331,7 +331,8 @@ export default function Desktop() {
         <Stickers stickers={site.stickers} />
         <div id="icons" role="list">
           {desktopIcons.map((d) => (
-            <div key={d.id} role="listitem">
+            // Trash lives in the top-right corner on bigger screens (see .trash-slot)
+            <div key={d.id} role="listitem" className={d.id === 'recycle' ? 'trash-slot' : undefined}>
               <IconButton
                 className="dicon"
                 icon={d.icon}
