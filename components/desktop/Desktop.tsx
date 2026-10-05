@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { site, visibleFolders, type Banner, type ContentItem, type Folder, type IconName, type Item } from '@/content';
+import { site, visibleFolders, type Banner, type Bookshelf, type ContentItem, type Folder, type IconName, type Item } from '@/content';
 import FolderView from './FolderView';
 import Stickers from './Stickers';
 import IconButton from './IconButton';
@@ -13,11 +13,11 @@ import WeatherView from './WeatherView';
 import Window, { type WinFrame } from './Window';
 
 // A folder window's contents: a top-level desktop folder or a folder item nested inside one.
-type FolderNode = { name: string; icon: IconName; blurb?: string; banner?: Banner; items: Item[] };
+type FolderNode = { name: string; icon: IconName; blurb?: string; banner?: Banner; bookshelf?: Bookshelf; items: Item[] };
 
 // What a window shows. The window key doubles as its deep link: #food, #food.city-guides.paris, #about.
 type Target =
-  | { kind: 'folder'; path: string[]; trail: string[]; node: FolderNode }
+  | { kind: 'folder'; path: string[]; trail: string[]; node: FolderNode; pick?: string }
   | { kind: 'item'; item: ContentItem }
   | { kind: 'about' }
   | { kind: 'readme' }
@@ -28,7 +28,7 @@ type Win = WinFrame & { target: Target };
 
 type OpenSpec = { title: string; icon: IconName; w: number; h?: number; target: Target };
 
-const topFolderNode = (f: Folder): FolderNode => ({ name: f.name, icon: f.icon ?? 'folder', blurb: f.blurb, banner: f.banner, items: f.items });
+const topFolderNode = (f: Folder): FolderNode => ({ name: f.name, icon: f.icon ?? 'folder', blurb: f.blurb, banner: f.banner, bookshelf: f.bookshelf, items: f.items });
 
 // Walks a path of ids (['food', 'city-guides', 'paris']) down from the desktop.
 // Returns the chain of folders passed through and, if the path ends on one, the item.
@@ -112,16 +112,16 @@ export default function Desktop() {
   );
 
   const openFolderAt = useCallback(
-    (path: string[], trail: string[], node: FolderNode) => {
+    (path: string[], trail: string[], node: FolderNode, pick?: string) => {
       const key = path.join('.');
       open(key, {
         title: node.name,
         icon: node.icon,
-        w: 500,
-        h: node.banner ? undefined : 360, // a folder with a banner sizes itself around it
-        target: { kind: 'folder', path, trail, node },
+        w: node.bookshelf ? 700 : 500,
+        h: node.bookshelf ? 540 : node.banner ? undefined : 360, // a folder with a banner sizes itself around it
+        target: { kind: 'folder', path, trail, node, pick },
       });
-      setHash(key);
+      setHash(pick ? `${key}.${pick}` : key);
     },
     [open],
   );
@@ -167,15 +167,18 @@ export default function Desktop() {
   const openPath = useCallback(
     (path: string[]) => {
       let r = resolve(path);
+      let rest: string | undefined;
       // A link to something that's gone falls back to the nearest folder that still exists.
       while (!r && path.length > 1) {
+        rest = path[path.length - 1];
         path = path.slice(0, -1);
         r = resolve(path);
       }
       if (!r) return false;
       const depth = r.folders.length;
       const node = r.folders[depth - 1];
-      openFolderAt(path.slice(0, depth), r.folders.map((f) => f.name), node);
+      // #books.shantaram: the bookshelf opens with that book pulled out
+      openFolderAt(path.slice(0, depth), r.folders.map((f) => f.name), node, node.bookshelf ? rest : undefined);
       if (r.item) openItemAt(path, r.item);
       return true;
     },
@@ -281,6 +284,9 @@ export default function Desktop() {
             link={t.path.join('.')}
             blurb={t.node.blurb}
             banner={t.node.banner}
+            bookshelf={t.node.bookshelf}
+            pick={t.pick}
+            onPick={(id) => setHash([...t.path, ...(id ? [id] : [])].join('.'))}
             items={t.node.items}
             onOpenItem={(it) => {
               const path = [...t.path, it.id];

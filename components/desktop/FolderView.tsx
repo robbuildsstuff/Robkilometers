@@ -1,7 +1,8 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import type { Banner, Item } from '@/content';
+import type { Banner, Bookshelf as Shelf, Item } from '@/content';
+import Bookshelf, { bookCount } from './Bookshelf';
 import DistanceCounter from './DistanceCounter';
 import RunnerBanner from './RunnerBanner';
 import IconButton from './IconButton';
@@ -12,12 +13,15 @@ type Props = {
   link: string; // deep link, e.g. 'food.city-guides'
   blurb?: string;
   banner?: Banner;
+  bookshelf?: Shelf;
+  pick?: string; // a book to have pulled out when the shelf opens
+  onPick?: (id: string | null) => void;
   items: Item[];
   onOpenItem: (it: Item) => void;
   onBack?: () => void; // go up to the parent folder; missing at the top level
 };
 
-export default function FolderView({ trail, link, blurb, banner, items, onOpenItem, onBack }: Props) {
+export default function FolderView({ trail, link, blurb, banner, bookshelf, pick, onPick, items, onOpenItem, onBack }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   return (
     <>
@@ -34,7 +38,8 @@ export default function FolderView({ trail, link, blurb, banner, items, onOpenIt
       </div>
       <div className="sunken scroll">
         {banner && <RunnerBanner title={banner.title} lines={banner.lines} />}
-        {blurb && <div className="blurb">{blurb}</div>}
+        {bookshelf && <Bookshelf shelf={bookshelf} pick={pick} onPick={onPick ?? (() => {})} />}
+        {blurb && !bookshelf && <div className="blurb">{blurb}</div>}
         <div className="fgrid" hidden={!items.length}>
           {items.map((it) => (
             <Fragment key={it.id}>
@@ -53,7 +58,11 @@ export default function FolderView({ trail, link, blurb, banner, items, onOpenIt
         </div>
       </div>
       <div className="status">
-        {banner ? <DistanceCounter metresPerSecond={banner.metresPerSecond ?? 3} /> : <span>{items.length} object(s)</span>}
+        {banner ? (
+          <DistanceCounter metresPerSecond={banner.metresPerSecond ?? 3} />
+        ) : (
+          <span>{bookshelf ? `${bookCount(bookshelf)} books` : `${items.length} object(s)`}</span>
+        )}
         <span>robkilometers.ca/#{link}</span>
       </div>
     </>

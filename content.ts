@@ -90,12 +90,20 @@ export type ItemType = Item['type'];
 // While the window is open, the status bar counts how far the visitor has "run" at `metresPerSecond`.
 export type Banner = { title: string; lines: string[]; metresPerSecond?: number };
 
+// A bookshelf for a folder window. Books stand as spines (with `short` on the spine if given);
+// a series is a run of spines that share one note. Clicking a spine opens its card, and
+// each book has a link like #books.shantaram.
+export type Book = { id: string; title: string; short?: string; author: string; note?: string };
+export type BookSeries = { series: string; id: string; author: string; note?: string; books: { id: string; title: string }[] };
+export type Bookshelf = { title: string; reading: Book[]; read: (Book | BookSeries)[] };
+
 export type Folder = {
   id: string;
   name: string;
   icon?: IconName;
   blurb?: string;
   banner?: Banner;
+  bookshelf?: Bookshelf;
   hidden?: boolean; // true keeps the folder here but off the desktop, Start menu and profile
   items: Item[];
 };
@@ -1164,26 +1172,61 @@ Last updated: Sept 2026
     {
       id: 'books',
       name: 'Books',
-      blurb: "What I'm reading and what I'd hand to a friend.",
-      items: [
-        {
-          type: 'list',
-          id: 'reading',
-          title: 'Reading list',
-          rows: [
-            { name: 'Kitchen Confidential', detail: 'Anthony Bourdain. Reading now. (sample)' },
-            { name: 'Salt, Fat, Acid, Heat', detail: 'Samin Nosrat. Changed how I cook. (sample)' },
-            { name: 'The Old Man and the Sea', detail: 'Hemingway. Short, and it hits. (sample)' },
-          ],
-        },
-        {
-          type: 'note',
-          id: 'underlined',
-          title: 'Underlined',
-          date: '2026-09-02',
-          body: 'Sample: a line from whatever I’m reading goes here, with a sentence on why it stuck.',
-        },
-      ],
+      blurb: "What I'm reading, what I've read",
+      bookshelf: {
+        title: "What I'm reading, what I've read",
+        reading: [{ id: 'lonesome-dove', title: 'Lonesome Dove', author: 'Larry McMurtry', note: 'beef certified' }],
+        read: [
+          { id: 'red-notice', title: "Red Notice: A True Story of High Finance, Murder, and One Man's Fight for Justice", short: 'Red Notice', author: 'Bill Browder', note: 'This book has gotten more people into reading than I can count. Crazy story, page turner, banger.' },
+          { id: 'the-hot-zone', title: 'The Hot Zone: The Terrifying True Story of the Origins of the Ebola Virus', short: 'The Hot Zone', author: 'Richard Preston', note: 'Just nuts...' },
+          { id: 'breath', title: 'Breath: The New Science of a Lost Art', short: 'Breath', author: 'James Nestor', note: 'Been mouth taping fam' },
+          { id: 'kitchen-confidential', title: 'Kitchen Confidential: Adventures in the Culinary Underbelly', short: 'Kitchen Confidential', author: 'Anthony Bourdain', note: 'Oui Chef' },
+          { id: 'project-hail-mary', title: 'Project Hail Mary', author: 'Andy Weir', note: 'they should make this into a movie' },
+          { id: 'greenlights', title: 'Greenlights', author: 'Matthew McConaughey', note: 'fighting his dad or something' },
+          { id: 'black-edge', title: 'Black Edge: Inside Information, Dirty Money, and the Quest to Bring Down the Most Wanted Man on Wall Street', short: 'Black Edge', author: 'Sheelah Kolhatkar', note: 'couple rotten eggs down on wall street' },
+          { id: 'the-martian', title: 'The Martian', author: 'Andy Weir', note: 'who even is matt damion' },
+          { id: 'dopamine-nation', title: 'Dopamine Nation: Finding Balance in the Age of Indulgence', short: 'Dopamine Nation', author: 'Anna Lembke', note: 'oh boy' },
+          { id: 'shantaram', title: 'Shantaram', author: 'Gregory David Roberts', note: 'SHELDON THIS RIPS' },
+          {
+            series: 'The Cemetery of Forgotten Books',
+            id: 'the-cemetery-of-forgotten-books',
+            author: 'Carlos Ruiz Zafón',
+            note: 'Like',
+            books: [{ id: 'the-shadow-of-the-wind', title: 'The Shadow of the Wind' }, { id: 'the-angels-game', title: "The Angel's Game" }, { id: 'the-prisoner-of-heaven', title: 'The Prisoner of Heaven' }, { id: 'the-labyrinth-of-the-spirits', title: 'The Labyrinth of the Spirits' }],
+          },
+          { id: 'i-am-pilgrim', title: 'I Am Pilgrim', author: 'Terry Hayes', note: 'Terry is a cool name' },
+          { id: 'youre-not-listening', title: "You're Not Listening: What You're Missing and Why It Matters", short: "You're Not Listening", author: 'Kate Murphy', note: 'Open ur ears' },
+          { id: 'constance', title: 'Constance (Constance #1)', short: 'Constance', author: 'Matthew FitzSimmons' },
+          { id: 'tuesdays-with-morrie', title: "Tuesdays with Morrie: An Old Man, a Young Man, and Life's Greatest Lesson", short: 'Tuesdays with Morrie', author: 'Mitch Albom', note: 'Ever cried in public?' },
+          { id: 'four-thousand-weeks', title: 'Four Thousand Weeks: Time Management for Mortals', short: 'Four Thousand Weeks', author: 'Oliver Burkeman', note: 'As a reminder we are all gonna turf it.' },
+          { id: 'unbroken', title: 'Unbroken: A World War II Story of Survival, Resilience and Redemption', short: 'Unbroken', author: 'Laura Hillenbrand', note: 'Nail' },
+          { id: 'beneath-a-scarlet-sky', title: 'Beneath a Scarlet Sky', author: 'Mark Sullivan', note: 'Good book' },
+          { id: 'flowers-for-algernon', title: 'Flowers for Algernon', author: 'Daniel Keyes', note: 'another cry for me' },
+          {
+            series: 'Red Rising Saga',
+            id: 'red-rising-saga',
+            author: 'Pierce Brown',
+            note: 'unreal - hunger games / game of thrones in space',
+            books: [{ id: 'red-rising', title: 'Red Rising' }, { id: 'golden-son', title: 'Golden Son' }, { id: 'morning-star', title: 'Morning Star' }, { id: 'iron-gold', title: 'Iron Gold' }, { id: 'dark-age', title: 'Dark Age' }, { id: 'light-bringer', title: 'Light Bringer' }],
+          },
+          { id: 'marching-powder', title: "Marching Powder: A True Story of Friendship, Cocaine, and South America's Strangest Jail", short: 'Marching Powder', author: 'Rusty Young & Thomas McFadden', note: 'Wild' },
+          {
+            series: 'Dungeon Crawler Carl',
+            id: 'dungeon-crawler-carl',
+            author: 'Matt Dinniman',
+            note: 'top tier',
+            books: [{ id: 'dungeon-crawler-carl-1', title: 'Dungeon Crawler Carl' }, { id: 'carls-doomsday-scenario', title: "Carl's Doomsday Scenario" }, { id: 'the-dungeon-anarchists-cookbook', title: "The Dungeon Anarchist's Cookbook" }, { id: 'the-gate-of-the-feral-gods', title: 'The Gate of the Feral Gods' }, { id: 'the-butchers-masquerade', title: "The Butcher's Masquerade" }, { id: 'the-eye-of-the-bedlam-bride', title: 'The Eye of the Bedlam Bride' }, { id: 'this-inevitable-ruin', title: 'This Inevitable Ruin' }],
+          },
+          {
+            series: 'The Power of the Dog',
+            id: 'the-power-of-the-dog',
+            author: 'Don Winslow',
+            note: 'shout out to jb for the recommendation',
+            books: [{ id: 'the-power-of-the-dog-1', title: 'The Power of the Dog' }, { id: 'the-cartel', title: 'The Cartel' }, { id: 'the-border', title: 'The Border' }],
+          },
+        ],
+      },
+      items: [],
     },
     {
       id: 'sport',
