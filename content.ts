@@ -1334,7 +1334,7 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
     {
       id: 'thoughts',
       name: 'Thoughts',
-      blurb: "Short notes. Some of them I'll disagree with next year.",
+      blurb: 'just thinking',
       items: [
         {
           type: 'note',
@@ -1351,20 +1351,6 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
 
 “you believe it, i’ll see it”
   - Kev Shirt`,
-        },
-        {
-          type: 'note',
-          id: 'why-this-site',
-          title: 'Why this site',
-          date: '2026-09-30',
-          body: "I wanted somewhere to put things I like that isn't a feed.\nNo algorithm, no likes. Just folders.\n\n(sample note)",
-        },
-        {
-          type: 'note',
-          id: 'on-slow-weekends',
-          title: 'On slow weekends',
-          date: '2026-09-14',
-          body: 'Best weekends have one plan and a lot of room around it.\n\n(sample note)',
         },
       ],
     },
