@@ -50,6 +50,8 @@ const aliases: Record<string, string> = {
   'food.toronto-eats': 'food.city-guides.toronto',
   'food.food-list': 'food.grocery-list',
   'running.cycling': 'cycling',
+  'food.osaka': 'food.oretachi-no-curry-ya',
+  'food.bobs-secret-sauce': 'food.cashew-butter-dressing',
 };
 
 // Applies an alias to a link or anything under it: running.cycling.wout-wout -> cycling.wout-wout
