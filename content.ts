@@ -99,6 +99,18 @@ export type Book = { id: string; title: string; short?: string; author: string; 
 export type BookSeries = { series: string; id: string; author: string; note?: string; books: { id: string; title: string }[] };
 export type Bookshelf = { title: string; reading: Book[]; read: (Book | BookSeries)[] };
 
+// A wardrobe for a folder window. Each category is a cartoon "hero" in its spot in the wardrobe
+// (shelf, upper rail, lower rail or floor); clicking it shows its items in a carousel.
+// To add something you own, add to a category's items:
+//   { id: 'grey-crewneck', name: 'Grey crewneck', brand: 'Reigning Champ', boughtAt: 'Simons, Toronto',
+//     note: 'Lives on me Oct to Apr', url: 'https://...', photo: '/wardrobe/grey-crewneck.jpg' },
+// Fits are full-outfit photos for the photo frame on the shelf: { src: '/wardrobe/fits/sunday.jpg', caption?: '...' }.
+// Wants is the wishlist notebook, written like the grocery list.
+export type WardrobeItem = { id: string; name: string; brand?: string; boughtAt?: string; note?: string; url?: string; photo: string; placeholder?: boolean };
+export type WardrobeArt = 'hat' | 'tee' | 'sweater' | 'jacket' | 'pants' | 'jeans' | 'shorts' | 'shoes';
+export type WardrobeCategory = { id: string; name: string; zone: 'shelf' | 'upper' | 'lower' | 'floor'; art: WardrobeArt; items: WardrobeItem[] };
+export type Wardrobe = { categories: WardrobeCategory[]; fits: { src: string; caption?: string }[]; wants: NoteLine[]; inspoUrl?: string };
+
 export type Folder = {
   id: string;
   name: string;
@@ -106,6 +118,7 @@ export type Folder = {
   blurb?: string;
   banner?: Banner;
   bookshelf?: Bookshelf;
+  wardrobe?: Wardrobe;
   hidden?: boolean; // true keeps the folder here but off the desktop, Start menu and profile
   items: Item[];
 };
@@ -1223,35 +1236,77 @@ Last updated: Sept 2026
       ],
     },
     {
-      id: 'clothes',
-      name: 'Clothes',
-      blurb: 'Stuff I wear, stuff I want, and where I read about it.',
-      items: [
-        {
-          type: 'note',
-          id: 'fall-rotation',
-          title: 'Fall rotation',
-          date: '2026-09-20',
-          body: 'Raw denim, grey crewneck, chore coat, beat-up runners.\nThe chore coat does most of the work.\n\n(sample note)',
-        },
-        {
-          type: 'link',
-          id: 'heddels',
-          title: 'Heddels',
-          url: 'https://www.heddels.com/',
-          note: 'Sample link. Denim, boots and workwear rabbit hole.',
-        },
-        {
-          type: 'list',
-          id: 'wishlist',
-          title: 'Wishlist',
-          rows: [
-            { name: 'Waxed jacket', detail: 'Something that gets better with age (sample)' },
-            { name: 'Loafers', detail: 'Brown, not too shiny (sample)' },
-            { name: 'Wool overshirt', detail: 'For the in-between weeks (sample)' },
-          ],
-        },
-      ],
+      id: 'wardrobe',
+      name: 'Wardrobe',
+      icon: 'wardrobe',
+      blurb: 'What I wear, what I want, and where it came from.',
+      wardrobe: {
+        categories: [
+          {
+            id: 'headwear',
+            name: 'Headwear',
+            zone: 'shelf',
+            art: 'hat',
+            items: [{ id: 'headwear-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real headwear coming soon.' }],
+          },
+          {
+            id: 'tees',
+            name: 'Tees',
+            zone: 'upper',
+            art: 'tee',
+            items: [{ id: 'tees-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real tees coming soon.' }],
+          },
+          {
+            id: 'knitwear',
+            name: 'Knitwear',
+            zone: 'upper',
+            art: 'sweater',
+            items: [{ id: 'knitwear-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real knitwear coming soon.' }],
+          },
+          {
+            id: 'outerwear',
+            name: 'Outerwear',
+            zone: 'upper',
+            art: 'jacket',
+            items: [{ id: 'outerwear-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real outerwear coming soon.' }],
+          },
+          {
+            id: 'pants',
+            name: 'Pants',
+            zone: 'lower',
+            art: 'pants',
+            items: [{ id: 'pants-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real pants coming soon.' }],
+          },
+          {
+            id: 'jeans',
+            name: 'Jeans',
+            zone: 'lower',
+            art: 'jeans',
+            items: [{ id: 'jeans-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real jeans coming soon.' }],
+          },
+          {
+            id: 'shorts',
+            name: 'Shorts',
+            zone: 'lower',
+            art: 'shorts',
+            items: [{ id: 'shorts-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real shorts coming soon.' }],
+          },
+          {
+            id: 'shoes',
+            name: 'Shoes',
+            zone: 'floor',
+            art: 'shoes',
+            items: [{ id: 'shoes-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real shoes coming soon.' }],
+          },
+        ],
+        fits: [
+          { src: '/wardrobe/fit-placeholder-1.svg', caption: 'Placeholder: fit pics coming soon' },
+          { src: '/wardrobe/fit-placeholder-2.svg', caption: 'Placeholder: fit pics coming soon' },
+        ],
+        wants: ['Placeholder: first thing on the list'],
+        inspoUrl: 'https://ca.pinterest.com/rdpmiles/gear/',
+      },
+      items: [],
     },
     {
       id: 'thoughts',

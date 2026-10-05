@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <rect width="300" height="400" fill="#cfe3f5"/>
+  <circle cx="150" cy="70" r="30" fill="#e0a878" stroke="#1a100a" stroke-width="4"/>
+  <path d="M120 58 q30 -40 60 0 q-30 -12 -60 0z" fill="#3a2a1a" stroke="#1a100a" stroke-width="3"/>
+  <path d="M96 116 q54 -22 108 0 l20 110 l-26 4 l-10 -70 v100 h-76 v-100 l-10 70 l-26 -4 z" fill="#e2b33c" stroke="#1a100a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M112 262 h76 l8 96 h-34 l-12 -76 l-12 76 h-34 z" fill="#24407e" stroke="#1a100a" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="108" y="356" width="40" height="14" rx="5" fill="#fff" stroke="#1a100a" stroke-width="3"/>
+  <rect x="152" y="356" width="40" height="14" rx="5" fill="#fff" stroke="#1a100a" stroke-width="3"/>
+  <text x="150" y="392" text-anchor="middle" font-family="Tahoma, Verdana, sans-serif" font-size="16" font-weight="700" fill="#1a100a">fit pic coming soon</text>
+</svg>

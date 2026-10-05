@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="300" height="360">
+  <rect x="6" y="6" width="288" height="348" rx="6" fill="#fffbe8" stroke="#1a100a" stroke-width="4"/>
+  <rect x="26" y="26" width="248" height="248" fill="#d9cfe0" stroke="#1a100a" stroke-width="3"/>
+  <path d="M150 70 q14 0 14 14 q0 12 -14 16 v8 l-70 34 h140 l-70 -34" fill="none" stroke="#1a100a" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M100 150 l20 -8 q30 22 60 0 l20 8 l30 28 l-16 20 l-14 -10 v58 h-100 v-58 l-14 10 l-16 -20 z" fill="#fff" stroke="#1a100a" stroke-width="4" stroke-linejoin="round" stroke-dasharray="10 7"/>
+  <text x="150" y="318" text-anchor="middle" font-family="Tahoma, Verdana, sans-serif" font-size="22" font-weight="700" fill="#1a100a">photo coming soon</text>
+</svg>

@@ -390,6 +390,24 @@ YY..yYYYYYy..YY.
 ................
 ................
 `,
+  wardrobe: `
+................
+..KKKKKKKKKKKK..
+..KbbbbbKbbbbK..
+..KbBbbbKbbBbK..
+..KbbbbbKbbbbK..
+..KbbbbbKbbbbK..
+..KbbbbyKybbbK..
+..KbbbbyKybbbK..
+..KbbbbbKbbbbK..
+..KbbbbbKbbbbK..
+..KbBbbbKbbBbK..
+..KbbbbbKbbbbK..
+..KKKKKKKKKKKK..
+...KK......KK...
+................
+................
+`,
 };
 
 export type CityIconName = keyof typeof cityArt;

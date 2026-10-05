@@ -1,10 +1,11 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import type { Banner, Bookshelf as Shelf, Item } from '@/content';
+import type { Banner, Bookshelf as Shelf, Item, Wardrobe as WardrobeData } from '@/content';
 import Bookshelf, { bookCount } from './Bookshelf';
 import DistanceCounter from './DistanceCounter';
 import RunnerBanner from './RunnerBanner';
+import Wardrobe from './Wardrobe';
 import IconButton from './IconButton';
 import { MenuBar, typeIcon } from './viewers';
 
@@ -14,6 +15,7 @@ type Props = {
   blurb?: string;
   banner?: Banner;
   bookshelf?: Shelf;
+  wardrobe?: WardrobeData;
   pick?: string; // a book to have pulled out when the shelf opens
   onPick?: (id: string | null) => void;
   items: Item[];
@@ -21,7 +23,7 @@ type Props = {
   onBack?: () => void; // go up to the parent folder; missing at the top level
 };
 
-export default function FolderView({ trail, link, blurb, banner, bookshelf, pick, onPick, items, onOpenItem, onBack }: Props) {
+export default function FolderView({ trail, link, blurb, banner, bookshelf, wardrobe, pick, onPick, items, onOpenItem, onBack }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   return (
     <>
@@ -39,7 +41,8 @@ export default function FolderView({ trail, link, blurb, banner, bookshelf, pick
       <div className="sunken scroll">
         {banner && <RunnerBanner title={banner.title} lines={banner.lines} />}
         {bookshelf && <Bookshelf shelf={bookshelf} pick={pick} onPick={onPick ?? (() => {})} />}
-        {blurb && !bookshelf && <div className="blurb">{blurb}</div>}
+        {wardrobe && <Wardrobe data={wardrobe} pick={pick} onPick={onPick ?? (() => {})} />}
+        {blurb && !bookshelf && !wardrobe && <div className="blurb">{blurb}</div>}
         <div className="fgrid" hidden={!items.length}>
           {items.map((it) => (
             <Fragment key={it.id}>
@@ -61,7 +64,13 @@ export default function FolderView({ trail, link, blurb, banner, bookshelf, pick
         {banner ? (
           <DistanceCounter metresPerSecond={banner.metresPerSecond ?? 3} />
         ) : (
-          <span>{bookshelf ? `${bookCount(bookshelf)} books` : `${items.length} object(s)`}</span>
+          <span>
+            {bookshelf
+              ? `${bookCount(bookshelf)} books`
+              : wardrobe
+                ? `${wardrobe.categories.reduce((n, c) => n + c.items.filter((x) => !x.placeholder).length, 0)} things`
+                : `${items.length} object(s)`}
+          </span>
         )}
         <span>robkilometers.ca/#{link}</span>
       </div>
