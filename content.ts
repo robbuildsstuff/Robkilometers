@@ -9,7 +9,8 @@ import type { CityIconName } from './components/desktop/cityIcons';
  *   note    { type, id, title, date?, body?, lines? }                  -> opens in Notepad. `lines` is a list, one thing per line;
  *                                                                        { text: 'Milk', crossed: true, scribble: 'why??' } crosses a
  *                                                                        line out and scribbles a handwritten note beside it
- *   recipe  { type, id, title, date?, serves?, time?, ingredients, steps, note?, source? }
+ *   recipe  { type, id, title, date?, serves?, time?, ingredients, steps, note?, source?, image? }
+ *           ('— Section —' in ingredients makes a heading; image is a photo shown on the card)
  *   link    { type, id, title, date?, url, note? }                     -> little browser window with a "Visit" button
  *   video   { type, id, title, date?, url, note? }                     -> media player. YouTube video links
  *                                                                        play right in the window; anything else links out
@@ -61,6 +62,7 @@ export type NoteLine = string | { text: string; crossed?: boolean; scribble?: st
 export type NoteItem = ItemBase & { type: 'note'; body?: string; lines?: NoteLine[] };
 export type RecipeItem = ItemBase & {
   type: 'recipe';
+  image?: string; // optional photo shown on the card, e.g. the handwritten original
   serves?: string;
   time?: string;
   ingredients: string[];
@@ -1079,6 +1081,37 @@ Last updated: Sept 2026
           note: 'Measurements are my best guess. Taste as you go and adjust.',
         },
         {
+          type: 'recipe',
+          id: 'bobs-secret-sauce',
+          title: "Bob's Secret Sauce",
+          serves: 'About 1 cup',
+          time: '5 min',
+          image: '/photos/bobs-secret-sauce.jpg',
+          ingredients: [
+            '1/3 cup avocado oil',
+            '1/3 cup cashew butter',
+            '1 tbsp rice vinegar',
+            '1 tbsp mirin',
+            '1/2 tbsp maple syrup',
+            '1/2 lime, juice + zest',
+            '2 cloves garlic',
+            '1 small shallot',
+            '1 green onion',
+            'Thumb of ginger',
+            'Chili flakes',
+            'Black pepper',
+            'Splash of water',
+          ],
+          steps: [
+            'Throw everything except the water into a blender or a jar for a stick blender.',
+            'Blend until smooth.',
+            'Add water a splash at a time until it pours.',
+            'Taste and adjust with more lime, maple or chili.',
+            'Keeps in the fridge for about a week; loosen with water if it thickens.',
+          ],
+          note: 'Cashew butter dressing. My play on the Sweetgreen one.',
+        },
+        {
           type: 'note',
           id: 'grocery-list',
           title: 'Grocery List',
@@ -1114,6 +1147,78 @@ Last updated: Sept 2026
           src: '/photos/ceres.jpg',
           thumb: '/photos/ceres-thumb.jpg',
           caption: 'Ceres, New York City',
+        },
+        {
+          type: 'image',
+          id: 'taqueria-ramirez',
+          title: '📍 Taqueria Ramirez',
+          src: '/photos/taqueria-ramirez.jpg',
+          thumb: '/photos/taqueria-ramirez-thumb.jpg',
+          caption: 'Taqueria Ramirez, Brooklyn',
+        },
+        {
+          type: 'image',
+          id: 'pasta-pooks',
+          title: '📍 Pasta Pooks',
+          src: '/photos/pasta-pooks.jpg',
+          thumb: '/photos/pasta-pooks-thumb.jpg',
+          caption: 'Pasta Pooks, Montreal',
+        },
+        {
+          type: 'image',
+          id: '20-victoria',
+          title: '📍 20 Victoria',
+          src: '/photos/20-victoria.jpg',
+          thumb: '/photos/20-victoria-thumb.jpg',
+          caption: '20 Victoria, Toronto',
+        },
+        {
+          type: 'image',
+          id: 'cervejaria-ramiro',
+          title: '📍 Cervejaria Ramiro',
+          src: '/photos/cervejaria-ramiro.jpg',
+          thumb: '/photos/cervejaria-ramiro-thumb.jpg',
+          caption: 'Cervejaria Ramiro, Lisbon',
+        },
+        {
+          type: 'image',
+          id: 'harrys-place',
+          title: "📍 Harry's Place",
+          src: '/photos/harrys-place.jpg',
+          thumb: '/photos/harrys-place-thumb.jpg',
+          caption: "Harry's Place, Copenhagen",
+        },
+        {
+          type: 'image',
+          id: 'salle-climatisee',
+          title: '📍 Salle Climatisée',
+          src: '/photos/salle-climatisee.jpg',
+          thumb: '/photos/salle-climatisee-thumb.jpg',
+          caption: 'Salle Climatisée, Montreal',
+        },
+        {
+          type: 'image',
+          id: 'vin-mon-lapin',
+          title: '📍 Mon Lapin',
+          src: '/photos/vin-mon-lapin.jpg',
+          thumb: '/photos/vin-mon-lapin-thumb.jpg',
+          caption: 'Mon Lapin, Montreal',
+        },
+        {
+          type: 'image',
+          id: 'osaka',
+          title: '📍 Some place',
+          src: '/photos/osaka.jpg',
+          thumb: '/photos/osaka-thumb.jpg',
+          caption: 'Some place, Osaka',
+        },
+        {
+          type: 'image',
+          id: 'el-pialadero',
+          title: '📍 El Pialadero de Guadalajara',
+          src: '/photos/el-pialadero.jpg',
+          thumb: '/photos/el-pialadero-thumb.jpg',
+          caption: 'El Pialadero de Guadalajara, Mexico City',
         },
       ],
     },

@@ -157,6 +157,10 @@ export function ItemView({ it }: { it: ContentItem }) {
       return (
         <div className="sunken scroll">
           <div className="doc">
+            {it.image && (
+              // eslint-disable-next-line @next/next/no-img-element -- local photo of the recipe
+              <img className="recipe-photo" src={it.image} alt={`${it.title}, the original card`} />
+            )}
             <h2>{it.title}</h2>
             <div className="meta">
               {it.serves && (
