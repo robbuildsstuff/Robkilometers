@@ -179,14 +179,22 @@ export function ItemView({ it }: { it: ContentItem }) {
               <div>
                 <h3>Ingredients</h3>
                 <ul className="ing">
-                  {it.ingredients.map((x, i) => (
-                    <li key={i}>
-                      <label>
-                        <input type="checkbox" />
-                        <span>{x}</span>
-                      </label>
-                    </li>
-                  ))}
+                  {it.ingredients.map((x, i) => {
+                    // '— Chorizo —' is a section heading, not something to tick off
+                    const heading = x.match(/^— (.+) —$/);
+                    return heading ? (
+                      <li key={i} className="ing-h">
+                        {heading[1]}
+                      </li>
+                    ) : (
+                      <li key={i}>
+                        <label>
+                          <input type="checkbox" />
+                          <span>{x}</span>
+                        </label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
               <div>
