@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'robOS 98 · robkilometers',
-  description: "Rob's corner of the internet: food, clothes, books, sport and whatever else he's into this week.",
+  title: 'robkilometers',
+  description: "My corner of the internet: food, travel, books, sport and whatever else I'm into this week.",
 };
 
 export const viewport: Viewport = {
