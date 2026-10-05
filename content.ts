@@ -1338,6 +1338,22 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
       items: [
         {
           type: 'note',
+          id: 'quotes',
+          title: 'Quotes',
+          body: `“if you win the rat race, you are still a rat”
+  - Idk
+
+“whether you think you can or you can't you're right”
+  - Henry Ford
+
+“at the end of the day, it’s the end of the day”
+  - unknown
+
+“you believe it, i’ll see it”
+  - Kev Shirt`,
+        },
+        {
+          type: 'note',
           id: 'why-this-site',
           title: 'Why this site',
           date: '2026-09-30',
