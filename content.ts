@@ -107,7 +107,7 @@ export type Bookshelf = { title: string; reading: Book[]; read: (Book | BookSeri
 // Fits are full-outfit photos for the photo frame on the shelf: { src: '/wardrobe/fits/sunday.jpg', caption?: '...' }.
 // Wants is the wishlist notebook, written like the grocery list.
 export type WardrobeItem = { id: string; name: string; brand?: string; boughtAt?: string; note?: string; url?: string; photo: string; placeholder?: boolean };
-export type WardrobeArt = 'hat' | 'tee' | 'sweater' | 'jacket' | 'pants' | 'jeans' | 'shorts' | 'shoes';
+export type WardrobeArt = 'cap' | 'tee' | 'sweater' | 'jacket' | 'jersey' | 'pants' | 'jeans' | 'shorts' | 'sneakers' | 'loafers' | 'running' | 'boots';
 export type WardrobeCategory = { id: string; name: string; zone: 'shelf' | 'upper' | 'lower' | 'floor'; art: WardrobeArt; items: WardrobeItem[] };
 export type Wardrobe = { categories: WardrobeCategory[]; fits: { src: string; caption?: string }[]; wants: NoteLine[]; inspoUrl?: string };
 
@@ -1246,7 +1246,7 @@ Last updated: Sept 2026
             id: 'headwear',
             name: 'Headwear',
             zone: 'shelf',
-            art: 'hat',
+            art: 'cap',
             items: [{ id: 'headwear-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real headwear coming soon.' }],
           },
           {
@@ -1271,6 +1271,13 @@ Last updated: Sept 2026
             items: [{ id: 'outerwear-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real outerwear coming soon.' }],
           },
           {
+            id: 'sport',
+            name: 'Sport',
+            zone: 'upper',
+            art: 'jersey',
+            items: [{ id: 'sport-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Running, cycling and gym stuff coming soon.' }],
+          },
+          {
             id: 'pants',
             name: 'Pants',
             zone: 'lower',
@@ -1292,11 +1299,32 @@ Last updated: Sept 2026
             items: [{ id: 'shorts-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real shorts coming soon.' }],
           },
           {
-            id: 'shoes',
-            name: 'Shoes',
+            id: 'sneakers',
+            name: 'Sneakers',
             zone: 'floor',
-            art: 'shoes',
-            items: [{ id: 'shoes-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real shoes coming soon.' }],
+            art: 'sneakers',
+            items: [{ id: 'sneakers-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real sneakers coming soon.' }],
+          },
+          {
+            id: 'loafers',
+            name: 'Loafers',
+            zone: 'floor',
+            art: 'loafers',
+            items: [{ id: 'loafers-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real loafers coming soon.' }],
+          },
+          {
+            id: 'running',
+            name: 'Running',
+            zone: 'floor',
+            art: 'running',
+            items: [{ id: 'running-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real running shoes coming soon.' }],
+          },
+          {
+            id: 'timbs',
+            name: 'Timbs',
+            zone: 'floor',
+            art: 'boots',
+            items: [{ id: 'timbs-placeholder', name: 'Placeholder', placeholder: true, photo: '/wardrobe/placeholder.svg', note: 'Real boots coming soon.' }],
           },
         ],
         fits: [

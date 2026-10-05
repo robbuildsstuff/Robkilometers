@@ -3,6 +3,7 @@ import type { WardrobeArt } from '@/content';
 // Cartoon clothes for the wardrobe: flat retro colours, thick dark outlines (like the bookcase).
 const INK = '#1a100a';
 const line = { stroke: INK, strokeWidth: 3, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const };
+const thin = { stroke: INK, strokeWidth: 2, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const };
 
 export function Hanger() {
   return (
@@ -12,7 +13,29 @@ export function Hanger() {
   );
 }
 
+// A shoe pair: two of the same shoe, the back one slightly behind.
+function Pair({ children }: { children: React.ReactNode }) {
+  return (
+    <svg viewBox="0 0 110 52">
+      <g transform="translate(34 0)" opacity="0.92">
+        {children}
+      </g>
+      <g transform="translate(0 6)">{children}</g>
+    </svg>
+  );
+}
+
 const ART: Record<WardrobeArt, React.ReactNode> = {
+  cap: (
+    <svg viewBox="0 0 110 60">
+      <path d="M20 44 Q18 10 52 8 Q82 8 84 40 Z" fill="#24407e" {...line} />
+      <path d="M52 8 Q50 26 50 42 M36 12 Q30 26 32 42 M68 11 Q72 26 70 41" fill="none" {...thin} />
+      <path d="M78 38 Q100 38 106 48 Q90 52 70 46 Z" fill="#1d3466" {...line} />
+      <path d="M16 44 H86" {...line} />
+      <circle cx="52" cy="8" r="4" fill="#24407e" {...thin} />
+      <rect x="40" y="22" width="20" height="12" rx="2" fill="#e2b33c" {...thin} />
+    </svg>
+  ),
   tee: (
     <svg viewBox="0 0 100 100">
       <path d="M30 14 L42 9 Q50 18 58 9 L70 14 L93 32 L82 47 L72 40 L72 94 L28 94 L28 40 L18 47 L7 32 Z" fill="#b8322a" {...line} />
@@ -39,6 +62,16 @@ const ART: Record<WardrobeArt, React.ReactNode> = {
       <path d="M30 70 L46 58 L58 70 L72 58" fill="none" stroke="#9ad4cf" strokeWidth="4" strokeLinejoin="round" />
     </svg>
   ),
+  jersey: (
+    <svg viewBox="0 0 100 100">
+      <path d="M32 13 L44 9 L50 16 L56 9 L68 13 L90 28 L82 44 L72 38 L72 94 L28 94 L28 38 L18 44 L10 28 Z" fill="#f2f2ec" {...line} />
+      <path d="M28 46 H72 V58 H28 Z" fill="#e8574a" stroke="none" />
+      <path d="M28 62 H72 V68 H28 Z" fill="#24407e" stroke="none" />
+      <path d="M50 16 V94" stroke={INK} strokeWidth="2" strokeDasharray="4 3" />
+      <path d="M32 13 L44 9 L50 16 L56 9 L68 13 L90 28 L82 44 L72 38 L72 94 L28 94 L28 38 L18 44 L10 28 Z" fill="none" {...line} />
+      <rect x="56" y="74" width="12" height="10" fill="#e2b33c" {...thin} />
+    </svg>
+  ),
   pants: (
     <svg viewBox="0 0 80 120">
       <path d="M14 6 H66 L71 114 H50 L42 40 H38 L30 114 H9 Z" fill="#8a5ab8" {...line} />
@@ -61,28 +94,38 @@ const ART: Record<WardrobeArt, React.ReactNode> = {
       <path d="M36 15 v10 M44 15 v10" stroke={INK} strokeWidth="2" />
     </svg>
   ),
-  hat: (
-    <svg viewBox="0 0 100 60">
-      <path d="M26 36 Q28 8 50 8 Q72 8 74 36 Z" fill="#e6d98a" {...line} />
-      <path d="M8 40 Q50 26 92 40 Q88 52 50 50 Q12 52 8 40 Z" fill="#e6d98a" {...line} />
-      <path d="M27 30 Q50 24 73 30 L74 36 Q50 30 26 36 Z" fill="#7a4424" {...line} />
-    </svg>
+  sneakers: (
+    <Pair>
+      <path d="M4 36 Q4 22 14 20 L26 17 Q34 27 52 29 Q66 31 68 38 V42 H4 Z" fill="#f2f2ec" {...line} />
+      <path d="M2 42 H70 V46 H2 Z" fill="#e8e0c8" {...thin} />
+      <path d="M22 32 Q36 36 50 30" fill="none" stroke="#b8322a" strokeWidth="4" strokeLinecap="round" />
+      <path d="M20 24 l6 -2 M24 28 l6 -2" {...thin} />
+    </Pair>
   ),
-  shoes: (
-    <svg viewBox="0 0 240 44">
-      {[
-        { x: 0, c: '#e6d98a' },
-        { x: 62, c: '#4f8a46' },
-        { x: 124, c: '#e0b090' },
-        { x: 186, c: '#8fa6e6' },
-      ].map(({ x, c }) => (
-        <g key={x} transform={`translate(${x} 0)`}>
-          <path d="M4 32 Q4 18 16 16 L26 14 Q32 24 46 26 Q52 28 52 34 V38 H4 Z" fill={c} {...line} />
-          <path d="M4 38 H52" stroke={INK} strokeWidth="5" />
-          <path d="M18 22 l6 -2 M22 26 l6 -2" stroke={INK} strokeWidth="2" />
-        </g>
-      ))}
-    </svg>
+  loafers: (
+    <Pair>
+      <path d="M4 40 Q4 30 14 28 Q40 22 58 30 Q68 34 68 40 V44 H4 Z" fill="#7a4424" {...line} />
+      <path d="M2 44 H70 V47 H2 Z" fill="#3a2414" {...thin} />
+      <path d="M30 27 Q44 24 56 30 L54 34 Q42 30 32 32 Z" fill="#5a3218" {...thin} />
+      <rect x="40" y="28" width="7" height="3" fill="#e2b33c" stroke={INK} strokeWidth="1" />
+    </Pair>
+  ),
+  running: (
+    <Pair>
+      <path d="M4 34 Q4 20 14 18 L26 15 Q34 25 50 27 Q66 29 68 36 V40 H4 Z" fill="#e9631a" {...line} />
+      <path d="M2 40 H70 Q70 47 64 47 H6 Q2 47 2 40 Z" fill="#f2f2ec" {...thin} />
+      <path d="M14 44 H60" stroke="#8fa6e6" strokeWidth="3" />
+      <path d="M18 24 L40 34 M26 21 L46 31" stroke="#24407e" strokeWidth="3" strokeLinecap="round" />
+    </Pair>
+  ),
+  boots: (
+    <Pair>
+      <path d="M8 44 V10 Q8 4 14 4 H34 Q38 4 38 10 V24 Q54 26 64 32 Q68 36 68 42 V44 Z" fill="#d9a54a" {...line} />
+      <path d="M6 44 H70 V49 H6 Z" fill="#3a2414" {...thin} />
+      <path d="M8 6 Q22 0 38 6" fill="none" stroke="#3a2414" strokeWidth="5" strokeLinecap="round" />
+      <path d="M38 12 l-8 4 M38 18 l-8 4 M38 24 l-8 4" {...thin} />
+      <path d="M40 30 Q54 30 64 36" fill="none" {...thin} />
+    </Pair>
   ),
 };
 
@@ -90,29 +133,33 @@ export function ClothesArt({ art }: { art: WardrobeArt }) {
   return <span className={`wd-art wd-${art}`}>{ART[art]}</span>;
 }
 
-// The digital photo frame on the shelf, showing a little cartoon outfit.
+// A real-looking photo frame: wooden frame, white mat, a cartoon fit pic, leaning on a little easel.
 export function FitsFrame() {
   return (
-    <svg viewBox="0 0 90 100" aria-hidden="true">
-      <rect x="3" y="3" width="84" height="86" rx="6" fill="#3e3e44" {...line} />
-      <rect x="11" y="11" width="68" height="66" fill="#cfe3f5" stroke={INK} strokeWidth="2" />
-      <circle cx="45" cy="26" r="7" fill="#e0a878" stroke={INK} strokeWidth="2" />
-      <path d="M33 37 q12 -5 24 0 l4 22 h-32 z" fill="#b8322a" stroke={INK} strokeWidth="2" strokeLinejoin="round" />
-      <path d="M36 59 h18 l2 18 h-8 l-3 -12 l-3 12 h-8 z" fill="#24407e" stroke={INK} strokeWidth="2" strokeLinejoin="round" />
-      <circle cx="45" cy="83" r="2.5" fill="#4fdc6a" />
-      <path d="M30 89 L24 98 M60 89 L66 98" {...line} />
+    <svg viewBox="0 0 84 100" aria-hidden="true">
+      <path d="M58 30 L74 98" {...line} />
+      <rect x="4" y="4" width="64" height="88" fill="#7a4424" {...line} />
+      <rect x="10" y="10" width="52" height="76" fill="#fffbe8" stroke={INK} strokeWidth="1.5" />
+      <rect x="17" y="17" width="38" height="58" fill="#cfe3f5" stroke={INK} strokeWidth="1.5" />
+      <circle cx="36" cy="30" r="5.5" fill="#e0a878" stroke={INK} strokeWidth="1.5" />
+      <path d="M27 39 q9 -4 18 0 l3 17 h-24 z" fill="#b8322a" stroke={INK} strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M29 56 h14 l1 16 h-6 l-2 -10 l-2 10 h-6 z" fill="#24407e" stroke={INK} strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M17 70 H55 V75 H17 Z" fill="#9fc97a" stroke="none" />
     </svg>
   );
 }
 
-// The little "Wants" notebook.
+// The Wants book, lying flat with its spine facing out.
 export function WantsBook() {
   return (
-    <svg viewBox="0 0 54 72" aria-hidden="true">
-      <rect x="4" y="3" width="46" height="66" rx="3" fill="#b8322a" {...line} />
-      <path d="M12 3 V69" stroke={INK} strokeWidth="2" />
-      <rect x="18" y="16" width="26" height="14" fill="#fffbe8" stroke={INK} strokeWidth="2" />
-      <path d="M38 3 v20 l4 -4 l4 4 v-20" fill="#e2b33c" stroke={INK} strokeWidth="2" strokeLinejoin="round" />
+    <svg viewBox="0 0 110 30" aria-hidden="true">
+      <path d="M8 6 H104 V24 H8 Z" fill="#fffbe8" {...thin} />
+      <path d="M12 9 H100 M12 13 H100 M12 17 H100 M12 21 H100" stroke="#c9b98a" strokeWidth="1" />
+      <rect x="3" y="3" width="100" height="24" rx="3" fill="#b8322a" {...line} />
+      <path d="M10 6.5 H96 M10 23.5 H96" stroke="#e2b33c" strokeWidth="1.5" />
+      <text x="53" y="20" textAnchor="middle" fontFamily="Tahoma, Verdana, sans-serif" fontWeight="700" fontSize="12" letterSpacing="2" fill="#fff4e0">
+        WANTS
+      </text>
     </svg>
   );
 }

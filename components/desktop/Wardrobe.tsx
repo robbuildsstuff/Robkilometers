@@ -5,8 +5,8 @@ import type { Wardrobe as Data, WardrobeCategory } from '@/content';
 import { ClothesArt, FitsFrame, Hanger, WantsBook } from './wardrobeArt';
 
 // The wardrobe is drawn at this size, then scaled to fit the window (no scrolling).
-const W = 480;
-const H = 620;
+const W = 580;
+const H = 700;
 
 type View =
   | { kind: 'cat'; id: string; i: number; detail: boolean }
@@ -28,6 +28,7 @@ const shuffled = (n: number) => {
 const viewFromPick = (data: Data, pick?: string): View => {
   if (!pick) return null;
   if (pick === 'fits' || pick === 'wants' || pick === 'inspo') return { kind: pick };
+  if (pick === 'shoes') pick = 'sneakers'; // the old single Shoes category
   return data.categories.some((c) => c.id === pick) ? { kind: 'cat', id: pick, i: 0, detail: false } : null;
 };
 

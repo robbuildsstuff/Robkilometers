@@ -2090,3 +2090,99 @@ img {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* wardrobe v2: bigger clothes that overlap, things resting on the shelf, four pairs of shoes */
+.wd-door {
+  height: 688px;
+}
+.wd-cork {
+  top: 170px;
+}
+.wd-body {
+  width: 496px;
+  height: 700px;
+}
+.wd-hero,
+.wd-fits,
+.wd-wantsbook {
+  position: relative;
+}
+.wd-tag {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 1px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 4;
+  margin: 0;
+}
+.wd-shelf {
+  height: 132px;
+  padding: 0 24px;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+/* sitting on the plank, with a little contact shadow */
+.wd-shelf svg {
+  display: block;
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.28));
+}
+.wd-shelf .wd-tag {
+  top: calc(100% + 2px);
+}
+.wd-fits svg {
+  width: 78px;
+  transform: none;
+}
+.wd-wantsbook svg {
+  width: 104px;
+}
+.wd-hero .wd-cap svg {
+  width: 112px;
+}
+.wd-rail {
+  justify-content: center;
+}
+.wd-rail.upper {
+  height: 214px;
+}
+.wd-rail.lower {
+  height: 214px;
+}
+.wd-rail .wd-hero + .wd-hero {
+  margin-left: -16px;
+}
+.wd-rail .wd-hero:hover,
+.wd-rail .wd-hero:focus-visible {
+  z-index: 3;
+}
+.wd-tee svg,
+.wd-sweater svg,
+.wd-jacket svg,
+.wd-jersey svg {
+  width: 128px;
+}
+.wd-pants svg,
+.wd-jeans svg {
+  width: 100px;
+}
+.wd-shorts svg {
+  width: 100px;
+}
+.wd-rail.lower .wd-hero {
+  margin: 0 6px;
+}
+.wd-floor {
+  justify-content: space-around;
+  padding: 0 16px 28px;
+}
+.wd-floor .wd-hero svg {
+  width: 100px;
+  display: block;
+}
+.wd-floor .wd-hero:hover .wd-art {
+  transform: translateY(-4px);
+}
+.wd-floor .wd-hero svg {
+  width: 112px;
+}
