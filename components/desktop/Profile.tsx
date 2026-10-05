@@ -78,18 +78,22 @@ export default function Profile({ onOpenPath }: { onOpenPath: (path: string[]) =
         </div>
         <div>
           <div className="ext">Rob is in your extended network</div>
-          <h3 style={{ marginTop: 18 }}>Rob&apos;s Latest Entries</h3>
-          <ul className="entries">
-            {latest.map(({ path, it }) => (
-              <li key={path.join('.')}>
-                {it.title} (
-                <button type="button" onClick={() => onOpenPath(path)}>
-                  check it out
-                </button>
-                )
-              </li>
-            ))}
-          </ul>
+          {latest.length > 0 && (
+            <>
+            <h3 style={{ marginTop: 18 }}>Rob&apos;s Latest Entries</h3>
+            <ul className="entries">
+              {latest.map(({ path, it }) => (
+                <li key={path.join('.')}>
+                  {it.title} (
+                  <button type="button" onClick={() => onOpenPath(path)}>
+                    check it out
+                  </button>
+                  )
+                </li>
+              ))}
+            </ul>
+            </>
+          )}
         </div>
       </div>
     </div>
