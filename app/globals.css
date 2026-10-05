@@ -2274,3 +2274,7 @@ img {
 .readme-text h2 {
   white-space: nowrap;
 }
+.space .avatar {
+  max-width: 220px;
+  border: 3px solid #1c3aa0;
+}

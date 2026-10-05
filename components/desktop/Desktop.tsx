@@ -190,7 +190,7 @@ export default function Desktop() {
   );
 
   const openAbout = useCallback(() => {
-    open('about', { title: `${site.handle} - Profile`, icon: 'computer', w: 720, h: 540, target: { kind: 'about' } });
+    open('about', { title: `${site.handle} - Profile`, icon: 'computer', w: 720, target: { kind: 'about' } });
     setHash('about');
   }, [open]);
 
@@ -308,7 +308,7 @@ export default function Desktop() {
       case 'item':
         return <ItemView it={t.item} />;
       case 'about':
-        return <Profile onOpenPath={openPath} onCopy={copy} />;
+        return <Profile onOpenPath={openPath} />;
       case 'readme':
         return <ReadmeView readme={site.readme} />;
       case 'weather':

@@ -136,9 +136,6 @@ export type Sticker = { id: string; src: string; alt?: string; x?: number; y?: n
 export type Site = {
   owner: string;
   handle: string;
-  location: string;
-  coords: string;
-  email: string;
   tagline: string;
   taskbar: QuickLink[];
   // The welcome note. `heading` is the big first line, `signoff` sits at the bottom, and
@@ -151,9 +148,6 @@ export type Site = {
 export const site: Site = {
   owner: 'Rob Kilometers',
   handle: 'robkilometers',
-  location: 'Toronto, ON',
-  coords: '43.65°N 79.38°W',
-  email: 'hello@robkilometers.ca',
   tagline: "Food, clothes, books, sport and whatever else I'm into this week.",
 
   // Quick-launch icons on the taskbar. Swap in your real handles.

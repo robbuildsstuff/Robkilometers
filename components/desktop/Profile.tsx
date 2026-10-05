@@ -2,35 +2,49 @@
 
 import { useEffect, useRef } from 'react';
 import { site, visibleFolders, type ContentItem, type Item } from '@/content';
-import { Icon } from './icons';
 
+// Rob as pixel art, 24 x 24, drawn from a photo (but much happier). One letter per pixel.
 const avatarRows = [
-  '................',
-  '.....hhhhhh.....',
-  '....hhhhhhhh....',
-  '...hhhhhhhhhh...',
-  '...hsssssssshh..',
-  '...ssesssessh...',
-  '...ssssssssss...',
-  '...sssssnssss...',
-  '....sssmmsss....',
-  '.....ssssss.....',
-  '......ssss......',
-  '...cccccccccc...',
-  '..cccccccccccc..',
-  '.cccccKcccccccc.',
-  '.cccccccccccccc.',
-  '.cccccccccccccc.',
+  '........................',
+  '.......hhhhhhhhhh.......',
+  '.....hhhHHhhhhHHhhh.....',
+  '....hhhhhhHhhhhhHhhh....',
+  '...phhHhhhhhHhhhhhhhp...',
+  '...phhhhhhhhhhhhhhhhp...',
+  '...phhhhhhhhhhhhhhhhp...',
+  '...phhhhhhhhhhhhhhhhp...',
+  '...phh.hhhhssssss.hhp...',
+  '..ppphsBBBssssBBBshppp..',
+  '..pPp.ssksssssskss.pPp..',
+  '..pPp.sksksSSsksks.pPp..',
+  '..pPp.rrsssSSsssrr.pPp..',
+  '..pPp.bmbbbbbbbbmb.pPp..',
+  '..pPp.bmmmmmmmmmmb.pPp..',
+  '..ppp.bbttttttttbb.ppp..',
+  '.......bbmmmmmmbb.......',
+  '.......bbbmmmmbbb.......',
+  '.........bbbbbb.........',
+  '.........SSbbSS.........',
+  '.cccccccccSSSSccccccccc.',
+  '.cccccccccccccccccccccc.',
+  '.cccccccccccccccccccccc.',
+  '.cccccccccccccccccccccc.',
 ];
 const avatarColours: Record<string, string> = {
-  '.': '#9fd4ff',
-  h: '#3a2a1a',
-  s: '#e0a878',
-  e: '#111',
-  n: '#c88a5a',
-  m: '#8a3a2a',
-  c: '#1a7a3a',
-  K: '#fff',
+  '.': '#e8dcc4', // wall
+  h: '#6b4426', // hair
+  H: '#9a6a3e', // hair highlights
+  s: '#f0c4a8', // skin
+  S: '#d9a088', // skin shadow
+  k: '#2a1a10', // eyes
+  b: '#7a5232', // beard
+  B: '#5a3a20', // eyebrows
+  m: '#6a1a1a', // mouth
+  t: '#ffffff', // teeth
+  p: '#1a1a1a', // headphones
+  P: '#4a4a4a', // headphone shine
+  c: '#141414', // black tee
+  r: '#ec9a8a', // cheeks
 };
 
 function Avatar() {
@@ -45,7 +59,7 @@ function Avatar() {
       }),
     );
   }, []);
-  return <canvas ref={ref} className="avatar" width={16} height={16} aria-label="Pixel portrait" role="img" />;
+  return <canvas ref={ref} className="avatar" width={24} height={24} aria-label="Pixel portrait" role="img" />;
 }
 
 const shownFolders = visibleFolders.filter((f) => f.id !== 'recycle');
@@ -61,13 +75,7 @@ const latest = shownFolders
   .sort((a, b) => (b.it.date ?? '').localeCompare(a.it.date ?? ''))
   .slice(0, 5);
 
-export default function Profile({
-  onOpenPath,
-  onCopy,
-}: {
-  onOpenPath: (path: string[]) => void;
-  onCopy: (text: string) => void;
-}) {
+export default function Profile({ onOpenPath }: { onOpenPath: (path: string[]) => void }) {
   return (
     <div className="sunken scroll space">
       <div className="space-top">
@@ -82,36 +90,6 @@ export default function Profile({
           <h3>{site.owner}</h3>
           <Avatar />
           <p>&ldquo;{site.tagline}&rdquo;</p>
-          <p>
-            {site.location}
-            <br />
-            <span className="term">{site.coords}</span>
-          </p>
-          <div className="pbox">
-            <div>Contacting Rob</div>
-            <div className="copyrow">
-              <Icon name="mail" className="inline-icon" />
-              <code>{site.email}</code>
-              <button type="button" className="bevel" style={{ padding: '1px 8px' }} onClick={() => onCopy(site.email)}>
-                Copy
-              </button>
-            </div>
-          </div>
-          <div className="pbox">
-            <div>Rob&apos;s Interests</div>
-            <div style={{ padding: 3 }}>
-              <table className="ltable">
-                <tbody>
-                  {shownFolders.map((f) => (
-                    <tr key={f.id}>
-                      <th>{f.name}</th>
-                      <td>{f.blurb}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
         <div>
           <div className="ext">Rob is in your extended network</div>
