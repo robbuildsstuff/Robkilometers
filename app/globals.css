@@ -2271,3 +2271,6 @@ img {
 .readme-signature {
   aspect-ratio: 640 / 294;
 }
+.readme-text h2 {
+  white-space: nowrap;
+}

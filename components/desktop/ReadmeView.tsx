@@ -27,18 +27,38 @@ export default function ReadmeView({ readme }: { readme: Site['readme'] }) {
       const h = w / RATIO;
       const room = h * (TEXT_BOTTOM - TEXT_TOP);
       // shrink to fit, but never below 12px; on small phones the text scrolls on the grass instead
+      const heading = text.querySelector('h2');
+      const fitHeading = () => {
+        // the heading stays on one line: shrink it (relative to the text) until it fits across
+        if (!heading) return;
+        let hs = 1.45;
+        heading.style.fontSize = `${hs}em`;
+        while (hs > 0.7 && heading.scrollWidth > heading.clientWidth) {
+          hs -= 0.05;
+          heading.style.fontSize = `${hs}em`;
+        }
+      };
       let font = Math.min(17, Math.max(12, w / 26));
       text.style.fontSize = `${font}px`;
+      fitHeading();
       while (font > 12 && text.scrollHeight > room) {
         font -= 0.5;
         text.style.fontSize = `${font}px`;
+        fitHeading();
       }
       setBox({ w, h, font });
     };
     fit();
     const ro = new ResizeObserver(fit);
     ro.observe(outer);
-    return () => ro.disconnect();
+    // fonts and the signature load after the first fit and change the text's size, so fit again then
+    document.fonts?.ready.then(fit);
+    const sig = text.querySelector('img');
+    sig?.addEventListener('load', fit);
+    return () => {
+      ro.disconnect();
+      sig?.removeEventListener('load', fit);
+    };
   }, []);
 
   return (
