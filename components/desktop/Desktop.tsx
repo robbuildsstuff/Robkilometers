@@ -6,9 +6,10 @@ import FolderView from './FolderView';
 import Stickers from './Stickers';
 import IconButton from './IconButton';
 import Profile from './Profile';
+import ReadmeView from './ReadmeView';
 import Solitaire from './Solitaire';
 import Taskbar from './Taskbar';
-import { ItemView, Notepad, itemSize, itemWindowTitle, typeIcon } from './viewers';
+import { ItemView, itemSize, itemWindowTitle, typeIcon } from './viewers';
 import WeatherView from './WeatherView';
 import Window, { type WinFrame } from './Window';
 
@@ -194,7 +195,7 @@ export default function Desktop() {
   }, [open]);
 
   const openReadme = useCallback(() => {
-    open('readme', { title: `${site.readme.title} - Notepad`, icon: 'notepad', w: 440, h: 360, target: { kind: 'readme' } });
+    open('readme', { title: site.readme.title, icon: 'notepad', w: 440, h: 690, target: { kind: 'readme' } });
   }, [open]);
 
   const openWeather = useCallback(() => {
@@ -214,6 +215,10 @@ export default function Desktop() {
       openAbout();
       return true;
     }
+    if (h === 'readme') {
+      openReadme();
+      return true;
+    }
     if (h === 'weather') {
       openWeather();
       return true;
@@ -223,7 +228,7 @@ export default function Desktop() {
       return true;
     }
     return h ? openPath(unalias(h).split('.')) : false;
-  }, [openAbout, openWeather, openSolitaire, openPath]);
+  }, [openAbout, openReadme, openWeather, openSolitaire, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -305,7 +310,7 @@ export default function Desktop() {
       case 'about':
         return <Profile onOpenPath={openPath} onCopy={copy} />;
       case 'readme':
-        return <Notepad body={site.readme.body} />;
+        return <ReadmeView readme={site.readme} />;
       case 'weather':
         return <WeatherView />;
       case 'solitaire':

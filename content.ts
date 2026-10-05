@@ -141,7 +141,9 @@ export type Site = {
   email: string;
   tagline: string;
   taskbar: QuickLink[];
-  readme: { title: string; body: string };
+  // The welcome note. `heading` is the big first line, `signoff` sits at the bottom, and
+  // `image` is the photo it's written on (the text only sits on the grass, see ReadmeView).
+  readme: { title: string; heading: string; body: string; signoff?: string; image?: string };
   stickers: Sticker[];
   folders: Folder[];
 };
@@ -165,19 +167,17 @@ export const site: Site = {
   // Opens automatically on desktop the first time someone visits.
   readme: {
     title: 'README.TXT',
-    body: `Welcome to robOS 98.
+    image: '/photos/readme-field.jpg',
+    heading: 'Yo - Welcome - Thanks for Stopping By',
+    body: `It's come to my attention lately that I have been consuming much more than I am creating.
 
-This is my corner of the internet. It's not a portfolio.
-It's food I'm cooking, clothes I like, books I'm reading,
-sport I'm watching and whatever I'm thinking about.
+I wanted to make my corner of the internet, where I can store what I am eating, reading, thinking about, or working towards. This is by me and for me. For my future self, or anyone else who happens to stumble upon it.
 
 Double-click a folder to poke around.
-On a phone, just tap.
-
 Start menu, bottom left, has everything in one list.
 
-Last updated: Sept 2026
-(sample text, edit me in content.ts)`,
+Hope this inspires you to create a little more, or go outside. Hopefully both`,
+    signoff: 'Rob',
   },
 
   // e.g. { id: 'bagel', src: '/stickers/bagel.png', size: 120, rotate: -8 },

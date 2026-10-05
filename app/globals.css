@@ -2186,3 +2186,76 @@ img {
 .wd-floor .wd-hero svg {
   width: 112px;
 }
+
+/* ---------- README on the field photo ---------- */
+.readme {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  background: #2b3a24;
+  border: 1px solid;
+  border-color: var(--chrome-lo) var(--chrome-hi) var(--chrome-hi) var(--chrome-lo);
+  overflow: hidden;
+}
+.readme-photo {
+  position: relative;
+  background: #5a7a3c center / cover no-repeat;
+}
+.readme-text {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  overflow: auto;
+  color: #fff;
+  font-family: Tahoma, Verdana, sans-serif;
+  line-height: 1.38;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.75),
+    0 0 8px rgba(0, 0, 0, 0.35);
+  scrollbar-width: none;
+}
+.readme-text h2 {
+  margin: 0 0 0.8em;
+  font: 600 1.45em/1.15 var(--font-display);
+  letter-spacing: 0.02em;
+}
+.readme-text p {
+  margin: 0 0 0.8em;
+}
+.readme-sign {
+  font: 600 1.9em/1 'Caveat', cursive;
+}
+/* labels on the wardrobe: hidden until you hover, then a little hang-tag swings in on a string */
+.wd-tag {
+  opacity: 0 !important;
+  pointer-events: none;
+  transform: translateX(-50%) rotate(-8deg) translateY(-4px) !important;
+  transform-origin: top center;
+  transition:
+    opacity 0.12s,
+    transform 0.25s;
+}
+.wd-tag::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  height: 7px;
+  border-left: 1px solid #1a100a;
+}
+.wd-hero:hover .wd-tag,
+.wd-hero:focus-visible .wd-tag,
+.wd-fits:hover .wd-tag,
+.wd-fits:focus-visible .wd-tag,
+.wd-wantsbook:hover .wd-tag,
+.wd-wantsbook:focus-visible .wd-tag {
+  opacity: 1 !important;
+  background: #f2cf5b;
+  transform: translateX(-50%) rotate(3deg) translateY(4px) !important;
+}
+@media (hover: none) {
+  .wd-tag {
+    display: none;
+  }
+}
