@@ -1,10 +1,11 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import type { Banner, Bookshelf as Shelf, Item, Wardrobe as WardrobeData } from '@/content';
+import type { Banner, Bookshelf as Shelf, Item, TravelCountry, Wardrobe as WardrobeData } from '@/content';
 import Bookshelf, { bookCount } from './Bookshelf';
 import DistanceCounter from './DistanceCounter';
 import RunnerBanner from './RunnerBanner';
+import Travel from './Travel';
 import Wardrobe from './Wardrobe';
 import IconButton from './IconButton';
 import { MenuBar, typeIcon } from './viewers';
@@ -16,6 +17,8 @@ type Props = {
   banner?: Banner;
   bookshelf?: Shelf;
   wardrobe?: WardrobeData;
+  travel?: TravelCountry[];
+  onOpenPath?: (path: string[]) => void;
   pick?: string; // a book to have pulled out when the shelf opens
   onPick?: (id: string | null) => void;
   items: Item[];
@@ -23,7 +26,7 @@ type Props = {
   onBack?: () => void; // go up to the parent folder; missing at the top level
 };
 
-export default function FolderView({ trail, link, blurb, banner, bookshelf, wardrobe, pick, onPick, items, onOpenItem, onBack }: Props) {
+export default function FolderView({ trail, link, blurb, banner, bookshelf, wardrobe, travel, onOpenPath, pick, onPick, items, onOpenItem, onBack }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   return (
     <>
@@ -38,6 +41,10 @@ export default function FolderView({ trail, link, blurb, banner, bookshelf, ward
         <span>Address</span>
         <div className="sunken">C:\Rob\{trail.join('\\')}</div>
       </div>
+      {travel ? (
+        <Travel travel={travel} pick={pick} onPick={onPick ?? (() => {})} onOpenPath={onOpenPath ?? (() => {})} />
+      ) : (
+        <>
       <div className="sunken scroll">
         {banner && <RunnerBanner title={banner.title} lines={banner.lines} />}
         {bookshelf && <Bookshelf shelf={bookshelf} pick={pick} onPick={onPick ?? (() => {})} />}
@@ -74,6 +81,8 @@ export default function FolderView({ trail, link, blurb, banner, bookshelf, ward
         )}
         <span>robkilometers.ca/#{link}</span>
       </div>
+        </>
+      )}
     </>
   );
 }

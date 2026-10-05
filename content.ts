@@ -111,6 +111,11 @@ export type WardrobeArt = 'cap' | 'tee' | 'sweater' | 'jacket' | 'jersey' | 'pan
 export type WardrobeCategory = { id: string; name: string; zone: 'shelf' | 'upper' | 'lower' | 'floor'; art: WardrobeArt; items: WardrobeItem[] };
 export type Wardrobe = { categories: WardrobeCategory[]; fits: { src: string; caption?: string }[]; wants: NoteLine[]; inspoUrl?: string };
 
+// Places Rob has been, for the Travel map and passport. Each city has a latitude/longitude for its pin;
+// a country with no cities listed gets one unnamed pin at `spot`. `home: true` gives a little house pin.
+export type TravelCity = { name: string; lat: number; lon: number; home?: boolean };
+export type TravelCountry = { country: string; cities: TravelCity[]; spot?: { lat: number; lon: number } };
+
 export type Folder = {
   id: string;
   name: string;
@@ -119,6 +124,7 @@ export type Folder = {
   banner?: Banner;
   bookshelf?: Bookshelf;
   wardrobe?: Wardrobe;
+  travel?: TravelCountry[];
   hidden?: boolean; // true keeps the folder here but off the desktop, Start menu and profile
   items: Item[];
 };
@@ -1422,6 +1428,65 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
         { type: 'link', id: 'raptors', title: 'Toronto Raptors', url: 'https://www.nba.com/raptors', note: 'Sample link.' },
         { type: 'link', id: 'jays', title: 'Toronto Blue Jays', url: 'https://www.mlb.com/bluejays', note: 'Sample link.' },
       ],
+    },
+    {
+      id: 'travel',
+      name: 'Travel',
+      icon: 'globe',
+      blurb: "Where I've been",
+      travel: [
+          { country: 'Antigua', cities: [], spot: { lat: 17.12, lon: -61.85 } },
+          { country: 'Australia', cities: [{ name: 'Melbourne', lat: -37.81, lon: 144.96 }] },
+          { country: 'Barbados', cities: [], spot: { lat: 13.19, lon: -59.54 } },
+          { country: 'Belgium', cities: [{ name: 'Brussels', lat: 50.85, lon: 4.35 }, { name: 'Antwerp', lat: 51.22, lon: 4.4 }] },
+          { country: 'Cambodia', cities: [{ name: 'Phnom Penh', lat: 11.56, lon: 104.92 }, { name: 'Siem Reap', lat: 13.36, lon: 103.86 }] },
+          { country: 'Canada', cities: [{ name: 'Toronto', lat: 43.65, lon: -79.38, home: true }, { name: 'Montreal', lat: 45.5, lon: -73.57 }, { name: 'Ottawa', lat: 45.42, lon: -75.7 }, { name: 'Winnipeg', lat: 49.9, lon: -97.14 }, { name: 'Halifax', lat: 44.65, lon: -63.58 }, { name: 'Vancouver', lat: 49.28, lon: -123.12 }, { name: 'Victoria', lat: 48.43, lon: -123.37 }] },
+          { country: 'Colombia', cities: [{ name: 'Medellín', lat: 6.24, lon: -75.58 }, { name: 'Cartagena', lat: 10.39, lon: -75.51 }, { name: 'Santa Marta', lat: 11.24, lon: -74.2 }] },
+          { country: 'Croatia', cities: [{ name: 'Dubrovnik', lat: 42.65, lon: 18.09 }, { name: 'Split', lat: 43.51, lon: 16.44 }] },
+          { country: 'Czechia', cities: [{ name: 'Prague', lat: 50.08, lon: 14.44 }, { name: 'České Budějovice', lat: 48.97, lon: 14.47 }] },
+          { country: 'Denmark', cities: [{ name: 'Copenhagen', lat: 55.68, lon: 12.57 }] },
+          { country: 'Dominican Republic', cities: [], spot: { lat: 18.49, lon: -69.93 } },
+          { country: 'Estonia', cities: [{ name: 'Tallinn', lat: 59.44, lon: 24.75 }] },
+          { country: 'Finland', cities: [{ name: 'Helsinki', lat: 60.17, lon: 24.94 }] },
+          { country: 'France', cities: [{ name: 'Paris', lat: 48.86, lon: 2.35 }, { name: 'Nice', lat: 43.7, lon: 7.27 }, { name: 'Lourdes', lat: 43.09, lon: -0.05 }, { name: 'Chamonix', lat: 45.92, lon: 6.87 }] },
+          { country: 'Germany', cities: [{ name: 'Berlin', lat: 52.52, lon: 13.4 }, { name: 'Hamburg', lat: 53.55, lon: 9.99 }, { name: 'Munich', lat: 48.14, lon: 11.58 }] },
+          { country: 'Greece', cities: [{ name: 'Athens', lat: 37.98, lon: 23.73 }] },
+          { country: 'Hungary', cities: [{ name: 'Budapest', lat: 47.5, lon: 19.04 }] },
+          { country: 'Iceland', cities: [{ name: 'Reykjavík', lat: 64.15, lon: -21.94 }] },
+          { country: 'Indonesia', cities: [{ name: 'Bali', lat: -8.34, lon: 115.09 }] },
+          { country: 'Ireland', cities: [{ name: 'Dublin', lat: 53.35, lon: -6.26 }, { name: 'Cork', lat: 51.9, lon: -8.47 }] },
+          { country: 'Italy', cities: [{ name: 'Rome', lat: 41.9, lon: 12.5 }, { name: 'Venice', lat: 45.44, lon: 12.33 }, { name: 'Naples', lat: 40.85, lon: 14.27 }, { name: 'Bologna', lat: 44.49, lon: 11.34 }, { name: 'Palermo', lat: 38.12, lon: 13.36 }] },
+          { country: 'Jamaica', cities: [{ name: 'Boscobel', lat: 18.4, lon: -76.95 }] },
+          { country: 'Japan', cities: [{ name: 'Tokyo', lat: 35.68, lon: 139.69 }, { name: 'Osaka', lat: 34.69, lon: 135.5 }, { name: 'Kyoto', lat: 35.01, lon: 135.77 }] },
+          { country: 'Laos', cities: [{ name: 'Vientiane', lat: 17.97, lon: 102.63 }, { name: 'Luang Prabang', lat: 19.89, lon: 102.13 }] },
+          { country: 'Latvia', cities: [{ name: 'Riga', lat: 56.95, lon: 24.11 }] },
+          { country: 'Malaysia', cities: [{ name: 'Kuala Lumpur', lat: 3.14, lon: 101.69 }] },
+          { country: 'Mexico', cities: [{ name: 'Mexico City', lat: 19.43, lon: -99.13 }, { name: 'Cancún', lat: 21.16, lon: -86.85 }] },
+          { country: 'Monaco', cities: [], spot: { lat: 43.74, lon: 7.42 } },
+          { country: 'Netherlands', cities: [{ name: 'Amsterdam', lat: 52.37, lon: 4.9 }] },
+          { country: 'Norway', cities: [{ name: 'Oslo', lat: 59.91, lon: 10.75 }, { name: '(where ever the fjords are)', lat: 61.2, lon: 6.8 }] },
+          { country: 'Poland', cities: [{ name: 'Gdańsk', lat: 54.35, lon: 18.65 }] },
+          { country: 'Portugal', cities: [{ name: 'Lisbon', lat: 38.72, lon: -9.14 }, { name: 'Comporta', lat: 38.38, lon: -8.79 }] },
+          { country: 'Russia', cities: [{ name: 'Saint Petersburg', lat: 59.93, lon: 30.34 }] },
+          { country: 'Singapore', cities: [{ name: 'Singapore', lat: 1.35, lon: 103.82 }] },
+          { country: 'South Korea', cities: [{ name: 'Seoul', lat: 37.57, lon: 126.98 }] },
+          { country: 'Spain', cities: [{ name: 'Madrid', lat: 40.42, lon: -3.7 }, { name: 'Barcelona', lat: 41.39, lon: 2.17 }, { name: 'Mijas', lat: 36.6, lon: -4.64 }] },
+          { country: 'St Martin', cities: [], spot: { lat: 18.07, lon: -63.05 } },
+          { country: 'Sweden', cities: [{ name: 'Stockholm', lat: 59.33, lon: 18.07 }, { name: 'Gothenburg', lat: 57.71, lon: 11.97 }] },
+          { country: 'Switzerland', cities: [{ name: 'Zürich', lat: 47.38, lon: 8.54 }, { name: 'Geneva', lat: 46.2, lon: 6.14 }] },
+          { country: 'Thailand', cities: [{ name: 'Bangkok', lat: 13.76, lon: 100.5 }, { name: 'Chiang Mai', lat: 18.79, lon: 98.99 }, { name: 'Pai', lat: 19.36, lon: 98.44 }, { name: 'Koh Samui', lat: 9.51, lon: 100.01 }] },
+          { country: 'The Bahamas', cities: [{ name: 'Nassau', lat: 25.05, lon: -77.35 }] },
+          { country: 'Turkey', cities: [{ name: 'Istanbul', lat: 41.01, lon: 28.98 }, { name: 'Ephesus', lat: 37.94, lon: 27.34 }] },
+          { country: 'United Kingdom', cities: [{ name: 'London', lat: 51.51, lon: -0.13 }, { name: 'Manchester', lat: 53.48, lon: -2.24 }] },
+          { country: 'United States', cities: [{ name: 'New York', lat: 40.71, lon: -74.01 }, { name: 'Boston', lat: 42.36, lon: -71.06 }, { name: 'Nashville', lat: 36.16, lon: -86.78 }, { name: 'Denver', lat: 39.74, lon: -104.99 }, { name: 'Atlanta', lat: 33.75, lon: -84.39 }, { name: 'Los Angeles', lat: 34.05, lon: -118.24 }, { name: 'Seattle', lat: 47.61, lon: -122.33 }, { name: 'Storrs', lat: 41.81, lon: -72.25 }, { name: 'Burlington', lat: 44.48, lon: -73.21 }, { name: 'Chicago', lat: 41.88, lon: -87.63 }, { name: 'Buffalo', lat: 42.89, lon: -78.88 }, { name: 'Detroit', lat: 42.33, lon: -83.05 }, { name: 'Washington DC', lat: 38.91, lon: -77.04 }] },
+          { country: 'Vatican City', cities: [{ name: 'Vatican City', lat: 41.9, lon: 12.45 }] },
+          { country: 'Vietnam', cities: [{ name: 'Ho Chi Minh City', lat: 10.82, lon: 106.63 }, { name: 'Hanoi', lat: 21.03, lon: 105.85 }, { name: 'Da Nang', lat: 16.05, lon: 108.22 }, { name: 'Hoi An', lat: 15.88, lon: 108.33 }] },
+          { country: 'Morocco', cities: [{ name: 'Tangier', lat: 35.76, lon: -5.83 }, { name: 'Casablanca', lat: 33.57, lon: -7.59 }] },
+          { country: 'Gibraltar', cities: [], spot: { lat: 36.14, lon: -5.35 } },
+          { country: 'Scotland', cities: [{ name: 'Edinburgh', lat: 55.95, lon: -3.19 }] },
+          { country: 'Northern Ireland', cities: [{ name: 'Belfast', lat: 54.6, lon: -5.93 }] },
+      ],
+      items: [],
     },
     {
       id: 'running',
