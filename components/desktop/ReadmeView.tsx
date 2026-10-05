@@ -63,7 +63,12 @@ export default function ReadmeView({ readme }: { readme: Site['readme'] }) {
               ))}
             </p>
           ))}
-          {readme.signoff && <p className="readme-sign">{readme.signoff}</p>}
+          {readme.signature ? (
+            // eslint-disable-next-line @next/next/no-img-element -- small local graphic
+            <img className="readme-signature" src={readme.signature} alt={readme.signoff ?? 'Signature'} />
+          ) : (
+            readme.signoff && <p className="readme-sign">{readme.signoff}</p>
+          )}
         </div>
       </div>
     </div>

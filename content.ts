@@ -143,7 +143,7 @@ export type Site = {
   taskbar: QuickLink[];
   // The welcome note. `heading` is the big first line, `signoff` sits at the bottom, and
   // `image` is the photo it's written on (the text only sits on the grass, see ReadmeView).
-  readme: { title: string; heading: string; body: string; signoff?: string; image?: string };
+  readme: { title: string; heading: string; body: string; signoff?: string; signature?: string; image?: string };
   stickers: Sticker[];
   folders: Folder[];
 };
@@ -178,6 +178,7 @@ Start menu, bottom left, has everything in one list.
 
 Hope this inspires you to create a little more, or go outside. Hopefully both`,
     signoff: 'Rob',
+    signature: '/photos/rob-signature.png', // Rob's hand-drawn ROB, shown instead of the typed sign-off
   },
 
   // e.g. { id: 'bagel', src: '/stickers/bagel.png', size: 120, rotate: -8 },
