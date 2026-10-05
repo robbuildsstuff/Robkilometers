@@ -3,48 +3,33 @@
 import { useEffect, useRef } from 'react';
 import { site, visibleFolders, type ContentItem, type Item } from '@/content';
 
-// Rob as pixel art, 24 x 24, drawn from a photo (but much happier). One letter per pixel.
 const avatarRows = [
-  '........................',
-  '.......hhhhhhhhhh.......',
-  '.....hhhHHhhhhHHhhh.....',
-  '....hhhhhhHhhhhhHhhh....',
-  '...phhHhhhhhHhhhhhhhp...',
-  '...phhhhhhhhhhhhhhhhp...',
-  '...phhhhhhhhhhhhhhhhp...',
-  '...phhhhhhhhhhhhhhhhp...',
-  '...phh.hhhhssssss.hhp...',
-  '..ppphsBBBssssBBBshppp..',
-  '..pPp.ssksssssskss.pPp..',
-  '..pPp.sksksSSsksks.pPp..',
-  '..pPp.rrsssSSsssrr.pPp..',
-  '..pPp.bmbbbbbbbbmb.pPp..',
-  '..pPp.bmmmmmmmmmmb.pPp..',
-  '..ppp.bbttttttttbb.ppp..',
-  '.......bbmmmmmmbb.......',
-  '.......bbbmmmmbbb.......',
-  '.........bbbbbb.........',
-  '.........SSbbSS.........',
-  '.cccccccccSSSSccccccccc.',
-  '.cccccccccccccccccccccc.',
-  '.cccccccccccccccccccccc.',
-  '.cccccccccccccccccccccc.',
+  '................',
+  '.....hhhhhh.....',
+  '....hhhhhhhh....',
+  '...hhhhhhhhhh...',
+  '...hsssssssshh..',
+  '...ssesssessh...',
+  '...ssssssssss...',
+  '...sssssnssss...',
+  '....sssmmsss....',
+  '.....ssssss.....',
+  '......ssss......',
+  '...cccccccccc...',
+  '..cccccccccccc..',
+  '.cccccKcccccccc.',
+  '.cccccccccccccc.',
+  '.cccccccccccccc.',
 ];
 const avatarColours: Record<string, string> = {
-  '.': '#e8dcc4', // wall
-  h: '#6b4426', // hair
-  H: '#9a6a3e', // hair highlights
-  s: '#f0c4a8', // skin
-  S: '#d9a088', // skin shadow
-  k: '#2a1a10', // eyes
-  b: '#7a5232', // beard
-  B: '#5a3a20', // eyebrows
-  m: '#6a1a1a', // mouth
-  t: '#ffffff', // teeth
-  p: '#1a1a1a', // headphones
-  P: '#4a4a4a', // headphone shine
-  c: '#141414', // black tee
-  r: '#ec9a8a', // cheeks
+  '.': '#9fd4ff',
+  h: '#3a2a1a',
+  s: '#e0a878',
+  e: '#111',
+  n: '#c88a5a',
+  m: '#8a3a2a',
+  c: '#1a7a3a',
+  K: '#fff',
 };
 
 function Avatar() {
@@ -59,7 +44,7 @@ function Avatar() {
       }),
     );
   }, []);
-  return <canvas ref={ref} className="avatar" width={24} height={24} aria-label="Pixel portrait" role="img" />;
+  return <canvas ref={ref} className="avatar" width={16} height={16} aria-label="Pixel portrait" role="img" />;
 }
 
 const shownFolders = visibleFolders.filter((f) => f.id !== 'recycle');
