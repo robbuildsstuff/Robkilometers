@@ -9,7 +9,29 @@ const ROWS = worldRows.length;
 const COLOURS: Record<string, string> = { '.': '#1f5d7a', l: '#c9bc94', v: '#e2b33c' };
 const INKS = ['#1a33a8', '#b8322a', '#2f6e3a', '#6d3a8a', '#1a6a7a', '#8a1c3a', '#3e3e44', '#b0601a'];
 
-type Pin = { key: string; name?: string; country: string; lat: number; lon: number; home?: boolean };
+type Pin = { key: string; name?: string; country: string; lat: number; lon: number; home?: boolean; guide?: boolean };
+
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+// Cities with a Food > City Guides map get a green pin. Read from the site's data, so new guides show up too.
+function guideCities(): Set<string> {
+  const names = new Set<string>();
+  const walk = (items: Item[]) => {
+    for (const it of items) {
+      if (it.type === 'folder') walk(it.items);
+      else if (it.type === 'map') names.add(it.title.toLowerCase());
+    }
+  };
+  for (const f of visibleFolders) walk(f.items);
+  return names;
+}
+const GUIDES = guideCities();
 
 const xPct = (lon: number) => ((lon + 180) / 360) * 100;
 const yPct = (lat: number) => ((MAP_LAT_TOP - lat) / (MAP_LAT_TOP - MAP_LAT_BOTTOM)) * 100;
@@ -39,7 +61,7 @@ function linksFor(city: string): Link[] {
   return out;
 }
 
-function Passport({ travel, close }: { travel: TravelCountry[]; close: () => void }) {
+function Passport({ travel, close, onStamp }: { travel: TravelCountry[]; close: () => void; onStamp: (country: string) => void }) {
   const [page, setPage] = useState(0);
   const per = 6;
   const pages = Math.ceil(travel.length / per);
@@ -57,15 +79,18 @@ function Passport({ travel, close }: { travel: TravelCountry[]; close: () => voi
           const ink = INKS[Math.floor(seeded(c.country, 3) * INKS.length)];
           const round = seeded(c.country, 4) < 0.45;
           return (
-            <div
+            <button
+              type="button"
               key={c.country}
+              onClick={() => onStamp(c.country)}
+              title={`Show ${c.country} on the map`}
               className={`tv-stamp${round ? ' round' : ''}`}
               style={{ color: ink, borderColor: ink, transform: `rotate(${Math.round((seeded(c.country, 5) - 0.5) * 24)}deg)`, marginTop: i % 2 ? 10 : 0 }}
             >
               <small>✈ ARRIVED</small>
               <b>{c.country.toUpperCase()}</b>
               <small>{c.cities.length ? `${c.cities.length} ${c.cities.length === 1 ? 'city' : 'cities'}` : 'visited'}</small>
-            </div>
+            </button>
           );
         })}
       </div>
@@ -97,7 +122,7 @@ export default function Travel({
 }) {
   const pins: Pin[] = travel.flatMap((c) =>
     c.cities.length
-      ? c.cities.map((city) => ({ key: `${c.country}-${city.name}`, name: city.name, country: c.country, lat: city.lat, lon: city.lon, home: city.home }))
+      ? c.cities.map((city) => ({ key: `${c.country}-${city.name}`, name: city.name, country: c.country, lat: city.lat, lon: city.lon, home: city.home, guide: GUIDES.has(city.name.toLowerCase()) }))
       : c.spot
         ? [{ key: c.country, country: c.country, lat: c.spot.lat, lon: c.spot.lon }]
         : [],
@@ -110,6 +135,7 @@ export default function Travel({
   const [base, setBase] = useState({ w: 0, h: 0 });
   const [card, setCard] = useState<Pin | null>(null);
   const [passport, setPassport] = useState(pick === 'passport');
+  const [flash, setFlash] = useState<string | null>(null);
 
   // Paint the pixel map once.
   useEffect(() => {
@@ -187,6 +213,40 @@ export default function Travel({
     if (pointers.current.size < 2) gesture.current = null;
   };
 
+  // Glide the map to a country's pins (padded), flash them, and give it a link like #travel.france.
+  const flyTo = (country: string) => {
+    const el = viewRef.current;
+    const ps = pins.filter((p) => p.country === country);
+    if (!el || !ps.length || !base.w) return;
+    const xs = ps.map((p) => (xPct(p.lon) / 100) * base.w);
+    const ys = ps.map((p) => (yPct(p.lat) / 100) * base.h);
+    const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+    const pad = 40;
+    const spread = Math.max(x1 - x0, y1 - y0);
+    const k = spread < 4 ? 4 : Math.min(el.clientWidth / (x1 - x0 + pad * 2), el.clientHeight / (y1 - y0 + pad * 2));
+    const kk = Math.min(6, Math.max(1, k));
+    const cx = (x0 + x1) / 2;
+    const cy = (y0 + y1) / 2;
+    setSmooth(true);
+    setPassport(false);
+    setCard(null);
+    setView(clampView({ k: kk, x: -(cx - base.w / 2) * kk, y: -(cy - base.h / 2) * kk }));
+    setFlash(country);
+    setTimeout(() => setFlash((f) => (f === country ? null : f)), 2200);
+    onPick(slug(country));
+  };
+
+  // #travel.france opens straight onto that country
+  const picked = useRef(false);
+  useEffect(() => {
+    if (picked.current || !pick || pick === 'passport' || !base.w) return;
+    const c = travel.find((t) => slug(t.country) === pick);
+    if (!c) return;
+    picked.current = true;
+    const t = setTimeout(() => flyTo(c.country), 0);
+    return () => clearTimeout(t);
+  });
+
   const showPassport = (on: boolean) => {
     setPassport(on);
     onPick(on ? 'passport' : null);
@@ -231,7 +291,7 @@ export default function Travel({
             <button
               key={p.key}
               type="button"
-              className={`tv-pin${p.home ? ' home' : ''}${card?.key === p.key ? ' on' : ''}`}
+              className={`tv-pin${p.home ? ' home' : ''}${p.guide && !p.home ? ' guide' : ''}${card?.key === p.key ? ' on' : ''}${flash === p.country ? ' flash' : ''}`}
               style={{ left: `${xPct(p.lon)}%`, top: `${yPct(p.lat)}%`, transform: `translate(-50%, -100%) scale(${1 / view.k})` }}
               title={p.name ? `${p.name}, ${p.country}` : p.country}
               aria-label={p.name ? `${p.name}, ${p.country}` : p.country}
@@ -240,6 +300,17 @@ export default function Travel({
               {p.home ? '⌂' : ''}
             </button>
           ))}
+        </div>
+        <div className="tv-legend" aria-hidden="true">
+          <span>
+            <i className="tv-dot" /> Been here
+          </span>
+          <span>
+            <i className="tv-dot guide" /> Has a food guide
+          </span>
+          <span>
+            <i className="tv-dot home">⌂</i> Home
+          </span>
         </div>
         {card && (
           <div className="tv-card" onPointerDown={(e) => e.stopPropagation()}>
@@ -270,7 +341,7 @@ export default function Travel({
       </div>
       {passport && (
         <div className="wd-overlay" onClick={() => showPassport(false)}>
-          <Passport travel={travel} close={() => showPassport(false)} />
+          <Passport travel={travel} close={() => showPassport(false)} onStamp={flyTo} />
         </div>
       )}
     </div>

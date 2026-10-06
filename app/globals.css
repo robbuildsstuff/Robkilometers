@@ -2527,3 +2527,69 @@ img {
 .shelf-item.reading .face-out b {
   font-size: 11px;
 }
+
+/* travel: guide pins, legend, flashing a country, clickable stamps */
+.tv-pin.guide::before {
+  background: #2f9e4a;
+}
+.tv-pin.guide:hover::before,
+.tv-pin.guide.on::before {
+  background: #4fc06a;
+}
+@keyframes pinflash {
+  50% {
+    filter: drop-shadow(0 0 3px #fff) brightness(1.6);
+  }
+}
+.tv-pin.flash {
+  animation: pinflash 0.55s steps(2) 4;
+  z-index: 2;
+}
+.tv-legend {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  display: grid;
+  gap: 2px;
+  padding: 4px 7px;
+  background: rgba(255, 251, 232, 0.92);
+  border: 1px solid #1a100a;
+  font-size: 11px;
+  pointer-events: none;
+}
+.tv-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tv-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: #c8201a;
+  border: 1.5px solid #1a100a;
+}
+.tv-dot.guide {
+  background: #2f9e4a;
+}
+.tv-dot.home {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  transform: none;
+  background: #1c3aa0;
+  color: #fff;
+  font: 700 10px/10px Tahoma, sans-serif;
+  text-align: center;
+  font-style: normal;
+}
+button.tv-stamp {
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+button.tv-stamp:hover {
+  opacity: 1;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.25));
+}
