@@ -2501,3 +2501,29 @@ img {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* travel: zoom glides for buttons and the wheel */
+.tv-stage.smooth,
+.tv-stage.smooth .tv-pin {
+  transition: transform 0.25s ease-out;
+}
+/* bookshelf: "reading now" sits above the book, the note only shows on the card */
+.shelf-item.reading {
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-right: 16px;
+}
+.shelf-item.reading .reading-tag {
+  position: static;
+  margin: 0 0 12px 2px;
+  line-height: 1;
+}
+.shelf-item.reading .face-out {
+  width: 66px;
+  height: 84px;
+  padding: 10px 5px 5px 10px;
+}
+.shelf-item.reading .face-out b {
+  font-size: 11px;
+}

@@ -140,18 +140,24 @@ export default function Travel({
   const clampView = (v: { k: number; x: number; y: number }) => {
     const el = viewRef.current;
     if (!el) return v;
-    const k = Math.min(8, Math.max(1, v.k));
+    const k = Math.min(6, Math.max(1, v.k));
     const maxX = Math.max(0, (base.w * k - el.clientWidth) / 2 + 20);
     const maxY = Math.max(0, (base.h * k - el.clientHeight) / 2 + 20);
     return { k, x: Math.min(maxX, Math.max(-maxX, v.x)), y: Math.min(maxY, Math.max(-maxY, v.y)) };
   };
-  const zoom = (f: number) => setView((v) => clampView({ ...v, k: v.k * f, x: v.x * f, y: v.y * f }));
+  // Buttons and the wheel glide to the new zoom; dragging and pinching follow the fingers directly.
+  const [smooth, setSmooth] = useState(false);
+  const zoom = (f: number, glide = false) => {
+    setSmooth(glide);
+    setView((v) => clampView({ ...v, k: v.k * f, x: v.x * f, y: v.y * f }));
+  };
 
   // drag to pan, pinch to zoom
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const gesture = useRef<{ dist: number; k: number } | null>(null);
   const moved = useRef(false);
   const onDown = (e: React.PointerEvent) => {
+    setSmooth(false);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     moved.current = false;
     if (pointers.current.size === 2) {
@@ -189,13 +195,16 @@ export default function Travel({
   return (
     <div className="tv">
       <div className="tv-bar">
-        <button type="button" className="bevel" onClick={() => zoom(1.5)} aria-label="Zoom in">
+        <button type="button" className="bevel" onClick={() => zoom(1.25, true)} aria-label="Zoom in">
           +
         </button>
-        <button type="button" className="bevel" onClick={() => zoom(1 / 1.5)} aria-label="Zoom out">
+        <button type="button" className="bevel" onClick={() => zoom(1 / 1.25, true)} aria-label="Zoom out">
           –
         </button>
-        <button type="button" className="bevel" onClick={() => setView({ k: 1, x: 0, y: 0 })}>
+        <button type="button" className="bevel" onClick={() => {
+            setSmooth(true);
+            setView({ k: 1, x: 0, y: 0 });
+          }}>
           Whole world
         </button>
         <span className="tv-hint">drag to move · pinch or +/– to zoom</span>
@@ -210,10 +219,11 @@ export default function Travel({
         onPointerMove={onMove}
         onPointerUp={onUp}
         onPointerCancel={onUp}
-        onWheel={(e) => zoom(e.deltaY < 0 ? 1.15 : 1 / 1.15)}
+        // gentle wheel / trackpad zoom: scaled to how far the wheel moved
+        onWheel={(e) => zoom(Math.exp(-Math.max(-60, Math.min(60, e.deltaY)) * 0.004), true)}
       >
         <div
-          className="tv-stage"
+          className={`tv-stage${smooth ? ' smooth' : ''}`}
           style={{ width: base.w, height: base.h, transform: `translate(-50%, -50%) translate(${view.x}px, ${view.y}px) scale(${view.k})` }}
         >
           <canvas ref={canvasRef} width={COLS} height={ROWS} aria-label="World map of the countries Rob has been to" role="img" />

@@ -179,7 +179,6 @@ export default function Bookshelf({ shelf, pick, onPick }: { shelf: Shelf; pick?
                   <b>{s.spine}</b>
                   <small>{s.author}</small>
                 </button>
-                {s.note && <span className="scribble reading-note">{s.note}</span>}
               </div>
             ))}
             {slots.map((g) => (
