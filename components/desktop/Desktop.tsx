@@ -237,7 +237,7 @@ export default function Desktop() {
   }, [open]);
 
   const openMakeOwn = useCallback(() => {
-    open('make-your-own', { title: 'Make Your Own.exe', icon: 'tools', w: 360, target: { kind: 'make-own' } });
+    open('make-your-own', { title: 'Make Your Own.exe', icon: 'tools', w: 440, target: { kind: 'make-own' } });
     setHash('make-your-own');
   }, [open]);
 
