@@ -1,9 +1,15 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
+const description = "My corner of the internet: food, travel, books, sport and whatever else I'm into this week.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.robkilometers.ca'),
   title: 'robkilometers',
-  description: "My corner of the internet: food, travel, books, sport and whatever else I'm into this week.",
+  description,
+  alternates: { canonical: '/' },
+  openGraph: { title: 'robkilometers', description, url: '/', siteName: 'robkilometers', type: 'website' },
+  twitter: { card: 'summary', title: 'robkilometers', description },
 };
 
 export const viewport: Viewport = {
