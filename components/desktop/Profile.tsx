@@ -96,7 +96,7 @@ const latest = shownFolders
   .sort((a, b) => (b.it.date ?? '').localeCompare(a.it.date ?? ''))
   .slice(0, 5);
 
-export default function Profile({ onOpenPath, onOpenFriend }: { onOpenPath: (path: string[]) => void; onOpenFriend: (f: Friend) => void }) {
+export default function Profile({ onOpenPath, onOpenFriend, onMakeOwn }: { onOpenPath: (path: string[]) => void; onOpenFriend: (f: Friend) => void; onMakeOwn: () => void }) {
   return (
     <div className="sunken scroll space">
       <div className="space-top">
@@ -133,6 +133,10 @@ export default function Profile({ onOpenPath, onOpenFriend }: { onOpenPath: (pat
           )}
         </div>
       </div>
+      {/* tucked in the corner: opens Make Your Own.exe */}
+      <button type="button" className="space-make" onClick={onMakeOwn}>
+        make your own ↗
+      </button>
     </div>
   );
 }

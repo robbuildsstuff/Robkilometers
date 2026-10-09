@@ -356,7 +356,7 @@ export default function Desktop() {
       case 'item':
         return <ItemView it={t.item} />;
       case 'about':
-        return <Profile onOpenPath={openPath} onOpenFriend={openFriend} />;
+        return <Profile onOpenPath={openPath} onOpenFriend={openFriend} onMakeOwn={openMakeOwn} />;
       case 'readme':
         return <ReadmeView readme={site.readme} />;
       case 'weather':
@@ -374,9 +374,7 @@ export default function Desktop() {
     { id: 'about', icon: 'computer', label: "Rob's Computer", open: openAbout },
     { id: 'readme', icon: 'notepad', label: site.readme.title, open: openReadme },
     { id: 'solitaire', icon: 'cards', label: 'Solitaire', open: openSolitaire },
-    ...visibleFolders.filter((f) => f.id !== 'recycle').map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
-    { id: 'make-your-own', icon: 'tools', label: 'Make Your Own.exe', open: openMakeOwn },
-    ...visibleFolders.filter((f) => f.id === 'recycle').map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
+    ...visibleFolders.map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
   ];
 
   return (
@@ -469,7 +467,6 @@ export default function Desktop() {
         onReadme={openReadme}
         onWeather={openWeather}
         onSolitaire={openSolitaire}
-        onMakeOwn={openMakeOwn}
         onFolder={openFolder}
         onCopy={copy}
         onShutDown={() => setOff(true)}

@@ -5,29 +5,60 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 // and the how-to is only sent back once the password matches.
 const REPO = 'https://github.com/robbuildsstuff/nookorcranny';
 
-const PROMPT = `I just set up my own Nook or Cranny site (a personal website that looks like a Windows 98 desktop).
-Read CLAUDE.md first, it explains how everything works.
+const PROMPT = `Hi Claude! I just set up a Nook or Cranny site and this is its project. Please read CLAUDE.md first; it explains how the site works.
 
-Then interview me, a few questions at a time, to make it mine:
-- my name, a one-line tagline, my home city
-- which folders I want (food, books, travel, music, clothes, sport, whatever I'm into)
-- what goes in each one (notes, links, recipes, places, videos, photos, books I've read, countries I've been to)
-- my README welcome message
-- any friends I want to link to
+A bit about me: I have never built a website and I don't know how any of this works. Hold my hand the whole way: explain things in plain English, one small step at a time, tell me exactly where to click when I need to do something, and check in before moving on. Never ask me to edit code myself. If something goes wrong, fix it and tell me simply what happened.
 
-Suggest ideas based on my answers. Remove the sample content as you replace it.
-After each round, update the site, tell me in plain words what changed, and push it live.
-Don't make up facts about me: use clear placeholders and tell me what's left to fill in.
-Keep going until I say I'm done.`;
+What I'm making: my own little corner of the internet that looks like an old Windows 98 desktop. Each icon on the desktop is something I'm into. When you click an icon, a window opens with my stuff inside (photos, lists, recipes, links, notes, whatever fits).
+
+The desktop already has three icons: README (a welcome note), My Computer (a bit about me and my friends) and Trash. Leave those.
+
+Let's start small. Help me pick 4 more folders, one for each thing I'm into. There's no right or wrong; it's whatever feels like me. If I'm stuck, here are some ideas to get me going:
+- Food: recipes I make, restaurants I love, a grocery list
+- Books: a bookshelf of what I'm reading and what I've read
+- Travel: a map with pins where I've been
+- Music: albums or playlists on repeat
+- Sport: running, cycling, climbing, the team I yell at
+- Wardrobe: clothes I love and things I want
+- Photos: pictures I'm proud of
+- Movies & TV: favourites and what's next
+- Thoughts: quotes and little notes to self
+- Projects: things I'm building or making
+- Something weird and specific to me (plants, sneakers, my dog, coffee)
+
+How I'd like to work with you:
+1. Ask me a few easy questions at a time: my name, a one-line hello for the README, and which 4 folders I want.
+2. For each folder, keep it simple at first. Ask me for 2 or 3 real things to put inside. If I don't have them yet, use clear placeholders and keep a list of what I still need to fill in.
+3. Don't invent facts about me.
+4. After each round, check that the site still builds, put it live, and tell me in one or two sentences what changed so I can go and look.
+5. Then ask what I'd like to change. I might say things like "make the Food folder look like a cookbook" or "I want an icon that's a calculator", and you build it, I look, I give feedback, and we go again.
+
+For any photo I send you: shrink it to about 2000px wide, keep it under 500KB, and remove all hidden location (GPS) and camera data before adding it.
+
+We can always add more later, so let's get the first version live before making it fancy.
+
+Tips for me (please share these with me after the first version is live):
+- The more detail I give you, the closer you'll get to what I'm picturing. "Make it nicer" is hard; "make the window green with a pixel cactus in the corner" is easy.
+- Screenshots and reference pictures help a lot. I can drop them in the chat.
+- If I don't like something, I can just say "undo that".`;
 
 const UNLOCKED = {
   pitch: 'Your stuff, your interests, linked together. No feed, no algorithm, no timeline. Just You',
   deploy: `https://vercel.com/new/clone?repository-url=${encodeURIComponent(REPO)}&repository-name=my-nook`,
+  intro: [
+    'GitHub stores your site\'s files (like Google Drive for websites).',
+    'Vercel puts them on the internet so anyone can visit.',
+    'Claude builds and changes your site for you. You just chat.',
+  ],
   steps: [
-    'Click Deploy and sign up with GitHub. Pick a name, hit Create, wait a minute.',
-    'Open claude.ai/code and pick the new repo it made for you.',
-    'Paste the prompt below and answer its questions.',
-    'Say "push it live". Your site updates in about a minute.',
+    'Click the Deploy button above, then Continue with GitHub.',
+    'No GitHub account? Click Sign up, pick a username, use your email. It\'s free.',
+    'Name your site, like jess-nook (lowercase, no spaces). Click Create.',
+    'Wait about a minute for the confetti 🎉. Your address is shown, like jess-nook.vercel.app. Save it.',
+    'Go to claude.ai/code and sign in (needs a paid Claude plan).',
+    'Click Connect to link GitHub, then pick the repository with your site\'s name.',
+    'Copy the prompt below, paste it into the chat and press Enter.',
+    'Answer Claude\'s questions. It puts changes live as you go; refresh your site to see them.',
   ],
   prompt: PROMPT,
   repo: REPO,

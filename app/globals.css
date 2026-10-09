@@ -2920,6 +2920,21 @@ button.tv-stamp:hover {
 }
 
 /* Make Your Own.exe */
+.space-make {
+  display: block;
+  margin: 10px 8px 6px auto;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 11px;
+  color: #777;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.space-make:hover {
+  color: var(--link);
+}
 .mo {
   position: relative;
   display: grid;
@@ -3032,6 +3047,13 @@ button.tv-stamp:hover {
 }
 .mo-prompt {
   justify-self: stretch;
+}
+.mo-tips {
+  justify-self: stretch;
+  margin: 0;
+  padding: 6px 8px 6px 24px;
+  background: #fffbe8;
+  font-size: 12px;
 }
 .mo-prompt-bar {
   display: flex;

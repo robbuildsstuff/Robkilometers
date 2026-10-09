@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 // "Make Your Own.exe": a Win98 log-in box. The right password unlocks a how-to for getting
 // your own corner of the internet like this one. The server checks the password and sends the how-to.
-type Unlocked = { pitch: string; deploy: string; steps: string[]; prompt: string; repo: string };
+type Unlocked = { pitch: string; deploy: string; intro?: string[]; steps: string[]; prompt: string; repo: string };
 const KEY = 'make-own-unlocked';
 
 export default function MakeOwnView() {
@@ -34,7 +34,7 @@ export default function MakeOwnView() {
       });
       const json = await res.json();
       if (json.ok) {
-        const unlocked: Unlocked = { pitch: json.pitch, deploy: json.deploy, steps: json.steps, prompt: json.prompt, repo: json.repo };
+        const unlocked: Unlocked = { pitch: json.pitch, deploy: json.deploy, intro: json.intro, steps: json.steps, prompt: json.prompt, repo: json.repo };
         setData(unlocked);
         try {
           sessionStorage.setItem(KEY, JSON.stringify(unlocked));
@@ -63,6 +63,13 @@ export default function MakeOwnView() {
           {/* eslint-disable-next-line @next/next/no-img-element -- Vercel's own button */}
           <img src="https://vercel.com/button" alt="Deploy with Vercel" />
         </a>
+        {data.intro && (
+          <ul className="mo-tips sunken">
+            {data.intro.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        )}
         <ol className="mo-steps">
           {data.steps.map((s) => (
             <li key={s}>{s}</li>
