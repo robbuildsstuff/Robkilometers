@@ -2918,3 +2918,26 @@ button.tv-stamp:hover {
     padding-right: 26px;
   }
 }
+
+/* Make Your Own.exe */
+.mo {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 16px 18px 18px;
+  text-align: center;
+  font-size: 13px;
+}
+.mo p {
+  margin: 0;
+}
+.mo-head {
+  font-weight: 700;
+  font-size: 14px;
+}
+.mo-btn {
+  margin-top: 6px;
+  padding: 5px 22px;
+  color: #000;
+  text-decoration: none;
+}

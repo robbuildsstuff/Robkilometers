@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { site, visibleFolders, type Banner, type Bookshelf, type ContentItem, type TravelCountry, type Wardrobe, type Folder, type Friend, type IconName, type Item } from '@/content';
 import FriendPhotos from './FriendPhotos';
+import MakeOwnView from './MakeOwnView';
 import FieldPage from './FieldPage';
 import FolderView from './FolderView';
 import Stickers from './Stickers';
@@ -26,7 +27,8 @@ type Target =
   | { kind: 'readme' }
   | { kind: 'weather' }
   | { kind: 'solitaire' }
-  | { kind: 'friend'; friend: Friend };
+  | { kind: 'friend'; friend: Friend }
+  | { kind: 'make-own' };
 
 type Win = WinFrame & { target: Target };
 
@@ -234,6 +236,11 @@ export default function Desktop() {
     setHash('solitaire');
   }, [open]);
 
+  const openMakeOwn = useCallback(() => {
+    open('make-your-own', { title: 'Make Your Own.exe', icon: 'tools', w: 360, target: { kind: 'make-own' } });
+    setHash('make-your-own');
+  }, [open]);
+
   // Opens whatever the URL hash points at. Returns false if it points at nothing.
   const openFromHash = useCallback(() => {
     const h = decodeURIComponent(location.hash.slice(1));
@@ -262,8 +269,12 @@ export default function Desktop() {
       openSolitaire();
       return true;
     }
+    if (h === 'make-your-own') {
+      openMakeOwn();
+      return true;
+    }
     return h ? openPath(unalias(h).split('.')) : false;
-  }, [openAbout, openFriend, openReadme, openWeather, openSolitaire, openPath]);
+  }, [openAbout, openFriend, openReadme, openWeather, openSolitaire, openMakeOwn, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -354,6 +365,8 @@ export default function Desktop() {
         return <Solitaire />;
       case 'friend':
         return <FriendPhotos friend={t.friend} />;
+      case 'make-own':
+        return <MakeOwnView />;
     }
   }
 
@@ -361,7 +374,9 @@ export default function Desktop() {
     { id: 'about', icon: 'computer', label: "Rob's Computer", open: openAbout },
     { id: 'readme', icon: 'notepad', label: site.readme.title, open: openReadme },
     { id: 'solitaire', icon: 'cards', label: 'Solitaire', open: openSolitaire },
-    ...visibleFolders.map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
+    ...visibleFolders.filter((f) => f.id !== 'recycle').map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
+    { id: 'make-your-own', icon: 'tools', label: 'Make Your Own.exe', open: openMakeOwn },
+    ...visibleFolders.filter((f) => f.id === 'recycle').map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
   ];
 
   return (
@@ -454,6 +469,7 @@ export default function Desktop() {
         onReadme={openReadme}
         onWeather={openWeather}
         onSolitaire={openSolitaire}
+        onMakeOwn={openMakeOwn}
         onFolder={openFolder}
         onCopy={copy}
         onShutDown={() => setOff(true)}
