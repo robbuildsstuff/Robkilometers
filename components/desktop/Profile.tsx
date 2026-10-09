@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { site, visibleFolders, type ContentItem, type Item } from '@/content';
 
 const avatarRows = [
@@ -47,6 +47,42 @@ function Avatar() {
   return <canvas ref={ref} className="avatar" width={16} height={16} aria-label="Pixel portrait" role="img" />;
 }
 
+// MySpace-style Top 8. Friends without a link show "coming soon" when clicked.
+function FriendSpace() {
+  const [soon, setSoon] = useState<string | null>(null);
+  const n = site.friends.length;
+  return (
+    <div className="pbox friends">
+      <div>Rob&apos;s Friend Space</div>
+      <div>
+        <p className="friends-count">
+          Rob has <b>{n}</b> {n === 1 ? 'friend' : 'friends'}. <span>Top 8</span>
+        </p>
+        <ul className="friends-grid">
+          {site.friends.slice(0, 8).map((f, i) => (
+            <li key={i}>
+              {f.url ? (
+                <a href={f.url} target="_blank" rel="noopener noreferrer">
+                  <span>{f.name}</span>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- small local picture */}
+                  <img src={f.photo} alt={f.name} />
+                </a>
+              ) : (
+                <button type="button" onClick={() => setSoon(soon === f.name + i ? null : f.name + i)}>
+                  <span>{f.name}</span>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- small local picture */}
+                  <img src={f.photo} alt={f.name} />
+                  {soon === f.name + i && <small>coming soon</small>}
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 const shownFolders = visibleFolders.filter((f) => f.id !== 'recycle');
 
 // Every dated item, however deep in folders, with its path for the deep link.
@@ -78,6 +114,7 @@ export default function Profile({ onOpenPath }: { onOpenPath: (path: string[]) =
         </div>
         <div>
           <div className="ext">Rob is in your extended network</div>
+          <FriendSpace />
           {latest.length > 0 && (
             <>
             <h3 style={{ marginTop: 18 }}>Rob&apos;s Latest Entries</h3>

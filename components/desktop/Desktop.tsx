@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { site, visibleFolders, type Banner, type Bookshelf, type ContentItem, type TravelCountry, type Wardrobe, type Folder, type IconName, type Item } from '@/content';
+import FieldPage from './FieldPage';
 import FolderView from './FolderView';
 import Stickers from './Stickers';
 import IconButton from './IconButton';
@@ -69,6 +70,9 @@ function folderTarget(path: string[]) {
   const node = r.folders[r.folders.length - 1];
   return { kind: 'folder' as const, path, trail: r.folders.map((f) => f.name), node };
 }
+// The screens you can slide between with the arrows at the edges. Page 0 is the desktop.
+const PAGES = ['desktop', 'field'] as const;
+
 const topZ = (ws: Win[]) => ws.reduce((z, w) => Math.max(z, w.z), 10);
 const isNarrow = () => window.matchMedia('(max-width: 640px)').matches;
 
@@ -84,6 +88,14 @@ export default function Desktop() {
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [off, setOff] = useState(false);
+  const [page, setPage] = useState(0);
+  const goPage = (n: number) => {
+    const p = Math.max(0, Math.min(PAGES.length - 1, n));
+    setPage(p);
+    setHash(p ? PAGES[p] : '');
+  };
+  // swipe between pages on phones (only on the background, so windows still scroll and drag)
+  const swipeX = useRef<number | null>(null);
 
   const activeKey = wins.reduce<Win | null>((top, w) => (!w.min && (!top || w.z > top.z) ? w : top), null)?.key ?? null;
 
@@ -215,6 +227,10 @@ export default function Desktop() {
       openAbout();
       return true;
     }
+    if (h === 'field') {
+      setPage(1);
+      return true;
+    }
     if (h === 'readme') {
       openReadme();
       return true;
@@ -332,9 +348,17 @@ export default function Desktop() {
       <div
         id="desktop"
         ref={deskRef}
+        style={{ transform: `translateX(${-page * 100}%)` }}
         onPointerDown={(e) => {
           const t = e.target as HTMLElement;
-          if (t === e.currentTarget || t.id === 'icons') setSelectedIcon(null);
+          if (t === e.currentTarget || t.id === 'icons') {
+            setSelectedIcon(null);
+            swipeX.current = e.clientX;
+          }
+        }}
+        onPointerUp={(e) => {
+          if (swipeX.current !== null && e.pointerType !== 'mouse' && e.clientX - swipeX.current < -60) goPage(page + 1);
+          swipeX.current = null;
         }}
       >
         <Stickers stickers={site.stickers} />
@@ -369,6 +393,33 @@ export default function Desktop() {
           </Window>
         ))}
       </div>
+
+      {/* page 2: the field */}
+      <div
+        className="page-screen"
+        style={{ transform: `translateX(${(1 - page) * 100}%)` }}
+        aria-hidden={page !== 1}
+        onPointerDown={(e) => {
+          if ((e.target as HTMLElement).tagName === 'CANVAS') swipeX.current = e.clientX;
+        }}
+        onPointerUp={(e) => {
+          if (swipeX.current !== null && e.pointerType !== 'mouse' && e.clientX - swipeX.current > 60) goPage(page - 1);
+          swipeX.current = null;
+        }}
+      >
+        <FieldPage active={page === 1} />
+      </div>
+
+      {page < PAGES.length - 1 && (
+        <button type="button" className="page-arrow right" onClick={() => goPage(page + 1)} aria-label="Next screen" title="Next screen">
+          ▶
+        </button>
+      )}
+      {page > 0 && (
+        <button type="button" className="page-arrow left" onClick={() => goPage(page - 1)} aria-label="Back to the desktop" title="Back">
+          ◀
+        </button>
+      )}
 
       <Taskbar
         wins={wins}

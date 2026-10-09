@@ -139,6 +139,9 @@ export type QuickLink =
 // Leave x, y or rotate out and the sticker gets a spot of its own that stays the same every visit.
 export type Sticker = { id: string; src: string; alt?: string; x?: number; y?: number; size?: number; rotate?: number };
 
+// Rob's Friend Space on Rob's Computer. `url` is where clicking a friend goes (leave it out for "coming soon").
+export type Friend = { name: string; photo: string; url?: string };
+
 export type Site = {
   owner: string;
   handle: string;
@@ -148,6 +151,7 @@ export type Site = {
   // `image` is the photo it's written on (the text only sits on the grass, see ReadmeView).
   readme: { title: string; heading: string; body: string; signoff?: string; signature?: string; image?: string };
   stickers: Sticker[];
+  friends: Friend[];
   folders: Folder[];
 };
 
@@ -183,6 +187,9 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
 
   // e.g. { id: 'bagel', src: '/stickers/bagel.png', size: 120, rotate: -8 },
   stickers: [],
+
+  // e.g. { name: 'Terry Snaps', photo: '/photos/friends/terry.png', url: 'https://...' },
+  friends: [{ name: 'Anonymous', photo: '/photos/friends/terry.png' }],
 
   folders: [
     {

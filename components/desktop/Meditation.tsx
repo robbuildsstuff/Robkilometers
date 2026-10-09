@@ -1,0 +1,129 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
+// A soft bell made in the browser (no sound file): a few sine partials that fade out.
+function bell() {
+  try {
+    const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx();
+    const now = ctx.currentTime;
+    for (const [f, v] of [
+      [528, 0.22],
+      [1056, 0.08],
+      [1587, 0.04],
+    ] as const) {
+      const o = ctx.createOscillator();
+      const gn = ctx.createGain();
+      o.frequency.value = f;
+      gn.gain.setValueAtTime(0.0001, now);
+      gn.gain.exponentialRampToValueAtTime(v, now + 0.02);
+      gn.gain.exponentialRampToValueAtTime(0.0001, now + 4);
+      o.connect(gn).connect(ctx.destination);
+      o.start(now);
+      o.stop(now + 4.1);
+    }
+    setTimeout(() => ctx.close(), 4500);
+  } catch {}
+}
+
+const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+type Run = { mode: 'open' | 'preset'; total: number; startedAt: number };
+
+export default function Meditation({ onClose }: { onClose: () => void }) {
+  const [muted, setMuted] = useState(false);
+  const [run, setRun] = useState<Run | null>(null);
+  const [now, setNow] = useState(0);
+  const [finished, setFinished] = useState<number | null>(null);
+  const mutedRef = useRef(muted);
+  useEffect(() => {
+    mutedRef.current = muted;
+  }, [muted]);
+
+  const start = (minutes: number | null) => {
+    if (!mutedRef.current) bell();
+    setFinished(null);
+    const t = Date.now();
+    setNow(t);
+    setRun({ mode: minutes ? 'preset' : 'open', total: (minutes ?? 0) * 60, startedAt: t });
+  };
+
+  const finish = (sat: number) => {
+    if (!mutedRef.current) bell();
+    setRun(null);
+    setFinished(sat);
+  };
+
+  // tick
+  useEffect(() => {
+    if (!run) return;
+    const id = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(id);
+  }, [run]);
+
+  const elapsed = run ? Math.max(0, (now - run.startedAt) / 1000) : 0;
+  useEffect(() => {
+    if (run?.mode === 'preset' && elapsed >= run.total) {
+      const t = setTimeout(() => finish(run.total), 0);
+      return () => clearTimeout(t);
+    }
+  });
+
+  const shown = run ? (run.mode === 'preset' ? Math.max(0, run.total - elapsed) : elapsed) : 0;
+
+  return (
+    <div className="med-wrap" onClick={onClose}>
+      <div className="med" role="dialog" aria-label="Meditate" onClick={(e) => e.stopPropagation()}>
+        <div className="wd-card-bar">
+          <span>Meditate</span>
+          <span className="med-bar-btns">
+            <button type="button" className="bevel wd-x med-mute" onClick={() => setMuted((m) => !m)} aria-label={muted ? 'Turn the bell on' : 'Turn the bell off'} title={muted ? 'Bell off' : 'Bell on'}>
+              {muted ? '♪̸' : '♪'}
+            </button>
+            <button type="button" className="bevel wd-x" onClick={onClose} aria-label="Close">
+              ×
+            </button>
+          </span>
+        </div>
+        <div className="med-body">
+          {run ? (
+            <>
+              <div className="med-breath" aria-hidden="true">
+                <i />
+              </div>
+              <p className="med-cue" aria-hidden="true">
+                <span className="in">breathe in</span>
+                <span className="out">breathe out</span>
+              </p>
+              <p className="med-time">{mmss(shown)}</p>
+              <button type="button" className="bevel med-main" onClick={() => finish(elapsed)}>
+                {run.mode === 'open' ? 'Finish' : 'Stop'}
+              </button>
+            </>
+          ) : (
+            <>
+              {finished !== null ? (
+                <p className="med-done">
+                  You sat for <b>{mmss(finished)}</b>. Nice.
+                </p>
+              ) : (
+                <p className="med-intro">Sit as long or as short as you like.</p>
+              )}
+              <button type="button" className="bevel med-main" onClick={() => start(null)}>
+                Start
+              </button>
+              <div className="med-presets">
+                {[1, 5, 10, 20].map((m) => (
+                  <button key={m} type="button" className="bevel" onClick={() => start(m)}>
+                    {m} min
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
