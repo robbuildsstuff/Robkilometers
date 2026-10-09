@@ -140,7 +140,8 @@ export type QuickLink =
 export type Sticker = { id: string; src: string; alt?: string; x?: number; y?: number; size?: number; rotate?: number };
 
 // Rob's Friend Space on Rob's Computer. `url` is where clicking a friend goes (leave it out for "coming soon").
-export type Friend = { name: string; photo: string; url?: string };
+// Give a friend `photos` instead and clicking them opens a window of their photos, with `instagram` linked below.
+export type Friend = { name: string; photo: string; url?: string; instagram?: string; photos?: { src: string; alt: string }[] };
 
 export type Site = {
   owner: string;
@@ -189,7 +190,19 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
   stickers: [],
 
   // e.g. { name: 'Terry Snaps', photo: '/photos/friends/terry.png', url: 'https://...' },
-  friends: [{ name: 'Anonymous', photo: '/photos/friends/terry.png' }],
+  friends: [
+    {
+      name: 'Terry Snaps',
+      photo: '/photos/friends/terry.png',
+      instagram: 'https://www.instagram.com/',
+      photos: [
+        { src: '/photos/terry/bear.jpg', alt: 'A brown bear among fir branches, mouth open' },
+        { src: '/photos/terry/salmon.jpg', alt: 'A salmon leaping up through white water' },
+        { src: '/photos/terry/bison-dust.jpg', alt: 'A bison rolling in a dust bath' },
+        { src: '/photos/terry/bison-road.jpg', alt: 'Two bison walking toward the camera on a road' },
+      ],
+    },
+  ],
 
   folders: [
     {

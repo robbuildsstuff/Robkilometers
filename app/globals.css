@@ -2615,11 +2615,6 @@ button.tv-stamp:hover {
   margin: 0 0 8px;
   font-size: 12px;
 }
-.friends-count span {
-  float: right;
-  color: #c8201a;
-  font-weight: 700;
-}
 .friends-grid {
   list-style: none;
   margin: 0;
@@ -2873,4 +2868,53 @@ button.tv-stamp:hover {
 .field-quote {
   color: #3c4a2c;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* a friend's photos (Terry's Photos) */
+.fp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  outline: none;
+}
+.fp-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  background: #111;
+  touch-action: pan-y;
+}
+.fp-stage img {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.fp-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+.fp-foot small {
+  color: #555;
+}
+.fp-foot a {
+  color: var(--link);
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  /* leave room for the page arrow on the right edge */
+  .fp-stage {
+    padding-right: 26px;
+  }
 }

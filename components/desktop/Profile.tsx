@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { site, visibleFolders, type ContentItem, type Item } from '@/content';
+import { site, visibleFolders, type ContentItem, type Friend, type Item } from '@/content';
 
 const avatarRows = [
   '................',
@@ -47,8 +47,8 @@ function Avatar() {
   return <canvas ref={ref} className="avatar" width={16} height={16} aria-label="Pixel portrait" role="img" />;
 }
 
-// MySpace-style Top 8. Friends without a link show "coming soon" when clicked.
-function FriendSpace() {
+// MySpace-style friends. Friends with photos open them; without a link or photos they show "coming soon".
+function FriendSpace({ onOpenFriend }: { onOpenFriend: (f: Friend) => void }) {
   const [soon, setSoon] = useState<string | null>(null);
   const n = site.friends.length;
   return (
@@ -56,7 +56,7 @@ function FriendSpace() {
       <div>Rob&apos;s Friend Space</div>
       <div>
         <p className="friends-count">
-          Rob has <b>{n}</b> {n === 1 ? 'friend' : 'friends'}. <span>Top 8</span>
+          Rob has <b>{n}</b> {n === 1 ? 'friend' : 'friends'}.
         </p>
         <ul className="friends-grid">
           {site.friends.slice(0, 8).map((f, i) => (
@@ -68,7 +68,7 @@ function FriendSpace() {
                   <img src={f.photo} alt={f.name} />
                 </a>
               ) : (
-                <button type="button" onClick={() => setSoon(soon === f.name + i ? null : f.name + i)}>
+                <button type="button" onClick={() => (f.photos?.length ? onOpenFriend(f) : setSoon(soon === f.name + i ? null : f.name + i))}>
                   <span>{f.name}</span>
                   {/* eslint-disable-next-line @next/next/no-img-element -- small local picture */}
                   <img src={f.photo} alt={f.name} />
@@ -96,7 +96,7 @@ const latest = shownFolders
   .sort((a, b) => (b.it.date ?? '').localeCompare(a.it.date ?? ''))
   .slice(0, 5);
 
-export default function Profile({ onOpenPath }: { onOpenPath: (path: string[]) => void }) {
+export default function Profile({ onOpenPath, onOpenFriend }: { onOpenPath: (path: string[]) => void; onOpenFriend: (f: Friend) => void }) {
   return (
     <div className="sunken scroll space">
       <div className="space-top">
@@ -114,7 +114,7 @@ export default function Profile({ onOpenPath }: { onOpenPath: (path: string[]) =
         </div>
         <div>
           <div className="ext">Rob is in your extended network</div>
-          <FriendSpace />
+          <FriendSpace onOpenFriend={onOpenFriend} />
           {latest.length > 0 && (
             <>
             <h3 style={{ marginTop: 18 }}>Rob&apos;s Latest Entries</h3>

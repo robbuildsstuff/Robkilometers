@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { site, visibleFolders, type Banner, type Bookshelf, type ContentItem, type TravelCountry, type Wardrobe, type Folder, type IconName, type Item } from '@/content';
+import { site, visibleFolders, type Banner, type Bookshelf, type ContentItem, type TravelCountry, type Wardrobe, type Folder, type Friend, type IconName, type Item } from '@/content';
+import FriendPhotos from './FriendPhotos';
 import FieldPage from './FieldPage';
 import FolderView from './FolderView';
 import Stickers from './Stickers';
@@ -24,7 +25,8 @@ type Target =
   | { kind: 'about' }
   | { kind: 'readme' }
   | { kind: 'weather' }
-  | { kind: 'solitaire' };
+  | { kind: 'solitaire' }
+  | { kind: 'friend'; friend: Friend };
 
 type Win = WinFrame & { target: Target };
 
@@ -75,6 +77,8 @@ const PAGES = ['desktop', 'field'] as const;
 
 const topZ = (ws: Win[]) => ws.reduce((z, w) => Math.max(z, w.z), 10);
 const isNarrow = () => window.matchMedia('(max-width: 640px)').matches;
+
+const friendSlug = (f: Friend) => f.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 function setHash(h: string) {
   try {
@@ -206,6 +210,16 @@ export default function Desktop() {
     setHash('about');
   }, [open]);
 
+  // A friend with photos: #about.terry-snaps
+  const openFriend = useCallback(
+    (f: Friend) => {
+      const key = `about.${friendSlug(f)}`;
+      open(key, { title: `${f.name.split(' ')[0]}'s Photos`, icon: 'image', w: 640, h: 520, target: { kind: 'friend', friend: f } });
+      setHash(key);
+    },
+    [open],
+  );
+
   const openReadme = useCallback(() => {
     open('readme', { title: site.readme.title, icon: 'notepad', w: 440, h: 690, target: { kind: 'readme' } });
   }, [open]);
@@ -227,6 +241,11 @@ export default function Desktop() {
       openAbout();
       return true;
     }
+    const friend = site.friends.find((f) => f.photos?.length && h === `about.${friendSlug(f)}`);
+    if (friend) {
+      openFriend(friend);
+      return true;
+    }
     if (h === 'field') {
       setPage(1);
       return true;
@@ -244,7 +263,7 @@ export default function Desktop() {
       return true;
     }
     return h ? openPath(unalias(h).split('.')) : false;
-  }, [openAbout, openReadme, openWeather, openSolitaire, openPath]);
+  }, [openAbout, openFriend, openReadme, openWeather, openSolitaire, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -326,13 +345,15 @@ export default function Desktop() {
       case 'item':
         return <ItemView it={t.item} />;
       case 'about':
-        return <Profile onOpenPath={openPath} />;
+        return <Profile onOpenPath={openPath} onOpenFriend={openFriend} />;
       case 'readme':
         return <ReadmeView readme={site.readme} />;
       case 'weather':
         return <WeatherView />;
       case 'solitaire':
         return <Solitaire />;
+      case 'friend':
+        return <FriendPhotos friend={t.friend} />;
     }
   }
 
