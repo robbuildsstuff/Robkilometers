@@ -46,20 +46,21 @@ export default function Meditation({ onClose }: { onClose: () => void }) {
     mutedRef.current = muted;
   }, [muted]);
 
-  // Pressing a button starts the get-ready countdown; the timer itself starts when it hits zero.
-  const start = (minutes: number | null) => {
-    setFinished(null);
-    const t = Date.now();
-    setNow(t);
-    setPending({ minutes, startedAt: t });
-  };
-
   const begin = (minutes: number | null) => {
     if (!mutedRef.current) bell();
     const t = Date.now();
     setNow(t);
     setPending(null);
     setRun({ mode: minutes ? 'preset' : 'open', total: (minutes ?? 0) * 60, startedAt: t });
+  };
+
+  // Start (open-ended) gets a get-ready countdown first; the 1/5/10/20 min presets start straight away.
+  const start = (minutes: number | null) => {
+    setFinished(null);
+    if (minutes) return begin(minutes);
+    const t = Date.now();
+    setNow(t);
+    setPending({ minutes, startedAt: t });
   };
 
   const finish = (sat: number) => {
