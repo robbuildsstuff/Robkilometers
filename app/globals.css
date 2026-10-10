@@ -3304,3 +3304,158 @@ button.tv-stamp:hover {
   flex: none;
   padding: 4px 10px;
 }
+
+/* Treadmill.exe */
+.tm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #1a1a1a;
+}
+.tm-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.tm-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.tm-card {
+  position: absolute;
+  width: min(300px, 86%);
+  padding: 12px 14px;
+  background: #c3c3c3;
+  font-size: 12px;
+}
+.tm-card b {
+  font: 600 16px 'Pixelify Sans', monospace;
+}
+.tm-card p {
+  margin: 6px 0 2px;
+}
+.tm-card ol {
+  margin: 0 0 6px;
+  padding-left: 18px;
+  display: grid;
+  gap: 2px;
+}
+.tm-keys {
+  color: #555;
+}
+.tm-card button {
+  margin-top: 6px;
+  padding: 4px 14px;
+}
+.tm-msg {
+  position: absolute;
+  top: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 6px 12px;
+  background: #ffffe1;
+  border: 1px solid #000;
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: tm-pop 0.2s ease-out;
+}
+@keyframes tm-pop {
+  from {
+    transform: translateX(-50%) scale(0.8);
+    opacity: 0;
+  }
+}
+.tm-off {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  border: 0;
+  background: none;
+  padding: 4px 6px;
+  font: 11px Tahoma, sans-serif;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+}
+.tm-off:hover,
+.tm-off:focus-visible {
+  color: #fff;
+}
+.tm-calm {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  animation: tm-fade 2.5s ease-out;
+}
+.tm-calm p {
+  margin: 0 0 30%;
+  font: 600 28px/1 Caveat, cursive;
+  color: #2a3a20;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.tm-calm > div {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  transition: opacity 0.6s;
+}
+.tm-calm .tm-hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.tm-calm button.bevel {
+  padding: 4px 12px;
+}
+.tm-again {
+  border: 0;
+  background: none;
+  font: 11px Tahoma, sans-serif;
+  color: rgba(0, 0, 0, 0.45);
+  text-decoration: underline;
+  cursor: pointer;
+}
+@keyframes tm-fade {
+  from {
+    opacity: 0;
+  }
+}
+.tm-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 6px;
+  background: #c3c3c3;
+  font-size: 12px;
+}
+/* on tall screens the game is letterboxed: fill the bands with the scene's own colours */
+.tm.is-intro .tm-stage,
+.tm.is-run .tm-stage,
+.tm.is-leaving .tm-stage {
+  background: linear-gradient(#d8d2c0 50%, #2a2a2a 50%);
+}
+.tm.is-off .tm-stage {
+  background: linear-gradient(#cfe3ef 50%, #5f8a42 50%);
+}
+.tm.is-off .tm-again {
+  color: rgba(20, 40, 10, 0.7);
+}

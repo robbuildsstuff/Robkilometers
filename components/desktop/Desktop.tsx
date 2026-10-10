@@ -10,6 +10,7 @@ import Stickers from './Stickers';
 import IconButton from './IconButton';
 import Paint from './Paint';
 import Profile from './Profile';
+import Treadmill from './Treadmill';
 import ReadmeView from './ReadmeView';
 import Solitaire from './Solitaire';
 import Taskbar from './Taskbar';
@@ -29,6 +30,7 @@ type Target =
   | { kind: 'weather' }
   | { kind: 'solitaire' }
   | { kind: 'paint' }
+  | { kind: 'treadmill' }
   | { kind: 'friend'; friend: Friend }
   | { kind: 'make-own' };
 
@@ -238,6 +240,11 @@ export default function Desktop() {
     setHash('paint');
   }, [open]);
 
+  const openTreadmill = useCallback(() => {
+    open('treadmill', { title: 'Treadmill.exe', icon: 'treadmill', w: 660, h: 470, target: { kind: 'treadmill' } });
+    setHash('treadmill');
+  }, [open]);
+
   const openSolitaire = useCallback(() => {
     open('solitaire', { title: 'Solitaire', icon: 'cards', w: 620, h: 500, target: { kind: 'solitaire' } });
     setHash('solitaire');
@@ -280,12 +287,16 @@ export default function Desktop() {
       openPaint();
       return true;
     }
+    if (h === 'treadmill') {
+      openTreadmill();
+      return true;
+    }
     if (h === 'make-your-own') {
       openMakeOwn();
       return true;
     }
     return h ? openPath(unalias(h).split('.')) : false;
-  }, [openAbout, openFriend, openReadme, openWeather, openSolitaire, openPaint, openMakeOwn, openPath]);
+  }, [openAbout, openFriend, openReadme, openWeather, openSolitaire, openPaint, openTreadmill, openMakeOwn, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -376,6 +387,8 @@ export default function Desktop() {
         return <Solitaire />;
       case 'paint':
         return <Paint />;
+      case 'treadmill':
+        return <Treadmill onField={() => goPage(1)} />;
       case 'friend':
         return <FriendPhotos friend={t.friend} />;
       case 'make-own':
@@ -388,6 +401,7 @@ export default function Desktop() {
     { id: 'readme', icon: 'notepad', label: site.readme.title, open: openReadme },
     { id: 'solitaire', icon: 'cards', label: 'Solitaire', open: openSolitaire },
     { id: 'paint', icon: 'paint', label: 'Paint', open: openPaint },
+    { id: 'treadmill', icon: 'treadmill', label: 'Treadmill.exe', open: openTreadmill },
     ...visibleFolders.map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
   ];
 
@@ -482,6 +496,7 @@ export default function Desktop() {
         onWeather={openWeather}
         onSolitaire={openSolitaire}
         onPaint={openPaint}
+        onTreadmill={openTreadmill}
         onFolder={openFolder}
         onCopy={copy}
         onShutDown={() => setOff(true)}

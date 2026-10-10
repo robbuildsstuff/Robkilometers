@@ -426,6 +426,24 @@ KCCCCCCKKKCCCCK.
 ...........S....
 ..........S.....
 `,
+  treadmill: `
+................
+................
+.........KK.....
+.........KK.....
+........RRR..GG.
+.......RRRRR.Gg.
+.......cRRR..Gg.
+........RR...Gg.
+........NN...Gg.
+.......N..N..Gg.
+......NN..NN.Gg.
+..KKKKKKKKKKKKK.
+.KGGGGGGGGGGGGK.
+.KKKKKKKKKKKKKK.
+..K..........K..
+................
+`,
 };
 
 export type CityIconName = keyof typeof cityArt;
