@@ -8,6 +8,7 @@ import FieldPage from './FieldPage';
 import FolderView from './FolderView';
 import Stickers from './Stickers';
 import IconButton from './IconButton';
+import Paint from './Paint';
 import Profile from './Profile';
 import ReadmeView from './ReadmeView';
 import Solitaire from './Solitaire';
@@ -27,6 +28,7 @@ type Target =
   | { kind: 'readme' }
   | { kind: 'weather' }
   | { kind: 'solitaire' }
+  | { kind: 'paint' }
   | { kind: 'friend'; friend: Friend }
   | { kind: 'make-own' };
 
@@ -231,6 +233,11 @@ export default function Desktop() {
     setHash('weather');
   }, [open]);
 
+  const openPaint = useCallback(() => {
+    open('paint', { title: 'untitled - Paint', icon: 'paint', w: 760, h: 560, target: { kind: 'paint' } });
+    setHash('paint');
+  }, [open]);
+
   const openSolitaire = useCallback(() => {
     open('solitaire', { title: 'Solitaire', icon: 'cards', w: 620, h: 500, target: { kind: 'solitaire' } });
     setHash('solitaire');
@@ -269,12 +276,16 @@ export default function Desktop() {
       openSolitaire();
       return true;
     }
+    if (h === 'paint') {
+      openPaint();
+      return true;
+    }
     if (h === 'make-your-own') {
       openMakeOwn();
       return true;
     }
     return h ? openPath(unalias(h).split('.')) : false;
-  }, [openAbout, openFriend, openReadme, openWeather, openSolitaire, openMakeOwn, openPath]);
+  }, [openAbout, openFriend, openReadme, openWeather, openSolitaire, openPaint, openMakeOwn, openPath]);
 
   // Boot: open from the link, or show the readme on bigger screens.
   useEffect(() => {
@@ -363,6 +374,8 @@ export default function Desktop() {
         return <WeatherView />;
       case 'solitaire':
         return <Solitaire />;
+      case 'paint':
+        return <Paint />;
       case 'friend':
         return <FriendPhotos friend={t.friend} />;
       case 'make-own':
@@ -374,6 +387,7 @@ export default function Desktop() {
     { id: 'about', icon: 'computer', label: "Rob's Computer", open: openAbout },
     { id: 'readme', icon: 'notepad', label: site.readme.title, open: openReadme },
     { id: 'solitaire', icon: 'cards', label: 'Solitaire', open: openSolitaire },
+    { id: 'paint', icon: 'paint', label: 'Paint', open: openPaint },
     ...visibleFolders.map((f) => ({ id: f.id, icon: f.icon ?? ('folder' as IconName), label: f.name, open: () => openFolder(f) })),
   ];
 
@@ -467,6 +481,7 @@ export default function Desktop() {
         onReadme={openReadme}
         onWeather={openWeather}
         onSolitaire={openSolitaire}
+        onPaint={openPaint}
         onFolder={openFolder}
         onCopy={copy}
         onShutDown={() => setOff(true)}

@@ -14,6 +14,7 @@ type Props = {
   onReadme: () => void;
   onWeather: () => void;
   onSolitaire: () => void;
+  onPaint: () => void;
   onFolder: (f: Folder) => void;
   onCopy: (text: string) => void;
   onShutDown: () => void;
@@ -40,7 +41,7 @@ function Clock() {
   );
 }
 
-export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, onWeather, onSolitaire, onFolder, onCopy, onShutDown }: Props) {
+export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, onWeather, onSolitaire, onPaint, onFolder, onCopy, onShutDown }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const startRef = useRef<HTMLButtonElement>(null);
@@ -154,6 +155,12 @@ export default function Taskbar({ wins, activeKey, onTask, onAbout, onReadme, on
               <button type="button" onClick={run(onSolitaire)}>
                 <Icon name="cards" />
                 <span>Solitaire</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" onClick={run(onPaint)}>
+                <Icon name="paint" />
+                <span>Paint</span>
               </button>
             </li>
             <li>
