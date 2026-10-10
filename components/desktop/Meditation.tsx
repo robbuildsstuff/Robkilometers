@@ -30,10 +30,15 @@ function bell() {
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 type Run = { mode: 'open' | 'preset'; total: number; startedAt: number };
+// A short "get settled" countdown that runs between pressing a button and the timer actually starting.
+type Pending = { minutes: number | null; startedAt: number };
+
+const GET_READY_SECONDS = 5;
 
 export default function Meditation({ onClose }: { onClose: () => void }) {
   const [muted, setMuted] = useState(false);
   const [run, setRun] = useState<Run | null>(null);
+  const [pending, setPending] = useState<Pending | null>(null);
   const [now, setNow] = useState(0);
   const [finished, setFinished] = useState<number | null>(null);
   const mutedRef = useRef(muted);
@@ -41,11 +46,19 @@ export default function Meditation({ onClose }: { onClose: () => void }) {
     mutedRef.current = muted;
   }, [muted]);
 
+  // Pressing a button starts the get-ready countdown; the timer itself starts when it hits zero.
   const start = (minutes: number | null) => {
-    if (!mutedRef.current) bell();
     setFinished(null);
     const t = Date.now();
     setNow(t);
+    setPending({ minutes, startedAt: t });
+  };
+
+  const begin = (minutes: number | null) => {
+    if (!mutedRef.current) bell();
+    const t = Date.now();
+    setNow(t);
+    setPending(null);
     setRun({ mode: minutes ? 'preset' : 'open', total: (minutes ?? 0) * 60, startedAt: t });
   };
 
@@ -57,10 +70,19 @@ export default function Meditation({ onClose }: { onClose: () => void }) {
 
   // tick
   useEffect(() => {
-    if (!run) return;
+    if (!run && !pending) return;
     const id = setInterval(() => setNow(Date.now()), 250);
     return () => clearInterval(id);
-  }, [run]);
+  }, [run, pending]);
+
+  // when the get-ready countdown runs out, roll straight into the chosen session
+  const readyLeft = pending ? Math.max(0, GET_READY_SECONDS - (now - pending.startedAt) / 1000) : 0;
+  useEffect(() => {
+    if (pending && readyLeft <= 0) {
+      const t = setTimeout(() => begin(pending.minutes), 0);
+      return () => clearTimeout(t);
+    }
+  });
 
   const elapsed = run ? Math.max(0, (now - run.startedAt) / 1000) : 0;
   useEffect(() => {
@@ -87,7 +109,17 @@ export default function Meditation({ onClose }: { onClose: () => void }) {
           </span>
         </div>
         <div className="med-body">
-          {run ? (
+          {pending ? (
+            <>
+              <p className="med-intro">Get comfortable. Starting in…</p>
+              <p className="med-time" aria-live="polite">
+                {Math.ceil(readyLeft)}
+              </p>
+              <button type="button" className="bevel med-main" onClick={() => setPending(null)}>
+                Cancel
+              </button>
+            </>
+          ) : run ? (
             <>
               <div className="med-breath" aria-hidden="true">
                 <i />
