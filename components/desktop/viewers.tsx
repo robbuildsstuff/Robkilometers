@@ -1,5 +1,6 @@
 import type { ContentItem, IconName, ItemType, NoteLine, VideoItem } from '@/content';
 import { PauseGlyph, PlayGlyph, StopGlyph } from './icons';
+import JournalPrompts from './JournalPrompts';
 import MapView from './MapView';
 
 export const typeIcon: Record<ItemType, IconName> = {
@@ -10,6 +11,7 @@ export const typeIcon: Record<ItemType, IconName> = {
   list: 'book',
   image: 'image',
   map: 'map',
+  prompts: 'notepad',
   folder: 'folder',
 };
 
@@ -21,6 +23,7 @@ const appName: Record<ContentItem['type'], string> = {
   list: 'Contents',
   image: 'Photo Viewer',
   map: 'Maps',
+  prompts: 'Notebook',
 };
 
 export const itemSize: Record<ContentItem['type'], [number, number | undefined]> = {
@@ -31,6 +34,7 @@ export const itemSize: Record<ContentItem['type'], [number, number | undefined]>
   list: [460, 300],
   image: [620, undefined],
   map: [660, 520],
+  prompts: [460, 380],
 };
 
 export function itemWindowTitle(it: ContentItem) {
@@ -150,6 +154,9 @@ function VideoPlayer({ it }: { it: VideoItem }) {
 
 export function ItemView({ it }: { it: ContentItem }) {
   switch (it.type) {
+    case 'prompts':
+      return <JournalPrompts it={it} />;
+
     case 'note':
       return <Notepad body={it.body} date={it.date} lines={it.lines} />;
 

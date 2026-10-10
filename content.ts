@@ -23,6 +23,8 @@ import type { CityIconName } from './components/desktop/cityIcons';
  *                                                                        clickable list; clicking one moves the map to it
  *                                                                        (`query` if the name alone finds the wrong spot).
  *                                                                        `area` is what the map shows before a place is picked
+ *   prompts { type, id, title, intro?, levels: [{ name, prompts: [...] }] }
+ *                                                                     -> journal prompts: pick a level, get a random prompt
  *   folder  { type, id, title, blurb?, items: [...] }                 -> a folder inside a folder, with its own items
  *
  * Any item can also have `icon: 'paris'` etc. to swap its icon (see IconName below),
@@ -82,9 +84,11 @@ export type MapItem = ItemBase & {
   places?: { name: string; note?: string; query?: string }[];
 };
 
+export type PromptsItem = ItemBase & { type: 'prompts'; intro?: string; levels: { name: string; blurb?: string; prompts: string[] }[] };
+
 export type FolderItem = ItemBase & { type: 'folder'; blurb?: string; items: Item[] };
 
-export type ContentItem = NoteItem | RecipeItem | LinkItem | VideoItem | ListItem | ImageItem | MapItem;
+export type ContentItem = NoteItem | RecipeItem | LinkItem | VideoItem | ListItem | ImageItem | MapItem | PromptsItem;
 export type Item = ContentItem | FolderItem;
 export type ItemType = Item['type'];
 
@@ -1377,6 +1381,92 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
 
 “you believe it, i’ll see it”
   - Kev Shirt`,
+        },
+        {
+          type: 'prompts',
+          id: 'journal',
+          title: 'Journal Prompts',
+          intro: 'Grab a notebook. Pick a level, write whatever comes.',
+          levels: [
+            {
+              name: 'Easy',
+              blurb: 'Light, everyday stuff',
+              prompts: [
+                'What was the best thing you ate this week?',
+                'Describe your perfect lazy Sunday.',
+                'What song have you had on repeat lately, and why?',
+                'Write about the last time you laughed so hard it hurt.',
+                'What is one small thing that made today better?',
+                'If you had a free afternoon tomorrow, what would you do with it?',
+                'What is the best purchase under $20 you have ever made?',
+                'Describe the view from wherever you are sitting right now.',
+                "What's a smell that takes you straight back to childhood?",
+                'Who did you talk to today, and what did you talk about?',
+                'What is something you are looking forward to this month?',
+                'Write a review of your morning, like a restaurant critic.',
+                'What would your ideal breakfast be, no limits?',
+                'What is a place in your city you never get tired of?',
+                'What is the last thing you learned that surprised you?',
+                'List five things in your room and the story behind one of them.',
+                'What would you name a boat if you had one?',
+                'What is a habit of yours that you actually like?',
+                'Describe the weather today like it is a person.',
+                'What is a compliment you got that you still think about?',
+              ],
+            },
+            {
+              name: 'Medium',
+              blurb: 'A bit more reflective',
+              prompts: [
+                'What did you spend most of your energy on this week? Was it worth it?',
+                'What is something you changed your mind about in the last year?',
+                'When do you feel most like yourself?',
+                'What advice would you give the version of you from five years ago?',
+                'What is a skill you want to get better at, and what is stopping you?',
+                'Who has had the biggest influence on how you live day to day?',
+                'What does a good day actually look like for you, hour by hour?',
+                'What is something you do just because everyone else does?',
+                'What are you proud of that nobody really knows about?',
+                'Which of your friendships do you want to put more into?',
+                'What would you do more of if nobody was watching?',
+                'What is one thing you would like to stop saying yes to?',
+                'Where does your money go, and does it line up with what you care about?',
+                'What is a small risk you could take this week?',
+                'What is something you used to love that you have drifted away from?',
+                'What does "enough" look like for you?',
+                'Describe a recent moment you felt really calm.',
+                'What do you want people to feel after spending time with you?',
+                'What is a goal you set that you have quietly given up on? Why?',
+                'If this year had a title, what would it be so far?',
+              ],
+            },
+            {
+              name: 'Deep',
+              blurb: 'Honest. Maybe hard.',
+              prompts: [
+                'What are you avoiding right now?',
+                'What are you chasing, and what do you think it will give you?',
+                'What would you do if you knew nobody would judge you?',
+                'What do you need to forgive yourself for?',
+                'What is a story you tell yourself that might not be true?',
+                'When was the last time you felt truly content? What was different?',
+                'What are you most afraid people will find out about you?',
+                'Who do you owe an apology, or a thank you?',
+                'What would you regret not doing if this was your last year?',
+                'What part of your life are you living for someone else?',
+                'What do you keep waiting for permission to do?',
+                'If you lost everything you own, what would you still have?',
+                'What is the hardest thing you have ever had to let go of?',
+                'Where in your life are you settling, and where are you just impatient?',
+                'What does your inner voice sound like when you fail? Would you talk to a friend that way?',
+                'What would change if you believed you were already enough?',
+                'What are you pretending not to know?',
+                'What is a feeling you have been trying not to feel?',
+                'What do you want to be remembered for? Are you spending your days on it?',
+                'If the goalposts stopped moving, what would you do with yourself?',
+              ],
+            },
+          ],
         },
       ],
     },
