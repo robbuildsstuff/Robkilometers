@@ -3459,3 +3459,27 @@ button.tv-stamp:hover {
 .tm.is-off .tm-again {
   color: rgba(20, 40, 10, 0.7);
 }
+
+/* locked "original recipe" link */
+.recipe-lock {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--link);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.recipe-lock-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.2);
+}
+.recipe-lock-box {
+  width: min(360px, 92vw);
+  background: #c3c3c3;
+  padding: 0;
+}

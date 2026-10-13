@@ -9,7 +9,7 @@ import type { CityIconName } from './components/desktop/cityIcons';
  *   note    { type, id, title, date?, body?, lines? }                  -> opens in Notepad. `lines` is a list, one thing per line;
  *                                                                        { text: 'Milk', crossed: true, scribble: 'why??' } crosses a
  *                                                                        line out and scribbles a handwritten note beside it
- *   recipe  { type, id, title, date?, serves?, time?, ingredients, steps, note?, source?, image? }
+ *   recipe  { type, id, title, date?, serves?, time?, ingredients, steps, note?, source?, sourceSealed?, image? }
  *           ('— Section —' in ingredients makes a heading; image is a photo shown on the card)
  *   link    { type, id, title, date?, url, note? }                     -> little browser window with a "Visit" button
  *   video   { type, id, title, date?, url, note? }                     -> media player. YouTube video links
@@ -71,6 +71,8 @@ export type RecipeItem = ItemBase & {
   steps: string[];
   note?: string;
   source?: string;
+  // `source`, but locked: only opens with the Make Your Own password. Made with scripts/seal-link.mjs
+  sourceSealed?: string;
 };
 export type LinkItem = ItemBase & { type: 'link'; url: string; note?: string };
 export type VideoItem = ItemBase & { type: 'video'; url: string; note?: string };
@@ -1010,7 +1012,7 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
           title: 'Bagels',
           serves: '~14 small bagels',
           time: '2 days (mostly waiting)',
-          source: 'https://docs.google.com/document/d/1LTdMHqFdjTvnNiZU3QcrJegVDtM5eDW9W8UjopKyiaY/edit?usp=sharing',
+          sourceSealed: 'mgZPPIaxN1-IrDENEFQ2vw.-fqroZ0I-Qgs-hNK.rFJ3ZPCqDHiM2xvMwWEycg.sgOHhWCtug5djsOLUJyjieCrVHJNCija8DSHX61SCk-37BI05JJjcUhGBODlMuCUpGJ6c16nN6kevKKiEpOGJxggysN9McCNutzCM606IHkhRCDK210gzwqX4r8vEHEm', // the original Google Doc, locked behind the password (see app/api/recipe-sources)
           ingredients: [
             '350 g water, at 95°F',
             '650 g hard bread flour (250 g for the sponge, 400 g later)',
@@ -1038,7 +1040,7 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
           id: 'pickled-onions',
           title: "Hank's Pickled Onions",
           time: '10 min, plus cooling',
-          source: 'https://docs.google.com/document/d/1s3CkMTPfqKeWS4tgrHV-V7sEXLU0-_IVJBDraFGnV4Q/edit?usp=sharing',
+          sourceSealed: 'XKTD0StK8AoV2k_tHPbkWQ.yW8u6me6IfAE2LSC.Fo6a5AW2FnkB9twDb0m_GQ.mek1_h6YTjARJForIVaiC6I-bsVpFUZMegn9crJW42DY4lN1rga7uPdJtoGSV3QtZFEbfFWj4eusfv5TQQGiDcVfntOPoXf2EU03LWht5EfvHsQ6nVWUwS6JYpyRca0W', // the original Google Doc, locked behind the password (see app/api/recipe-sources)
           ingredients: [
             '1 red onion',
             '1 red chili',
@@ -1063,7 +1065,7 @@ Hope this inspires you to create a little more, or go outside. Hopefully both`,
           title: 'Breakfast Tacos',
           serves: '4 (about 8 tacos)',
           time: '1.5 hours',
-          source: 'https://docs.google.com/document/d/1tfn_IncSiDoB3TL8Dz6GsrakdGCDfEE8_NLaTQ-9w7o/edit?usp=sharing',
+          sourceSealed: 'adhNJANTMYYrc34JQBC4Lg.Dij-EDLG4Lbc0Tcy.gzwx0jpvDUf3fr_if2GUaw.BM6p4PhYDihSY6h62-FU7Yd9Zuo-V72q7mWHw9ZKBZcQJLLGJc6atN9hND6jnCc8SqhNMfTExnWhaVrjoc-RhqCAOMTI02roy1nG-cDG4rX_pLsN3drh0PQ9QATHAIQi', // the original Google Doc, locked behind the password (see app/api/recipe-sources)
           ingredients: [
             '— Flour tortillas (8) —',
             '250 g all-purpose flour',

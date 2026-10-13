@@ -2,6 +2,7 @@ import type { ContentItem, IconName, ItemType, NoteLine, VideoItem } from '@/con
 import { PauseGlyph, PlayGlyph, StopGlyph } from './icons';
 import JournalPrompts from './JournalPrompts';
 import MapView from './MapView';
+import RecipeSource from './RecipeSource';
 
 export const typeIcon: Record<ItemType, IconName> = {
   note: 'notepad',
@@ -185,6 +186,7 @@ export function ItemView({ it }: { it: ContentItem }) {
                   Original recipe
                 </a>
               )}
+              {it.sourceSealed && !it.source && <RecipeSource id={it.id} />}
             </div>
             <div className="rgrid">
               <div>

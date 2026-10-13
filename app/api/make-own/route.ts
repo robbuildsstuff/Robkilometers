@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from 'node:crypto';
+import { normalise, passwordOk } from '../_lib/password';
 
 // The "Make Your Own.exe" password check. The password's SHA-256 hash lives in Vercel
 // (Settings > Environment Variables > MAKE_OWN_PASSWORD_HASH), never in this public code,
@@ -64,16 +64,11 @@ const UNLOCKED = {
   repo: REPO,
 };
 
-const sha = (s: string) => createHash('sha256').update(s).digest();
-
 export async function POST(request: Request) {
-  const hash = process.env.MAKE_OWN_PASSWORD_HASH?.trim().toLowerCase() ?? '';
   let password = '';
   try {
-    const body = await request.json();
-    if (typeof body?.password === 'string') password = body.password;
+    password = normalise((await request.json())?.password);
   } catch {}
-  const ok = /^[0-9a-f]{64}$/.test(hash) && timingSafeEqual(sha(password.trim().toLowerCase()), Buffer.from(hash, 'hex'));
-  if (!ok) return Response.json({ ok: false }, { status: 401 });
+  if (!passwordOk(password)) return Response.json({ ok: false }, { status: 401 });
   return Response.json({ ok: true, ...UNLOCKED });
 }
